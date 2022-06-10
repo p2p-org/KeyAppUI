@@ -1,9 +1,9 @@
 import UIKit
 
-extension UIFont {
+public extension UIFont {
     
     /// Typography styles
-    enum Style {
+    enum Style: String, CaseIterable {
         case caption2
         case caption1
         case footnote

@@ -45,7 +45,18 @@ class ViewController: UIViewController {
                     ),
                     size: .medium
                 )
+            }.padding(.init(x: 16, y: 0))
+            
+
+            BEVStack {
+                UILabel(text: "Typography", textSize: 22)
+                for style in UIFont.Style.allCases {
+                    UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
+                }
+                for style in UIFont.Style.allCases {
+                    UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .bold))
+                }
             }
-        }.padding(.init(x: 16, y: 0))
+        }
     }
 }
