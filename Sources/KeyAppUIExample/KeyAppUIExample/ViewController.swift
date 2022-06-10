@@ -5,15 +5,34 @@
 //  Created by Ivan on 09.06.2022.
 //
 
+import BEPureLayout
+import KeyAppUI
 import UIKit
+import Algorithms
 
 class ViewController: UIViewController {
+    @IBOutlet var stackView: UIStackView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        let child = build()
+        view.addSubview(child)
+        child.autoPinEdgesToSuperviewEdges()
     }
 
-
+    func build() -> UIView {
+        BEScrollView {
+            // Icons section
+            UILabel(text: "Icons", textSize: 22)
+            BEVStack {
+                for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
+                    BEHStack {
+                        for icon in iconsChunk { UIImageView(image: icon.image) }
+                        UIView.spacer
+                    }
+                }
+            }
+        }.padding(.init(x: 16, y: 0))
+    }
 }
-
