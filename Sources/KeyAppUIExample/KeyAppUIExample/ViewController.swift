@@ -37,7 +37,7 @@ class ViewController: UIViewController {
             // Buttons
             BEVStack {
                 Button(
-                    content: UILabel(text: "Button"),
+                    content: "Button",//UILabel(text: "Button"),
                     theme: .init(
                         backgroundColor: .black,
                         foregroundColor: .green,

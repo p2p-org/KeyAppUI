@@ -55,7 +55,7 @@ public class Button: UIControl {
     func build() -> UIView {
         BEVStack {
             if let leading = leading { leading }
-            title
+//            title
             if let trailing = trailing { trailing }
         }.backgroundColor(color: theme.backgroundColor)
     }
