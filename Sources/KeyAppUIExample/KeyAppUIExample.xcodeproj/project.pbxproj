@@ -13,6 +13,8 @@
 		2C4E0AB028513D3D00933184 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AAE28513D3D00933184 /* Main.storyboard */; };
 		2C4E0AB228513D3E00933184 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AB128513D3E00933184 /* Assets.xcassets */; };
 		2C4E0AB528513D3E00933184 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AB328513D3E00933184 /* LaunchScreen.storyboard */; };
+		86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB128523BE100664C9A /* KeyAppUI */; };
+		86F83DB82852421500664C9A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB72852421500664C9A /* Algorithms */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,7 @@
 		2C4E0AB128513D3E00933184 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C4E0AB428513D3E00933184 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C4E0AB628513D3E00933184 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		86F83DAF28523B3D00664C9A /* KeyAppUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KeyAppUI; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86F83DB82852421500664C9A /* Algorithms in Frameworks */,
+				86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,8 +45,10 @@
 		2C4E0A9C28513D3D00933184 = {
 			isa = PBXGroup;
 			children = (
+				86F83DAC2852395200664C9A /* Packages */,
 				2C4E0AA728513D3D00933184 /* KeyAppUIExample */,
 				2C4E0AA628513D3D00933184 /* Products */,
+				86F83DB028523BE100664C9A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +74,21 @@
 			path = KeyAppUIExample;
 			sourceTree = "<group>";
 		};
+		86F83DAC2852395200664C9A /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				86F83DAF28523B3D00664C9A /* KeyAppUI */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		86F83DB028523BE100664C9A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,6 +105,10 @@
 			dependencies = (
 			);
 			name = KeyAppUIExample;
+			packageProductDependencies = (
+				86F83DB128523BE100664C9A /* KeyAppUI */,
+				86F83DB72852421500664C9A /* Algorithms */,
+			);
 			productName = KeyAppUIExample;
 			productReference = 2C4E0AA528513D3D00933184 /* KeyAppUIExample.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +137,9 @@
 				Base,
 			);
 			mainGroup = 2C4E0A9C28513D3D00933184;
+			packageReferences = (
+				86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
 			productRefGroup = 2C4E0AA628513D3D00933184 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -360,6 +389,29 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		86F83DB128523BE100664C9A /* KeyAppUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeyAppUI;
+		};
+		86F83DB72852421500664C9A /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2C4E0A9D28513D3D00933184 /* Project object */;
 }
