@@ -14,7 +14,6 @@
 		2C4E0AB228513D3E00933184 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AB128513D3E00933184 /* Assets.xcassets */; };
 		2C4E0AB528513D3E00933184 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AB328513D3E00933184 /* LaunchScreen.storyboard */; };
 		86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB128523BE100664C9A /* KeyAppUI */; };
-		86F83DB528523F1800664C9A /* BEPureLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB428523F1800664C9A /* BEPureLayout */; };
 		86F83DB82852421500664C9A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB72852421500664C9A /* Algorithms */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +36,6 @@
 			files = (
 				86F83DB82852421500664C9A /* Algorithms in Frameworks */,
 				86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */,
-				86F83DB528523F1800664C9A /* BEPureLayout in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +107,6 @@
 			name = KeyAppUIExample;
 			packageProductDependencies = (
 				86F83DB128523BE100664C9A /* KeyAppUI */,
-				86F83DB428523F1800664C9A /* BEPureLayout */,
 				86F83DB72852421500664C9A /* Algorithms */,
 			);
 			productName = KeyAppUIExample;
@@ -141,7 +138,6 @@
 			);
 			mainGroup = 2C4E0A9C28513D3D00933184;
 			packageReferences = (
-				86F83DB328523F1800664C9A /* XCRemoteSwiftPackageReference "BEPureLayout" */,
 				86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 2C4E0AA628513D3D00933184 /* Products */;
@@ -395,14 +391,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		86F83DB328523F1800664C9A /* XCRemoteSwiftPackageReference "BEPureLayout" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bigearsenal/BEPureLayout.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -417,11 +405,6 @@
 		86F83DB128523BE100664C9A /* KeyAppUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = KeyAppUI;
-		};
-		86F83DB428523F1800664C9A /* BEPureLayout */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86F83DB328523F1800664C9A /* XCRemoteSwiftPackageReference "BEPureLayout" */;
-			productName = BEPureLayout;
 		};
 		86F83DB72852421500664C9A /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;

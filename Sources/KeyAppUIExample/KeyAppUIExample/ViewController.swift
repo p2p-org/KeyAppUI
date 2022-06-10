@@ -5,10 +5,10 @@
 //  Created by Ivan on 09.06.2022.
 //
 
+import Algorithms
 import BEPureLayout
 import KeyAppUI
 import UIKit
-import Algorithms
 
 class ViewController: UIViewController {
     @IBOutlet var stackView: UIStackView!
@@ -32,6 +32,19 @@ class ViewController: UIViewController {
                         UIView.spacer
                     }
                 }
+            }
+
+            // Buttons
+            BEVStack {
+                Button(
+                    content: UILabel(text: "Button"),
+                    theme: .init(
+                        backgroundColor: .black,
+                        foregroundColor: .green,
+                        highlightColor: .gray
+                    ),
+                    size: .medium
+                )
             }
         }.padding(.init(x: 16, y: 0))
     }
