@@ -19,12 +19,14 @@ class ViewController: UIViewController {
         let child = build()
         view.addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
+        
+        view.backgroundColor = UIColor(red: 0.9569, green: 0.9569, blue: 0.9569, alpha: 1.0)
     }
 
     func build() -> UIView {
         BEScrollView {
             // Icons section
-            UILabel(text: "Icons", textSize: 22)
+            UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
             BEVStack {
                 for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
                     BEHStack {
@@ -35,16 +37,20 @@ class ViewController: UIViewController {
             }
 
             // Buttons
-            BEVStack {
-                Button(
-                    content: UILabel(text: "Button"),
-                    theme: .init(
-                        backgroundColor: .black,
-                        foregroundColor: .green,
-                        highlightColor: .gray
-                    ),
-                    size: .medium
-                )
+            UILabel(text: "Buttons", textSize: 22).padding(.init(only: .top, inset: 20))
+            BEVStack(spacing: 8) {
+                for style in TextButton.Style.allCases {
+                    BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
+                        for size in TextButton.Size.allCases {
+                            TextButton.style(
+                                title: "Button",
+                                style: style,
+                                size: size,
+                                config: [.rightArrow]
+                            ).onPressed { print("tap") }
+                        }
+                    }
+                }
             }
         }.padding(.init(x: 16, y: 0))
     }
