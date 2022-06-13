@@ -38,7 +38,7 @@ class ViewController: UIViewController {
                 }
 
                 BEVStack {
-                    UILabel(text: "Typography", textSize: 22)
+                    UILabel(text: "Typography", textSize: 22).padding(.init(only: .top, inset: 20))
                     for style in UIFont.Style.allCases {
                         UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
                     }

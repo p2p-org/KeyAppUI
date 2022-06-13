@@ -7,15 +7,7 @@ import Foundation
 import PureLayout
 import UIKit
 
-public class TextButton: UIControl {
-    // MARK: Properties
-
-    /// On pressed callback
-    var onPressed: BEVoidCallback?
-
-    /// Animation configuration
-    let propertiesAnimator = UIViewPropertyAnimator(duration: 0.12, curve: .easeInOut)
-
+public class TextButton: ButtonControl<TextButtonTheme> {
     /// Button title text
     public var title: String {
         didSet { titleView.text = title }
@@ -39,10 +31,6 @@ public class TextButton: UIControl {
         }
     }
 
-    var themes: [ThemeState: Theme] = [:] {
-        didSet { update() }
-    }
-
     // MARK: Refs
 
     let container = BERef<UIView>()
@@ -59,34 +47,21 @@ public class TextButton: UIControl {
 
     // MARK: Init
 
-    internal init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: [ThemeState: Theme]) {
+    public init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: [State: TextButtonTheme]) {
         self.leadingImage = leadingImage
         self.trailingImage = trailingImage
         self.title = title
-        self.themes = themes
-
+        
         // Set default theme in case themes is empty
-        if self.themes[.normal] == nil {
-            self.themes[.normal] = .default()
+        var themes = themes
+        if themes[.normal] == nil {
+            themes[.normal] = .default()
         }
 
-        super.init(frame: .zero)
-
-        // Build
-        let child = build()
-        addSubview(child)
-        child.autoPinEdgesToSuperviewEdges()
-
-        // Update
-        update(animated: false)
+        super.init(frame: .zero, themes: themes)
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func build() -> UIView {
+    override func build() -> UIView {
         BEContainer {
             BECenter {
                 BEHStack {
@@ -131,91 +106,34 @@ public class TextButton: UIControl {
             let constraint: NSLayoutConstraint = container.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
             constraint.priority = .defaultLow
         }
-        .frame(height: theme.minHeight)
     }
 
     // MARK: Applying theme
 
-    /// Current theme base on button state
-    var theme: Theme {
-        if state.contains(.disabled) {
-            return themes[.disabled] ?? themes[.normal]!
-        }
-        return themes[.normal]!
-    }
-
     /// Apply current theme to button
-    func update(animated: Bool = true) {
+    override func update(animated: Bool = true) {
         titleView.textColor = theme.foregroundColor
         leadingImageView.tintColor = theme.foregroundColor
         trailingImageView.tintColor = theme.foregroundColor
 
         titleView.font = theme.font
-        container.view?.heightConstraint?.constant = theme.minHeight
         layer.cornerRadius = theme.borderRadius
 
         leadingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing
         trailingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing
 
-        propertiesAnimator.stopAnimation(true)
-
-        if animated {
-            propertiesAnimator.addAnimations { [weak self] in self?.updateAnimated() }
-            propertiesAnimator.startAnimation()
-        } else {
-            updateAnimated()
-        }
+        super.update(animated: animated)
     }
 
-    /// Applying part with animation
-    func updateAnimated() {
+    override func updateAnimated() {
+        super.updateAnimated()
+
         if state.contains(.highlighted) {
             backgroundColor = theme.highlightColor
         } else {
             backgroundColor = theme.backgroundColor
         }
     }
-
-    // MARK: Touches handler
-
-    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if onPressed != nil || state.contains(.disabled) { isHighlighted = true }
-        update()
-
-        super.touchesBegan(touches, with: event)
-    }
-
-    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let location = touches.first?.location(in: superview) else { return }
-        isHighlighted = false
-
-        if frame.contains(location) {
-            if !state.contains(.disabled) { onPressed?() }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in self?.update() }
-        } else {
-            update()
-        }
-
-        super.touchesEnded(touches, with: event)
-    }
-    
-    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isHighlighted = false
-        update()
-        super.touchesCancelled(touches, with: event)
-    }
-    
-    @discardableResult
-    public func onPressed(_ callback: @escaping BEVoidCallback) -> Self {
-        onPressed = callback
-        return self
-    }
-
-    override public var isEnabled: Bool {
-        get { super.isEnabled }
-        set {
-            super.isEnabled = newValue
-            update()
-        }
-    }
 }
+
+extension UIControl.State: Hashable {}

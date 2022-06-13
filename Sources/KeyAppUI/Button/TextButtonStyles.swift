@@ -62,7 +62,7 @@ public extension TextButton {
         case medium
         case small
 
-        var minHeight: CGFloat {
+        var height: CGFloat {
             switch self {
             case .small: return 32
             case .medium: return 48
@@ -88,7 +88,7 @@ public extension TextButton {
     }
 
     static func style(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) -> TextButton {
-        let theme = TextButton.Theme(
+        let theme = TextButtonTheme(
             backgroundColor: style.backgroundColor,
             foregroundColor: style.foreground,
             highlightColor: style.highlight,
@@ -100,8 +100,7 @@ public extension TextButton {
                 right: trailing != nil ? 14 : 20
             ),
             iconSpacing: 8,
-            borderRadius: size.borderRadius,
-            minHeight: size.minHeight
+            borderRadius: size.borderRadius
         )
 
         return TextButton(
@@ -115,6 +114,6 @@ public extension TextButton {
                     foregroundColor: style.disabledForegroundColor
                 ),
             ]
-        )
+        ).frame(height: size.height)
     }
 }
