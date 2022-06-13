@@ -45,7 +45,7 @@ public class IconButton: ButtonControl<IconButtonTheme> {
         BEVStack(alignment: .center) {
             BEContainer {
                 BECenter {
-                    UIImageView(image: image)
+                    UIImageView(image: image, contentMode: .scaleAspectFill)
                         .frame(width: theme.iconSize, height: theme.iconSize)
                         .bind(imageView)
                 }

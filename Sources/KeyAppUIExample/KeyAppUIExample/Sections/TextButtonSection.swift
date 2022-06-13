@@ -14,10 +14,10 @@ func buttonSection() -> UIView {
             generateButtons()
 
             UILabel(text: "With left icon", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
-            generateButtons(leading: Icons.arrowBack24px.image)
+            generateButtons(leading: Icons.arrowBack.image)
 
             UILabel(text: "With right icon", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
-            generateButtons(trailing: Icons.arrowForward24px.image)
+            generateButtons(trailing: Icons.arrowForward.image)
 
             UILabel(text: "Others", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
 
@@ -72,7 +72,7 @@ func buttonSection() -> UIView {
                             c.isActive = true
                         }
                         TextButton
-                            .style(title: "Paste", style: .third, size: .small, trailing: Icons.star24px.image)
+                            .style(title: "Paste", style: .third, size: .small, trailing: Icons.paste.image)
                             .onPressed {}
                     }
                     UITextField(placeholder: "Input")

@@ -94,9 +94,9 @@ public extension IconButton {
 
         var iconSize: CGFloat {
             switch self {
-            case .small: return 20
-            case .medium: return 28
-            case .large: return 40
+            case .small: return 12
+            case .medium: return 20
+            case .large: return 32
             }
         }
 

@@ -25,7 +25,7 @@ private func iconButton(title: String?) -> UIView {
             BEHStack(spacing: 8, alignment: .center, distribution: .fill) {
                 for size in IconButton.Size.allCases {
                     IconButton.style(
-                        image: Icons.star24px.image,
+                        image: Icons.appleLogo.image,
                         title: title,
                         style: style,
                         size: size

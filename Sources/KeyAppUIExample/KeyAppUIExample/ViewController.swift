@@ -31,7 +31,9 @@ class ViewController: UIViewController {
                 BEVStack {
                     for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
                         BEHStack {
-                            for icon in iconsChunk { UIImageView(image: icon.image) }
+                            for icon in iconsChunk {
+                                UIImageView(image: icon.image, contentMode: .scaleAspectFill)
+                            }
                             UIView.spacer
                         }
                     }
