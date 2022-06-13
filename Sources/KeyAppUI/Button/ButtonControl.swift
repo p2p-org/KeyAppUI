@@ -7,16 +7,18 @@ import Foundation
 import UIKit
 
 public class ButtonControl<T>: UIControl {
+    public typealias ThemeState<T> = [State: T]
+    
     var onPressed: BEVoidCallback?
 
-    var themes: [State: T] = [:] {
+    var themes: ThemeState<T> = [:] {
         didSet { update() }
     }
 
     /// Animation configuration
     let propertiesAnimator = UIViewPropertyAnimator(duration: 0.12, curve: .easeInOut)
 
-    init(frame: CGRect, themes: [State : T]) {
+    init(frame: CGRect, themes: ThemeState<T>) {
         self.themes = themes
         super.init(frame: frame)
 

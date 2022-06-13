@@ -7,6 +7,7 @@ import Foundation
 import PureLayout
 import UIKit
 
+/// A button where primary focus is text. Leading and trailing icons are secondary.
 public class TextButton: ButtonControl<TextButtonTheme> {
     /// Button title text
     public var title: String {
@@ -47,15 +48,16 @@ public class TextButton: ButtonControl<TextButtonTheme> {
 
     // MARK: Init
 
-    public init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: [State: TextButtonTheme]) {
+    public init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: ThemeState<TextButtonTheme>) {
         self.leadingImage = leadingImage
         self.trailingImage = trailingImage
         self.title = title
-        
+
         // Set default theme in case themes is empty
         var themes = themes
         if themes[.normal] == nil {
             themes[.normal] = .default()
+            themes[.highlighted] = .default().copy(backgroundColor: .gray)
         }
 
         super.init(frame: .zero, themes: themes)
@@ -126,13 +128,8 @@ public class TextButton: ButtonControl<TextButtonTheme> {
     }
 
     override func updateAnimated() {
+        backgroundColor = theme.backgroundColor
         super.updateAnimated()
-
-        if state.contains(.highlighted) {
-            backgroundColor = theme.highlightColor
-        } else {
-            backgroundColor = theme.backgroundColor
-        }
     }
 }
 

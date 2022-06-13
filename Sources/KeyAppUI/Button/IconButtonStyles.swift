@@ -4,17 +4,16 @@
 
 import UIKit
 
-public extension TextButton {
+public extension IconButton {
     enum Style: CaseIterable {
         case primary
         case primaryWhite
         case second
         case third
-        case ghost
+        case ghostBlack
         case ghostWhite
         case ghostLime
         case inverted
-        case invertedRed
 
         var backgroundColor: UIColor {
             switch self {
@@ -22,8 +21,8 @@ public extension TextButton {
             case .primaryWhite: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
             case .second: return UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
             case .third: return UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
-            case .ghost, .ghostWhite, .ghostLime: return .clear
-            case .inverted, .invertedRed: return .white
+            case .ghostBlack, .ghostWhite, .ghostLime: return .clear
+            case .inverted: return .white
             }
         }
 
@@ -31,22 +30,29 @@ public extension TextButton {
             UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
         }
 
-        var foreground: UIColor {
+        var iconColor: UIColor {
             switch self {
             case .primary, .ghostLime: return UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
             case .primaryWhite, .ghostWhite: return UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-            case .second, .third, .ghost, .inverted: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
-            case .invertedRed: return UIColor(red: 0.922, green: 0.29, blue: 0.478, alpha: 1)
+            case .second, .third, .ghostBlack, .inverted: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
             }
         }
 
-        var disabledForegroundColor: UIColor? {
+        var titleColor: UIColor {
+            switch self {
+            case .primary, .primaryWhite, .second, .third, .ghostBlack, .inverted: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
+            case .ghostWhite: return UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+            case .ghostLime: return UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
+            }
+        }
+
+        var disabledIconColor: UIColor? {
             UIColor(red: 0.435, green: 0.49, blue: 0.553, alpha: 1)
         }
 
         var font: UIFont {
             switch self {
-            default: return .systemFont(ofSize: 16, weight: .medium)
+            default: return .systemFont(ofSize: 11, weight: .regular)
             }
         }
 
@@ -62,11 +68,11 @@ public extension TextButton {
         case medium
         case small
 
-        var height: CGFloat {
+        var width: CGFloat {
             switch self {
-            case .small: return 32
-            case .medium: return 48
-            case .large: return 56
+            case .small: return 36
+            case .medium: return 52
+            case .large: return 80
             }
         }
 
@@ -74,7 +80,7 @@ public extension TextButton {
             switch self {
             case .small: return 8
             case .medium: return 12
-            case .large: return 12
+            case .large: return 20
             }
         }
 
@@ -85,36 +91,47 @@ public extension TextButton {
             case .large: return 16
             }
         }
+
+        var iconSize: CGFloat {
+            switch self {
+            case .small: return 20
+            case .medium: return 28
+            case .large: return 40
+            }
+        }
+
+        var titleSpacing: CGFloat {
+            switch self {
+            case .small: return 4
+            case .medium: return 4
+            case .large: return 8
+            }
+        }
     }
 
     /// Create button with defined style
-    static func style(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) -> TextButton {
-        let theme = TextButtonTheme(
+    static func style(image: UIImage, title: String? = nil, style: Style, size: Size) -> IconButton {
+        let theme: IconButtonTheme = .init(
+            iconColor: style.iconColor,
+            titleColor: style.titleColor,
             backgroundColor: style.backgroundColor,
-            foregroundColor: style.foreground,
             font: style.font.withSize(size.fontSize),
-            contentPadding: .init(
-                top: 0,
-                left: leading != nil ? 14 : 20,
-                bottom: 0,
-                right: trailing != nil ? 14 : 20
-            ),
-            iconSpacing: 8,
+            iconSize: size.iconSize,
+            titleSpacing: size.titleSpacing,
             borderRadius: size.borderRadius
         )
 
-        return TextButton(
-            leadingImage: leading,
+        return IconButton(
+            image: image,
             title: title,
-            trailingImage: trailing,
             themes: [
                 .normal: theme,
                 .disabled: theme.copy(
-                    backgroundColor: style.disabledBackgroundColor,
-                    foregroundColor: style.disabledForegroundColor
+                    iconColor: style.disabledIconColor,
+                    backgroundColor: style.disabledBackgroundColor
                 ),
                 .highlighted: theme.copy(backgroundColor: style.highlight),
             ]
-        ).frame(height: size.height)
+        ).frame(width: size.width)
     }
 }

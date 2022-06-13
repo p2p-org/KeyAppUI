@@ -49,6 +49,9 @@ class ViewController: UIViewController {
 
                 // Buttons section
                 buttonSection()
+
+                // Icon buttons section
+               iconButtonSection()
             }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
