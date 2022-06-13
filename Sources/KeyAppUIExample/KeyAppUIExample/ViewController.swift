@@ -37,6 +37,16 @@ class ViewController: UIViewController {
                     }
                 }
 
+                BEVStack {
+                    UILabel(text: "Typography", textSize: 22)
+                    for style in UIFont.Style.allCases {
+                        UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
+                    }
+                    for style in UIFont.Style.allCases {
+                        UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .bold))
+                    }
+                }
+
                 // Buttons section
                 buttonSection()
             }
