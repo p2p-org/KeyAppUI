@@ -27,6 +27,10 @@ public extension TextButton {
             }
         }
 
+        var disabledBackgroundColor: UIColor? {
+            UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
+        }
+
         var foreground: UIColor {
             switch self {
             case .primary, .ghostLime: return UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
@@ -34,6 +38,10 @@ public extension TextButton {
             case .second, .third, .ghost, .inverted: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
             case .invertedRed: return UIColor(red: 0.922, green: 0.29, blue: 0.478, alpha: 1)
             }
+        }
+
+        var disabledForegroundColor: UIColor? {
+            UIColor(red: 0.435, green: 0.49, blue: 0.553, alpha: 1)
         }
 
         var font: UIFont {
@@ -79,31 +87,34 @@ public extension TextButton {
         }
     }
 
-    enum Configuration: CaseIterable {
-        case leftArrow
-        case rightArrow
-    }
+    static func style(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) -> TextButton {
+        let theme = TextButton.Theme(
+            backgroundColor: style.backgroundColor,
+            foregroundColor: style.foreground,
+            highlightColor: style.highlight,
+            font: style.font.withSize(size.fontSize),
+            contentPadding: .init(
+                top: 0,
+                left: leading != nil ? 14 : 20,
+                bottom: 0,
+                right: trailing != nil ? 14 : 20
+            ),
+            iconSpacing: 8,
+            borderRadius: size.borderRadius,
+            minHeight: size.minHeight
+        )
 
-    static func style(title: String, style: Style, size: Size, config: Set<Configuration> = []) -> TextButton {
-        TextButton(
-            leadingImage: config.contains(.leftArrow) ? Icons.arrowBack24px.image : nil,
+        return TextButton(
+            leadingImage: leading,
             title: title,
-            trailingImage: config.contains(.rightArrow) ? Icons.arrowForward24px.image : nil,
-            theme: .init(
-                backgroundColor: style.backgroundColor,
-                foregroundColor: style.foreground,
-                highlightColor: style.highlight,
-                font: style.font.withSize(size.fontSize),
-                contentPadding: .init(
-                    top: 0,
-                    left: config.contains(.leftArrow) ? 14 : 20,
-                    bottom: 0,
-                    right: config.contains(.rightArrow) ? 14 : 20
+            trailingImage: trailing,
+            themes: [
+                .normal: theme,
+                .disabled: theme.copy(
+                    backgroundColor: style.disabledBackgroundColor,
+                    foregroundColor: style.disabledForegroundColor
                 ),
-                iconSpacing: 8,
-                borderRadius: size.borderRadius,
-                minHeight: size.minHeight
-            )
+            ]
         )
     }
 }

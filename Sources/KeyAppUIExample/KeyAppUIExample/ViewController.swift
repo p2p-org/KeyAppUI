@@ -19,39 +19,29 @@ class ViewController: UIViewController {
         let child = build()
         view.addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
-        
-        view.backgroundColor = UIColor(red: 0.9569, green: 0.9569, blue: 0.9569, alpha: 1.0)
+
+        view.backgroundColor = UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
     }
 
     func build() -> UIView {
         BEScrollView {
-            // Icons section
-            UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
             BEVStack {
-                for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
-                    BEHStack {
-                        for icon in iconsChunk { UIImageView(image: icon.image) }
-                        UIView.spacer
-                    }
-                }
-            }
-
-            // Buttons
-            UILabel(text: "Buttons", textSize: 22).padding(.init(only: .top, inset: 20))
-            BEVStack(spacing: 8) {
-                for style in TextButton.Style.allCases {
-                    BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
-                        for size in TextButton.Size.allCases {
-                            TextButton.style(
-                                title: "Button",
-                                style: style,
-                                size: size,
-                                config: [.rightArrow]
-                            ).onPressed { print("tap") }
+                // Icons section
+                UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
+                BEVStack {
+                    for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
+                        BEHStack {
+                            for icon in iconsChunk { UIImageView(image: icon.image) }
+                            UIView.spacer
                         }
                     }
                 }
+
+                // Buttons section
+                buttonSection()
             }
-        }.padding(.init(x: 16, y: 0))
+        }
+        .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
+        .padding(.init(x: 16, y: 0))
     }
 }

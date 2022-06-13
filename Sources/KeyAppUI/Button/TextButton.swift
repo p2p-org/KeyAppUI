@@ -8,6 +8,43 @@ import PureLayout
 import UIKit
 
 public class TextButton: UIControl {
+    // MARK: Properties
+
+    /// On pressed callback
+    var onPressed: BEVoidCallback?
+
+    /// Animation configuration
+    let propertiesAnimator = UIViewPropertyAnimator(duration: 0.12, curve: .easeInOut)
+
+    /// Button title text
+    public var title: String {
+        didSet { titleView.text = title }
+    }
+
+    /// Button leading icon image
+    public var leadingImage: UIImage? {
+        didSet {
+            leadingImageView.image = leadingImage
+            leadingImageView.isHidden = leadingImage == nil
+            leadingIconSpacing.view?.isHidden = leadingImage == nil
+        }
+    }
+
+    /// Button trailing icon image
+    public var trailingImage: UIImage? {
+        didSet {
+            trailingImageView.image = trailingImage
+            trailingImageView.isHidden = trailingImage == nil
+            trailingIconSpacing.view?.isHidden = trailingImage == nil
+        }
+    }
+
+    var themes: [ThemeState: Theme] = [:] {
+        didSet { update() }
+    }
+
+    // MARK: Refs
+
     let container = BERef<UIView>()
     let titleView = BERef<UILabel>()
 
@@ -20,52 +57,33 @@ public class TextButton: UIControl {
     let trailingImageView = BERef<UIImageView>()
     let trailingIconSpacing = BERef<UIView>()
 
-    var onPressed: BEVoidCallback?
+    // MARK: Init
 
-    public var title: String {
-        didSet { titleView.text = title }
-    }
-
-    public var leadingImage: UIImage? {
-        didSet {
-            leadingImageView.image = leadingImage
-            leadingImageView.isHidden = leadingImage == nil
-            leadingIconSpacing.view?.isHidden = leadingImage == nil
-        }
-    }
-
-    public var trailingImage: UIImage? {
-        didSet {
-            trailingImageView.image = trailingImage
-            trailingImageView.isHidden = trailingImage == nil
-            trailingIconSpacing.view?.isHidden = trailingImage == nil
-        }
-    }
-
-    var themes: [TextButtonThemeState:Theme] = [:] {
-        didSet { update() }
-    }
-    
-    var theme: TextButtonTheme {
-        didSet { update() }
-    }
-    
-    internal init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, theme: TextButtonTheme) {
+    internal init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: [ThemeState: Theme]) {
         self.leadingImage = leadingImage
         self.trailingImage = trailingImage
         self.title = title
-        self.theme = theme
+        self.themes = themes
+
+        // Set default theme in case themes is empty
+        if self.themes[.normal] == nil {
+            self.themes[.normal] = .default()
+        }
 
         super.init(frame: .zero)
 
-        backgroundColor = theme.backgroundColor
-        clipsToBounds = true
-        layer.cornerRadius = theme.borderRadius
-
-        // Build button
+        // Build
         let child = build()
         addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
+
+        // Update
+        update(animated: false)
+    }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func build() -> UIView {
@@ -104,21 +122,30 @@ public class TextButton: UIControl {
                     BEContainer()
                         .frame(width: theme.contentPadding.right)
                         .bind(trailingSpacing)
-                }
+                }.withTag(1)
             }
         }
         .bind(container)
+        .setup { container in
+            guard let content = container.viewWithTag(1) else { return }
+            let constraint: NSLayoutConstraint = container.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
+            constraint.priority = .defaultLow
+        }
         .frame(height: theme.minHeight)
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    // MARK: Applying theme
+
+    /// Current theme base on button state
+    var theme: Theme {
+        if state.contains(.disabled) {
+            return themes[.disabled] ?? themes[.normal]!
+        }
+        return themes[.normal]!
     }
 
-    func update() {
-        print(state == .highlighted)
-
+    /// Apply current theme to button
+    func update(animated: Bool = true) {
         titleView.textColor = theme.foregroundColor
         leadingImageView.tintColor = theme.foregroundColor
         trailingImageView.tintColor = theme.foregroundColor
@@ -131,11 +158,17 @@ public class TextButton: UIControl {
         trailingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing
 
         propertiesAnimator.stopAnimation(true)
-        propertiesAnimator.addAnimations { [weak self] in self?.animation() }
-        propertiesAnimator.startAnimation()
+
+        if animated {
+            propertiesAnimator.addAnimations { [weak self] in self?.updateAnimated() }
+            propertiesAnimator.startAnimation()
+        } else {
+            updateAnimated()
+        }
     }
 
-    func animation() {
+    /// Applying part with animation
+    func updateAnimated() {
         if state.contains(.highlighted) {
             backgroundColor = theme.highlightColor
         } else {
@@ -143,10 +176,10 @@ public class TextButton: UIControl {
         }
     }
 
-    lazy var propertiesAnimator = UIViewPropertyAnimator(duration: 0.12, curve: .easeInOut)
+    // MARK: Touches handler
 
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isHighlighted = true
+        if onPressed != nil || state.contains(.disabled) { isHighlighted = true }
         update()
 
         super.touchesBegan(touches, with: event)
@@ -157,7 +190,7 @@ public class TextButton: UIControl {
         isHighlighted = false
 
         if frame.contains(location) {
-            onPressed?()
+            if !state.contains(.disabled) { onPressed?() }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in self?.update() }
         } else {
             update()
@@ -165,10 +198,24 @@ public class TextButton: UIControl {
 
         super.touchesEnded(touches, with: event)
     }
-
+    
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isHighlighted = false
+        update()
+        super.touchesCancelled(touches, with: event)
+    }
+    
     @discardableResult
     public func onPressed(_ callback: @escaping BEVoidCallback) -> Self {
         onPressed = callback
         return self
+    }
+
+    override public var isEnabled: Bool {
+        get { super.isEnabled }
+        set {
+            super.isEnabled = newValue
+            update()
+        }
     }
 }
