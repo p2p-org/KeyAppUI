@@ -49,10 +49,8 @@ public extension IconButton {
             Asset.Colors.mountain.color
         }
 
-        var font: UIFont {
-            switch self {
-            default: return .systemFont(ofSize: 11, weight: .regular)
-            }
+        func font(size: Size) -> UIFont {
+            UIFont.font(of: .label2, weight: .regular)
         }
 
         var highlight: UIColor {
@@ -83,14 +81,6 @@ public extension IconButton {
             }
         }
 
-        var fontSize: CGFloat {
-            switch self {
-            case .small: return 13
-            case .medium: return 16
-            case .large: return 16
-            }
-        }
-
         var iconSize: CGFloat {
             switch self {
             case .small: return 12
@@ -114,7 +104,7 @@ public extension IconButton {
             iconColor: style.iconColor,
             titleColor: style.titleColor,
             backgroundColor: style.backgroundColor,
-            font: style.font.withSize(size.fontSize),
+            font: style.font(size: size),
             iconSize: size.iconSize,
             titleSpacing: size.titleSpacing,
             borderRadius: size.borderRadius

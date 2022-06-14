@@ -43,9 +43,10 @@ public extension TextButton {
             Asset.Colors.mountain.color
         }
 
-        var font: UIFont {
-            switch self {
-            default: return .systemFont(ofSize: 16, weight: .medium)
+        func font(size: Size) -> UIFont {
+            switch size {
+            case .large, .medium: return UIFont.font(of: .text2, weight: .bold)
+            case .small: return UIFont.font(of: .text4, weight: .bold)
             }
         }
 
@@ -76,14 +77,6 @@ public extension TextButton {
             case .large: return 12
             }
         }
-
-        var fontSize: CGFloat {
-            switch self {
-            case .small: return 13
-            case .medium: return 16
-            case .large: return 16
-            }
-        }
     }
 
     /// Create button with defined style
@@ -91,7 +84,7 @@ public extension TextButton {
         let theme = TextButtonTheme(
             backgroundColor: style.backgroundColor,
             foregroundColor: style.foreground,
-            font: style.font.withSize(size.fontSize),
+            font: style.font(size: size),
             contentPadding: .init(
                 top: 0,
                 left: leading != nil ? 14 : 20,
