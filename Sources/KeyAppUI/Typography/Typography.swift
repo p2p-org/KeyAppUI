@@ -4,12 +4,12 @@ public extension UIFont {
     
     /// Typography styles
     enum Style: String, CaseIterable {
-        case caption2
-        case caption1
-        case footnote
-        case subheadline
-        case callout
-        case headline
+        case label2
+        case label1
+        case text4
+        case text3
+        case text2
+        case text1
         case title3
         case title2
         case title1
@@ -38,17 +38,17 @@ public extension UIFont {
     private static func fontSize(of style: Style) -> CGFloat {
         var fontSize: CGFloat = 11
         switch style {
-        case .caption2:
+        case .label2:
             fontSize = 11
-        case .caption1:
+        case .label1:
             fontSize = 12
-        case .footnote:
+        case .text4:
             fontSize = 13
-        case .subheadline:
+        case .text3:
             fontSize = 15
-        case .callout:
+        case .text2:
             fontSize = 16
-        case .headline:
+        case .text1:
             fontSize = 17
         case .title3:
             fontSize = 20
@@ -65,13 +65,13 @@ public extension UIFont {
     private static func lineHeight(for style: Style) -> CGFloat {
         var lineHeight: CGFloat = 12
         switch style {
-        case .caption2:
+        case .label2:
             lineHeight = 12
-        case .caption1, .footnote:
+        case .label1, .text4:
             lineHeight = 16
-        case .subheadline, .callout:
+        case .text3, .text2:
             lineHeight = 20
-        case .headline, .title3:
+        case .text1, .title3:
             lineHeight = 24
         case .title2:
             lineHeight = 28
@@ -86,17 +86,17 @@ public extension UIFont {
     private static func letterSpacibg(for style: Style) -> CGFloat {
         var letterSpacing = 0.07
         switch style {
-        case .caption2:
+        case .label2:
             letterSpacing = 0.07
-        case .caption1:
+        case .label1:
             letterSpacing = 0
-        case .footnote:
+        case .text4:
             letterSpacing = -0.08
-        case .subheadline:
+        case .text3:
             letterSpacing = -0.24
-        case .callout:
+        case .text2:
             letterSpacing = -0.32
-        case .headline:
+        case .text1:
             letterSpacing = -0.41
         case .title3:
             letterSpacing = 0.38

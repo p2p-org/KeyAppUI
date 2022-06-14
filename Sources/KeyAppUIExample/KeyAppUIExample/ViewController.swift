@@ -19,44 +19,43 @@ class ViewController: UIViewController {
         let child = build()
         view.addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
+
+        view.backgroundColor = UIColor(red: 0.91, green: 0.92, blue: 0.95, alpha: 1)
     }
 
     func build() -> UIView {
-        BEScrollView {
-            // Icons section
-            UILabel(text: "Icons", textSize: 22)
+        BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
-                    BEHStack {
-                        for icon in iconsChunk { UIImageView(image: icon.image) }
-                        UIView.spacer
+                // Icons section
+                UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
+                BEVStack {
+                    for iconsChunk in Asset.MaterialIcon.allImages.chunks(ofCount: 12) {
+                        BEHStack {
+                            for icon in iconsChunk {
+                                UIImageView(image: icon.image, contentMode: .scaleAspectFill)
+                            }
+                            UIView.spacer
+                        }
                     }
                 }
-            }
 
-            // Buttons
-            BEVStack {
-                Button(
-                    content: "Button",//UILabel(text: "Button"),
-                    theme: .init(
-                        backgroundColor: .black,
-                        foregroundColor: .green,
-                        highlightColor: .gray
-                    ),
-                    size: .medium
-                )
-            }.padding(.init(x: 16, y: 0))
-            
+                BEVStack {
+                    UILabel(text: "Typography", textSize: 22).padding(.init(only: .top, inset: 20))
+                    for style in UIFont.Style.allCases {
+                        UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
+                    }
+                    for style in UIFont.Style.allCases {
+                        UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .bold))
+                    }
+                }
 
-            BEVStack {
-                UILabel(text: "Typography", textSize: 22)
-                for style in UIFont.Style.allCases {
-                    UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
-                }
-                for style in UIFont.Style.allCases {
-                    UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .bold))
-                }
+                // Buttons section
+                buttonSection()
+
+                // Icon buttons section
+               iconButtonSection()
             }
         }
+        .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
     }
 }

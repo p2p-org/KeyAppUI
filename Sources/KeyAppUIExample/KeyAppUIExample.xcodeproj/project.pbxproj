@@ -13,6 +13,8 @@
 		2C4E0AB028513D3D00933184 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AAE28513D3D00933184 /* Main.storyboard */; };
 		2C4E0AB228513D3E00933184 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AB128513D3E00933184 /* Assets.xcassets */; };
 		2C4E0AB528513D3E00933184 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C4E0AB328513D3E00933184 /* LaunchScreen.storyboard */; };
+		8685681C285741A2000D24EF /* TextButtonSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8685681B285741A2000D24EF /* TextButtonSection.swift */; };
+		8685681E28578252000D24EF /* IconButtonSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8685681D28578252000D24EF /* IconButtonSection.swift */; };
 		86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB128523BE100664C9A /* KeyAppUI */; };
 		86F83DB82852421500664C9A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB72852421500664C9A /* Algorithms */; };
 /* End PBXBuildFile section */
@@ -26,6 +28,8 @@
 		2C4E0AB128513D3E00933184 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C4E0AB428513D3E00933184 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C4E0AB628513D3E00933184 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8685681B285741A2000D24EF /* TextButtonSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextButtonSection.swift; sourceTree = "<group>"; };
+		8685681D28578252000D24EF /* IconButtonSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconButtonSection.swift; sourceTree = "<group>"; };
 		86F83DAF28523B3D00664C9A /* KeyAppUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KeyAppUI; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +67,7 @@
 		2C4E0AA728513D3D00933184 /* KeyAppUIExample */ = {
 			isa = PBXGroup;
 			children = (
+				8685681F28578264000D24EF /* Sections */,
 				2C4E0AA828513D3D00933184 /* AppDelegate.swift */,
 				2C4E0AAA28513D3D00933184 /* SceneDelegate.swift */,
 				2C4E0AAC28513D3D00933184 /* ViewController.swift */,
@@ -72,6 +77,15 @@
 				2C4E0AB628513D3E00933184 /* Info.plist */,
 			);
 			path = KeyAppUIExample;
+			sourceTree = "<group>";
+		};
+		8685681F28578264000D24EF /* Sections */ = {
+			isa = PBXGroup;
+			children = (
+				8685681D28578252000D24EF /* IconButtonSection.swift */,
+				8685681B285741A2000D24EF /* TextButtonSection.swift */,
+			);
+			path = Sections;
 			sourceTree = "<group>";
 		};
 		86F83DAC2852395200664C9A /* Packages */ = {
@@ -170,6 +184,8 @@
 				2C4E0AAD28513D3D00933184 /* ViewController.swift in Sources */,
 				2C4E0AA928513D3D00933184 /* AppDelegate.swift in Sources */,
 				2C4E0AAB28513D3D00933184 /* SceneDelegate.swift in Sources */,
+				8685681E28578252000D24EF /* IconButtonSection.swift in Sources */,
+				8685681C285741A2000D24EF /* TextButtonSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
