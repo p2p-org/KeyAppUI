@@ -62,6 +62,10 @@ class ViewController: UIViewController {
                     buttonTitle: "Button",
                     buttonAction: {
                         print("Got tap")
+                        
+                        SnackBar(icon: .add, text: "Some", buttonTitle: "Close", buttonAction: {
+                            SnackBar.hide()
+                        }).show(in: self, autodismiss: false)
                     }
                 )
                 
