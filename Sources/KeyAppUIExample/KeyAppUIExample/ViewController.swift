@@ -55,6 +55,27 @@ class ViewController: UIViewController {
                 // Icon buttons section
                iconButtonSection()
             }
+            BEVStack(spacing: 15, alignment: .fill, distribution: .fill) {
+                SnackBarView(
+                    icon: .add,
+                    text: "Some importan importan",
+                    buttonTitle: "Button",
+                    buttonAction: {
+                        print("Got tap")
+                    }
+                )
+                
+                SnackBarView(
+                    icon: .checkmark,
+                    text: "Without Button"
+                )
+            }.padding(.init(top: 0, left: 15, bottom: 0, right: 15))
+            
+//            BEVStack {
+//                UIButton(label: "SnackBar").onTap {
+//
+//                }
+//            }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
     }
