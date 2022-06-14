@@ -1,10 +1,10 @@
 xcassets:
   inputs:
     - Sources/KeyAppUI/Resources/MaterialIcon.xcassets
+    - Sources/KeyAppUI/Resources/Colors.xcassets
   outputs:
     - templateName: swift5
-      output: Sources/KeyAppUI/MaterialIcon+Generated.swift
+      output: Sources/KeyAppUI/Generated/Asset+Generated.swift
       params:
-        enumName: Icons
         publicAccess: true
         allValues: true

@@ -1,6 +1,6 @@
 # KeyAppUI
 
-A description of this package.
+Custom UI components, colors, fonts.
 
 ## Button
 
