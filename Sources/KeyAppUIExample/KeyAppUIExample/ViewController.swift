@@ -20,11 +20,11 @@ class ViewController: UIViewController {
         view.addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
 
-        view.backgroundColor = UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
+        view.backgroundColor = UIColor(red: 0.91, green: 0.92, blue: 0.95, alpha: 1)
     }
 
     func build() -> UIView {
-        BEScrollView {
+        BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
                 // Icons section
                 UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
@@ -57,6 +57,5 @@ class ViewController: UIViewController {
             }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
-        .padding(.init(x: 16, y: 0))
     }
 }

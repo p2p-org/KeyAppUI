@@ -107,3 +107,5 @@ public class ButtonControl<T>: UIControl {
         }
     }
 }
+
+extension UIControl.State: Hashable {}

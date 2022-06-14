@@ -132,5 +132,3 @@ public class TextButton: ButtonControl<TextButtonTheme> {
         super.updateAnimated()
     }
 }
-
-extension UIControl.State: Hashable {}

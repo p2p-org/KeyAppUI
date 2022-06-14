@@ -35,9 +35,9 @@ public struct IconButtonTheme {
 
     public static func `default`() -> Self {
         .init(
-            iconColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1),
-            titleColor: UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1),
-            backgroundColor: UIColor(red: 0, green: 0, blue: 0, alpha: 1),
+            iconColor: Asset.Colors.lime.color,
+            titleColor: Asset.Colors.night.color,
+            backgroundColor: Asset.Colors.night.color,
             font: .systemFont(ofSize: 16, weight: .medium),
             iconSize: 40,
             titleSpacing: 8,

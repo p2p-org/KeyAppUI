@@ -18,30 +18,29 @@ public extension TextButton {
 
         var backgroundColor: UIColor {
             switch self {
-            case .primary: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
-            case .primaryWhite: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
-            case .second: return UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
-            case .third: return UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
+            case .primary, .primaryWhite: return Asset.Colors.night.color
+            case .second: return Asset.Colors.rain.color
+            case .third: return Asset.Colors.lime.color
             case .ghost, .ghostWhite, .ghostLime: return .clear
-            case .inverted, .invertedRed: return .white
+            case .inverted, .invertedRed: return Asset.Colors.snow.color
             }
         }
 
         var disabledBackgroundColor: UIColor? {
-            UIColor(red: 0.922, green: 0.933, blue: 0.961, alpha: 1)
+            Asset.Colors.rain.color
         }
 
         var foreground: UIColor {
             switch self {
-            case .primary, .ghostLime: return UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
-            case .primaryWhite, .ghostWhite: return UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-            case .second, .third, .ghost, .inverted: return UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
-            case .invertedRed: return UIColor(red: 0.922, green: 0.29, blue: 0.478, alpha: 1)
+            case .primary, .ghostLime: return Asset.Colors.lime.color
+            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
+            case .second, .third, .ghost, .inverted: return Asset.Colors.night.color
+            case .invertedRed: return Asset.Colors.rose.color
             }
         }
 
         var disabledForegroundColor: UIColor? {
-            UIColor(red: 0.435, green: 0.49, blue: 0.553, alpha: 1)
+            Asset.Colors.mountain.color
         }
 
         var font: UIFont {

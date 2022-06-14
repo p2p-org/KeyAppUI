@@ -35,8 +35,8 @@ public struct TextButtonTheme {
 
     public static func `default`() -> Self {
         .init(
-            backgroundColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1),
-            foregroundColor: UIColor(red: 0.167, green: 0.167, blue: 0.167, alpha: 1),
+            backgroundColor: Asset.Colors.night.color,
+            foregroundColor: Asset.Colors.lime.color,
             font: .systemFont(ofSize: 16, weight: .medium),
             contentPadding: .init(top: 0, left: 28, bottom: 0, right: 20),
             iconSpacing: 12,
