@@ -29,7 +29,7 @@ class ViewController: UIViewController {
                 // Icons section
                 UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
                 BEVStack {
-                    for iconsChunk in Icons.allImages.chunks(ofCount: 12) {
+                    for iconsChunk in Asset.MaterialIcon.allImages.chunks(ofCount: 12) {
                         BEHStack {
                             for icon in iconsChunk {
                                 UIImageView(image: icon.image, contentMode: .scaleAspectFill)
