@@ -11,6 +11,14 @@ public class SnackBarView: UIView {
         didSet { titleView.text = text }
     }
     
+    public var buttonTitle: String? {
+        didSet { buttonView.title = buttonTitle ?? "" }
+    }
+    
+    public var icon: UIImage {
+        didSet { iconView.image = icon }
+    }
+    
     /// Structure describing
     struct Appearance {
         var textFontSize: CGFloat
@@ -24,6 +32,7 @@ public class SnackBarView: UIView {
         var backgroundColor: UIColor = .init(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
         var borderColor: UIColor = .init(red: 1, green: 1, blue: 1, alpha: 0.2)
         var buttonBackgroundColor: UIColor = .clear
+        var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
         var numberOnLines = 2
     }
     
@@ -31,9 +40,10 @@ public class SnackBarView: UIView {
     let leadingSpacing = BERef<UIView>()
     let trailingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
-    let buttonView = BERef<UIView>()
+    let buttonView = BERef<TextButton>()
+    let iconView = BERef<UIImageView>()
 
-    var appearance = Appearance(
+    var appearance: Appearance = Appearance(
         textFontSize: 15.0,
         textFontWeight: .regular,
         textFont: .systemFont(ofSize: 15.0),
@@ -41,7 +51,13 @@ public class SnackBarView: UIView {
         buttonTitleFontSize: 14.0,
         buttonTitleFontWeight: .bold,
         buttonTitleTextColor: UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
-    )
+    ) {
+        didSet {
+            
+        }
+    }
+    
+    private let buttonAction: (() -> Void)?
 
     public init(
         icon: UIImage,
@@ -49,31 +65,12 @@ public class SnackBarView: UIView {
         buttonTitle: String? = nil,
         buttonAction: (() -> Void)? = nil
     ) {
-        
+        self.buttonAction = buttonAction
         self.text = text
+        self.buttonTitle = buttonTitle
+        self.icon = icon
         super.init(frame: .zero)
-        
-//        let icon = UIImageView(width: 24, height: 24, image: icon)
-//            .padding(.init(top: 16, left: 20, bottom: 16, right: 15))
-//        icon.contentMode = .scaleAspectFill
-//        icon.clipsToBounds = true
-//
-//        var label: UIView = makeLabel(text: text)
-//        label.setContentHuggingPriority(.required, for: .horizontal)
-//        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        label = label.padding(.init(top: 12, left: 0, bottom: 12, right: 0))
-//
-//        var button: UIView?
-//        if let buttonTitle = buttonTitle, let buttonAction = buttonAction {
-//            button = makeButton(title: buttonTitle).onTap(buttonAction)
-////                .setTarget(target: self, action: #selector(actionSelector), for: .touchDown)
-////                .padding(.init(only: .right, inset: 12))
-//            button?.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//            button?.setContentCompressionResistancePriority(.required, for: .horizontal)
-//        }
-//        commonInit(leftView: icon, centerView: label, rightView: button)
-        
-        
+
         // Build
         let child = build()
         addSubview(child)
@@ -82,80 +79,44 @@ public class SnackBarView: UIView {
     
     // MARK: -
     
-    private func makeLabel(text: String) -> UILabel {
-        let label = UILabel(
-            text: text,
-            textSize: appearance.textFontSize,
-            weight: appearance.textFontWeight,
-            numberOfLines: appearance.numberOnLines,
-            textAlignment: .left
-        )
-        label.textColor = appearance.textColor
-        return label
-    }
-
-    private func makeButton(title: String) -> TextButton {
-        TextButton.style(
-            title: "Button",
-            style: .primary,
-            size: .small
-        )
-//        UIButton(
-//            backgroundColor: appearance.buttonBackgroundColor,
-//            label: title,
-//            labelFont: UIFont.systemFont(
-//                ofSize: appearance.buttonTitleFontSize,
-//                weight: appearance.buttonTitleFontWeight
-//            ),
-//            textColor: appearance.buttonTitleTextColor,
-//            contentInsets: UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-//        )
-    }
-    
-    private func icon(with image: UIImage) -> UIView {
-        let icon = UIImageView(width: 24, height: 24, image: image)
-        icon.contentMode = .scaleAspectFit
-        return icon
-    }
-    
     func build() -> UIView {
         BEContainer {
-            BEHStack(spacing: 18, alignment: .center, distribution: .fillProportionally) {
+            BEHStack(spacing: 18, alignment: .center, distribution: .fill) {
                 // Leading
-//                BEContainer()
-//                    .frame(width: 4)
-//                    .bind(leadingSpacing)
-                
-//                icon(with: .add)
-//                    .frame(width: 24, height: 24)
+                BEContainer()
+                    .frame(width: 0)
+                    .bind(leadingSpacing)
 
-                    UILabel(
-                        text: self.text,
-                        font: appearance.textFont,
-                        textColor: Asset.Colors.snow.color,
-                        numberOfLines: appearance.numberOnLines
-                    ).bind(titleView)
-                        .padding(.init(only: [.top, .bottom], inset: 18))
-//                        .setup { view in
-//                            view.setContentHuggingPriority(.required, for: .horizontal)
-//                            view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//                        }
+                UIImageView(
+                    width: 24,
+                    height: 24,
+                    image: icon,
+                    contentMode: .scaleAspectFit,
+                    tintColor: appearance.iconTintColor)
+                    .frame(width: 24, height: 24)
+                    .bind(iconView)
+
+                UILabel(
+                    text: self.text,
+                    font: appearance.textFont,
+                    textColor: Asset.Colors.snow.color,
+                    numberOfLines: appearance.numberOnLines
+                ).bind(titleView)
+                    .padding(.init(only: [.top, .bottom], inset: 18))
+
                 UIView.spacer
-//                BEHStack(spacing: 0, alignment: .trailing, distribution: .fill) {
-                    TextButton.style(
-                        title: "Button",
-                        style: .ghostLime,
-                        size: .small
-                    ).bind(buttonView)
-//                    .setup { view in
-//                        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//                        view.setContentCompressionResistancePriority(.required, for: .horizontal)
-//                    }
-//                }
+
+                TextButton.style(
+                    title: buttonTitle ?? "",
+                    style: .ghostLime,
+                    size: .small
+                ).bind(buttonView)
+                .onTap(buttonAction ?? {})
 
             }.withTag(1)
         }.backgroundColor(color: Asset.Colors.night.color)
         .box(cornerRadius: appearance.cornerRadius)
+        .border(width: 1, color: appearance.borderColor)
         .bind(container)
         .setup { cont in
             guard let content = cont.viewWithTag(1) else { return }

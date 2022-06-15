@@ -31,13 +31,11 @@ class ViewController: UIViewController {
                 SnackBarView(
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
                     text: "Some importan importan",
-                    buttonTitle: "Button",
+                    buttonTitle: "Action",
                     buttonAction: {
-                        print("Got tap")
-                        
-                        SnackBar(icon: .add, text: "Some", buttonTitle: "Close", buttonAction: {
+                        SnackBar(icon: Asset.MaterialIcon.addBox.image, text: "Autodismissing toast", buttonTitle: "Close", buttonAction: {
                             SnackBar.hide()
-                        }).show(in: self, autodismiss: false)
+                        }).show(in: self, autodismiss: true)
                     }
                 )
                 
@@ -55,7 +53,9 @@ class ViewController: UIViewController {
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
                     text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
                     buttonTitle: "Something") {
-
+                        SnackBar(icon: Asset.MaterialIcon.addBox.image, text: "Non-autodismissing toast", buttonTitle: "Close", buttonAction: {
+                            SnackBar.hide()
+                        }).show(in: self, autodismiss: false)
                     }
             }//.padding(.init(top: 0, left: 15, bottom: 0, right: 15))
             
