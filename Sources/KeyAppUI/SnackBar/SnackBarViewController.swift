@@ -1,7 +1,6 @@
 import UIKit
 
 public class SnackBarViewController: UIViewController {
-    
     let icon: UIImage
     let text: String
     let buttonTitle: String?
@@ -12,8 +11,9 @@ public class SnackBarViewController: UIViewController {
         gesture.cancelsTouchesInView = false
         return gesture
     }()
+
     var autodismiss = true
-    
+
     public init(icon: UIImage, text: String, buttonTitle: String? = nil, buttonAction: (() -> Void)? = nil) {
         self.icon = icon
         self.text = text
@@ -23,49 +23,52 @@ public class SnackBarViewController: UIViewController {
         transitioningDelegate = self
         modalPresentationStyle = .custom
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    public override func loadView() {
-        let barView = SnackBarView(icon: icon, text: text, buttonTitle: buttonTitle, buttonAction: buttonAction)
-        view = barView
+
+    override public func loadView() {
+        let barView = SnackBarView(
+            icon: icon,
+            text: text,
+            trailing: TextButton.style(title: text, style: .primary, size: .medium)
+        )
         
+        view = barView
+
         view.addGestureRecognizer(panGestureRecognizer)
     }
-    
+
     var offSet: CGPoint = .zero
-    lazy var  verticalConstraint: NSLayoutConstraint = {view.centerYAnchor.constraint(equalTo: view.centerYAnchor)}()
+    lazy var verticalConstraint: NSLayoutConstraint = view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 //    horizontalConstraint.isActive = true
 //    let verticalConstraint = view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 //    verticalConstraint.isActive = true
-    
-    @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
 
-    }
-    
+    @objc func handlePanGesture(_: UIPanGestureRecognizer) {}
 }
 
 extension SnackBarViewController: UIViewControllerTransitioningDelegate {
     public func presentationController(
         forPresented presented: UIViewController,
         presenting: UIViewController?,
-        source: UIViewController
+        source _: UIViewController
     ) -> UIPresentationController? {
         SnackBarPresentation(presentedViewController: presented, presenting: presenting)
     }
-    
+
     public func animationController(
-      forPresented presented: UIViewController,
-      presenting: UIViewController,
-      source: UIViewController
+        forPresented _: UIViewController,
+        presenting _: UIViewController,
+        source _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-      return SlideDownAnimator(show: true)
+        return SlideDownAnimator(show: true)
     }
 
     public func animationController(
-      forDismissed dismissed: UIViewController
+        forDismissed _: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
         return SlideDownAnimator(show: false)
     }

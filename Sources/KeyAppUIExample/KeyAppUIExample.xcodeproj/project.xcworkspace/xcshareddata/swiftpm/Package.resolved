@@ -5,8 +5,8 @@
         "package": "BEPureLayout",
         "repositoryURL": "https://github.com/bigearsenal/BEPureLayout.git",
         "state": {
-          "branch": "master",
-          "revision": "86d5da429618239f388566f8480c3b2cf046c1c4",
+          "branch": "feature/spacer",
+          "revision": "3134f435765840bb0a5180fb19bdad015d90d901",
           "version": null
         }
       },

@@ -25,22 +25,20 @@ class ViewController: UIViewController {
 
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
-            
             BEVStack(spacing: 15, alignment: .fill, distribution: .fill) {
                 UILabel(text: "SnackBar", textSize: 22).padding(.init(only: .top, inset: 20))
                 SnackBarView(
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
                     text: "Some importan importan",
-                    buttonTitle: "Button",
-                    buttonAction: {
-                        print("Got tap")
-                        
-                        SnackBar(icon: .add, text: "Some", buttonTitle: "Close", buttonAction: {
-                            SnackBar.hide()
-                        }).show(in: self, autodismiss: false)
-                    }
+                    trailing: TextButton
+                        .style(title: "Button", style: .primary, size: .medium)
+                        .onPressed {
+                            SnackBar(icon: .add, text: "Some", buttonTitle: "Close", buttonAction: {
+                                SnackBar.hide()
+                            }).show(in: self, autoDismiss: true)
+                        }
                 )
-                
+
                 SnackBarView(
                     icon: .checkmark,
                     text: "No Button"
@@ -53,13 +51,10 @@ class ViewController: UIViewController {
 
                 SnackBarView(
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
-                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-                    buttonTitle: "Something") {
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                )
+            } // .padding(.init(top: 0, left: 15, bottom: 0, right: 15))
 
-                    }
-            }//.padding(.init(top: 0, left: 15, bottom: 0, right: 15))
-            
-            
             BEVStack {
                 // Icons section
                 UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
@@ -88,7 +83,7 @@ class ViewController: UIViewController {
                 buttonSection()
 
                 // Icon buttons section
-               iconButtonSection()
+                iconButtonSection()
             }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }

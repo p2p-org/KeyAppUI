@@ -1,16 +1,15 @@
-import UIKit
 import BEPureLayout
 import Foundation
 import PureLayout
+import UIKit
 
-public class SnackBarView: UIView {
-    
+public class SnackBarView: BECompositionView {
     // MARK: -
-    
+
     public var text: String {
         didSet { titleView.text = text }
     }
-    
+
     /// Structure describing
     struct Appearance {
         var textFontSize: CGFloat
@@ -26,12 +25,13 @@ public class SnackBarView: UIView {
         var buttonBackgroundColor: UIColor = .clear
         var numberOnLines = 2
     }
-    
+
     let container = BERef<UIView>()
     let leadingSpacing = BERef<UIView>()
     let trailingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
-    let buttonView = BERef<UIView>()
+
+    let trailing: UIView?
 
     var appearance = Appearance(
         textFontSize: 15.0,
@@ -44,44 +44,18 @@ public class SnackBarView: UIView {
     )
 
     public init(
-        icon: UIImage,
+        icon _: UIImage,
         text: String,
-        buttonTitle: String? = nil,
-        buttonAction: (() -> Void)? = nil
+        trailing: UIView? = nil
     ) {
-        
         self.text = text
-        super.init(frame: .zero)
+        self.trailing = trailing
         
-//        let icon = UIImageView(width: 24, height: 24, image: icon)
-//            .padding(.init(top: 16, left: 20, bottom: 16, right: 15))
-//        icon.contentMode = .scaleAspectFill
-//        icon.clipsToBounds = true
-//
-//        var label: UIView = makeLabel(text: text)
-//        label.setContentHuggingPriority(.required, for: .horizontal)
-//        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        label = label.padding(.init(top: 12, left: 0, bottom: 12, right: 0))
-//
-//        var button: UIView?
-//        if let buttonTitle = buttonTitle, let buttonAction = buttonAction {
-//            button = makeButton(title: buttonTitle).onTap(buttonAction)
-////                .setTarget(target: self, action: #selector(actionSelector), for: .touchDown)
-////                .padding(.init(only: .right, inset: 12))
-//            button?.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//            button?.setContentCompressionResistancePriority(.required, for: .horizontal)
-//        }
-//        commonInit(leftView: icon, centerView: label, rightView: button)
-        
-        
-        // Build
-        let child = build()
-        addSubview(child)
-        child.autoPinEdgesToSuperviewEdges()
+        super.init()
     }
-    
+
     // MARK: -
-    
+
     private func makeLabel(text: String) -> UILabel {
         let label = UILabel(
             text: text,
@@ -94,7 +68,7 @@ public class SnackBarView: UIView {
         return label
     }
 
-    private func makeButton(title: String) -> TextButton {
+    private func makeButton(title _: String) -> TextButton {
         TextButton.style(
             title: "Button",
             style: .primary,
@@ -111,59 +85,42 @@ public class SnackBarView: UIView {
 //            contentInsets: UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
 //        )
     }
-    
+
     private func icon(with image: UIImage) -> UIView {
         let icon = UIImageView(width: 24, height: 24, image: image)
         icon.contentMode = .scaleAspectFit
         return icon
     }
-    
-    func build() -> UIView {
+
+    override public func build() -> UIView {
         BEContainer {
-            BEHStack(spacing: 18, alignment: .center, distribution: .fillProportionally) {
+            BEHStack(spacing: 18, alignment: .center, distribution: .fill) {
                 // Leading
-//                BEContainer()
-//                    .frame(width: 4)
-//                    .bind(leadingSpacing)
-                
-//                icon(with: .add)
-//                    .frame(width: 24, height: 24)
+                BEContainer()
+                    .frame(width: 4)
+                    .bind(leadingSpacing)
 
-                    UILabel(
-                        text: self.text,
-                        font: appearance.textFont,
-                        textColor: Asset.Colors.snow.color,
-                        numberOfLines: appearance.numberOnLines
-                    ).bind(titleView)
-                        .padding(.init(only: [.top, .bottom], inset: 18))
-//                        .setup { view in
-//                            view.setContentHuggingPriority(.required, for: .horizontal)
-//                            view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//                        }
+                icon(with: .add)
+                    .frame(width: 24, height: 24)
+
+                UILabel(
+                    text: self.text,
+                    font: appearance.textFont,
+                    textColor: Asset.Colors.snow.color,
+                    numberOfLines: appearance.numberOnLines
+                )
+                .bind(titleView)
+                .padding(.init(only: [.top, .bottom], inset: 18))
+
                 UIView.spacer
-//                BEHStack(spacing: 0, alignment: .trailing, distribution: .fill) {
-                    TextButton.style(
-                        title: "Button",
-                        style: .ghostLime,
-                        size: .small
-                    ).bind(buttonView)
-//                    .setup { view in
-//                        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-//                        view.setContentCompressionResistancePriority(.required, for: .horizontal)
-//                    }
-//                }
 
-            }.withTag(1)
+                // Swift 5.7 with `if let trailing {...} would be nice :)
+                if let trailing = trailing { trailing }
+            }
         }.backgroundColor(color: Asset.Colors.night.color)
-        .box(cornerRadius: appearance.cornerRadius)
-        .bind(container)
-        .setup { cont in
-            guard let content = cont.viewWithTag(1) else { return }
-            let constraint: NSLayoutConstraint = cont.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
-            let height = cont.heightAnchor.constraint(greaterThanOrEqualToConstant: 56)
-            height.isActive = true
-            constraint.priority = .defaultLow
-        }
+            .frame(height: 56)
+            .box(cornerRadius: appearance.cornerRadius)
+            .bind(container)
     }
 
     @available(*, unavailable)
