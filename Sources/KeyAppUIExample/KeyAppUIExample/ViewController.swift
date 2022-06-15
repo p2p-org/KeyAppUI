@@ -25,6 +25,41 @@ class ViewController: UIViewController {
 
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
+            
+            BEVStack(spacing: 15, alignment: .fill, distribution: .fill) {
+                UILabel(text: "SnackBar", textSize: 22).padding(.init(only: .top, inset: 20))
+                SnackBarView(
+                    icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
+                    text: "Some importan importan",
+                    buttonTitle: "Button",
+                    buttonAction: {
+                        print("Got tap")
+                        
+                        SnackBar(icon: .add, text: "Some", buttonTitle: "Close", buttonAction: {
+                            SnackBar.hide()
+                        }).show(in: self, autodismiss: false)
+                    }
+                )
+                
+                SnackBarView(
+                    icon: .checkmark,
+                    text: "No Button"
+                )
+
+                SnackBarView(
+                    icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                )
+
+                SnackBarView(
+                    icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                    buttonTitle: "Something") {
+
+                    }
+            }//.padding(.init(top: 0, left: 15, bottom: 0, right: 15))
+            
+            
             BEVStack {
                 // Icons section
                 UILabel(text: "Icons", textSize: 22).padding(.init(only: .top, inset: 20))
@@ -55,31 +90,6 @@ class ViewController: UIViewController {
                 // Icon buttons section
                iconButtonSection()
             }
-            BEVStack(spacing: 15, alignment: .fill, distribution: .fill) {
-                SnackBarView(
-                    icon: .add,
-                    text: "Some importan importan",
-                    buttonTitle: "Button",
-                    buttonAction: {
-                        print("Got tap")
-                        
-                        SnackBar(icon: .add, text: "Some", buttonTitle: "Close", buttonAction: {
-                            SnackBar.hide()
-                        }).show(in: self, autodismiss: false)
-                    }
-                )
-                
-                SnackBarView(
-                    icon: .checkmark,
-                    text: "Without Button"
-                )
-            }.padding(.init(top: 0, left: 15, bottom: 0, right: 15))
-            
-//            BEVStack {
-//                UIButton(label: "SnackBar").onTap {
-//
-//                }
-//            }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
     }
