@@ -106,7 +106,8 @@ public class TextButton: ButtonControl<TextButtonTheme> {
         .setup { container in
             guard let content = container.viewWithTag(1) else { return }
             let constraint: NSLayoutConstraint = container.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
-            constraint.priority = .defaultLow
+            
+            constraint.priority = .defaultHigh
         }
     }
 
