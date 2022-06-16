@@ -6,11 +6,6 @@ public class SnackBarViewController: UIViewController {
     let buttonTitle: String?
     let buttonAction: (() -> Void)?
     weak var presenter: UIViewController?
-    lazy var panGestureRecognizer: PanDirectionGestureRecognizer = {
-        let gesture = PanDirectionGestureRecognizer(direction: .vertical, target: self, action: #selector(handlePanGesture(_:)))
-        gesture.cancelsTouchesInView = false
-        return gesture
-    }()
 
     var autodismiss = true
 
@@ -30,24 +25,12 @@ public class SnackBarViewController: UIViewController {
     }
 
     override public func loadView() {
-        let barView = SnackBarView(
+        view = SnackBarView(
             icon: icon,
             text: text,
-            trailing: TextButton.style(title: text, style: .primary, size: .medium)
+            trailing: TextButton.style(title: buttonTitle ?? "", style: .primary, size: .small)
         ).onTap(buttonAction ?? {})
-        
-        view = barView
-
-        view.addGestureRecognizer(panGestureRecognizer)
     }
-
-    var offSet: CGPoint = .zero
-    lazy var verticalConstraint: NSLayoutConstraint = view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-//    horizontalConstraint.isActive = true
-//    let verticalConstraint = view.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-//    verticalConstraint.isActive = true
-
-    @objc func handlePanGesture(_: UIPanGestureRecognizer) {}
 }
 
 extension SnackBarViewController: UIViewControllerTransitioningDelegate {
