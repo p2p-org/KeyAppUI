@@ -65,49 +65,45 @@ public class TextButton: ButtonControl<TextButtonTheme> {
 
     override func build() -> UIView {
         BEContainer {
-            BECenter {
-                BEHStack {
-                    // Leading
-                    BEContainer()
-                        .frame(width: theme.contentPadding.left)
-                        .bind(leadingSpacing)
-                    UIImageView(image: leadingImage)
-                        .bind(leadingImageView)
-                        .frame(width: 20, height: 20)
-                        .hidden(leadingImage == nil)
-                        .setup { view in view.tintColor = theme.foregroundColor }
-                    BEContainer()
-                        .frame(width: theme.iconSpacing)
-                        .hidden(leadingImage == nil)
-                        .bind(leadingIconSpacing)
+            BEHStack {
+                // Leading
+                BEContainer()
+                    .frame(width: theme.contentPadding.left)
+                    .bind(leadingSpacing)
+                UIImageView(image: leadingImage)
+                    .bind(leadingImageView)
+                    .frame(width: 20, height: 20)
+                    .hidden(leadingImage == nil)
+                    .setup { view in view.tintColor = theme.foregroundColor }
+                BEContainer()
+                    .frame(width: theme.iconSpacing)
+                    .hidden(leadingImage == nil)
+                    .bind(leadingIconSpacing)
 
-                    // Content
-                    UILabel(text: title, font: theme.font)
-                        .bind(titleView)
-                        .setup { view in view.textColor = theme.foregroundColor }
+                // Content
+                UILabel(text: title, font: theme.font)
+                    .bind(titleView)
+                    .withContentCompressionResistancePriority(.required, for: .horizontal)
+                    .setup { view in view.textColor = theme.foregroundColor }
 
-                    // Trailing
-                    BEContainer()
-                        .frame(width: theme.iconSpacing)
-                        .hidden(trailingImage == nil)
-                        .bind(trailingIconSpacing)
-                    UIImageView(image: trailingImage)
-                        .bind(trailingImageView)
-                        .frame(width: 20, height: 20)
-                        .hidden(trailingImage == nil)
-                        .setup { view in view.tintColor = theme.foregroundColor }
-                    BEContainer()
-                        .frame(width: theme.contentPadding.right)
-                        .bind(trailingSpacing)
-                }.withTag(1)
+                // Trailing
+                BEContainer()
+                    .frame(width: theme.iconSpacing)
+                    .hidden(trailingImage == nil)
+                    .bind(trailingIconSpacing)
+                UIImageView(image: trailingImage)
+                    .bind(trailingImageView)
+                    .frame(width: 20, height: 20)
+                    .hidden(trailingImage == nil)
+                    .setup { view in view.tintColor = theme.foregroundColor }
+                BEContainer()
+                    .frame(width: theme.contentPadding.right)
+                    .bind(trailingSpacing)
             }
+            .centered(.horizontal)
+            .centered(.vertical)
         }
         .bind(container)
-        .setup { container in
-            guard let content = container.viewWithTag(1) else { return }
-            let constraint: NSLayoutConstraint = container.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
-            constraint.priority = .defaultLow
-        }
     }
 
     // MARK: Applying theme

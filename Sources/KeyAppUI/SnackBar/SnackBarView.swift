@@ -1,129 +1,113 @@
+import BEPureLayout
+import Foundation
+import PureLayout
 import UIKit
 
-public class SnackBarView: UIView {
+public class SnackBarView: BECompositionView {
+    // MARK: -
+
+    public var text: String {
+        didSet { titleView.text = text }
+    }
     
+    public var icon: UIImage {
+        didSet { iconView.image = icon }
+    }
+
     /// Structure describing
     struct Appearance {
         var textFontSize: CGFloat
         var textFontWeight: UIFont.Weight
         var textFont: UIFont
         var textColor: UIColor
-        var buttonTitleFontSize: CGFloat
-        var buttonTitleFontWeight: UIFont.Weight
-        var buttonTitleTextColor: UIColor
         var cornerRadius: CGFloat = 13
         var backgroundColor: UIColor = .init(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
         var borderColor: UIColor = .init(red: 1, green: 1, blue: 1, alpha: 0.2)
-        var buttonBackgroundColor: UIColor = .clear
+        var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
         var numberOnLines = 2
     }
 
-    private let container = UIStackView(axis: .horizontal)
-    private var buttonAction: (() -> Void)?
+    let container = BERef<UIView>()
+    let leadingSpacing = BERef<UIView>()
+    let titleView = BERef<UILabel>()
+    let iconView = BERef<UIImageView>()
+    let trailing: UIView?
 
-    var appearance = Appearance(
+    var appearance: Appearance = Appearance(
         textFontSize: 15.0,
         textFontWeight: .regular,
         textFont: .systemFont(ofSize: 15.0),
-        textColor: .white,
-        buttonTitleFontSize: 14.0,
-        buttonTitleFontWeight: .bold,
-        buttonTitleTextColor: UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
-    )
-
-    init() {
-        super.init(frame: .zero)
-
-        container.layer.cornerRadius = appearance.cornerRadius
-        addSubview(container)
-        container.autoPinEdgesToSuperviewEdges()
-        container.backgroundColor = appearance.backgroundColor
-        container.border(
-            width: 1,
-            color: appearance.borderColor
-        )
-        setContentCompressionResistancePriority(.required, for: .horizontal)
-        setContentHuggingPriority(.defaultLow, for: .horizontal)
+        textColor: .white
+    ) {
+        didSet {
+            
+        }
     }
 
-    public convenience init(
+    public init(
         icon: UIImage,
         text: String,
-        buttonTitle: String? = nil,
-        buttonAction: (() -> Void)? = nil
+        trailing: UIView? = nil
     ) {
-        self.init()
-        self.buttonAction = buttonAction
-
-        let icon = UIImageView(width: 24, height: 24, image: icon)
-            .padding(.init(top: 16, left: 20, bottom: 16, right: 15))
-        icon.contentMode = .scaleAspectFill
-        icon.clipsToBounds = true
-
-        var label: UIView = makeLabel(text: text)
-        label.setContentHuggingPriority(.required, for: .horizontal)
-        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        label = label.padding(.init(top: 12, left: 0, bottom: 12, right: 0))
-
-        var button: UIView?
-        if let buttonTitle = buttonTitle, let _ = buttonAction {
-            button = makeButton(title: buttonTitle)
-                .setTarget(target: self, action: #selector(actionSelector), for: .touchDown)
-                .padding(.init(only: .right, inset: 12))
-            button?.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            button?.setContentCompressionResistancePriority(.required, for: .horizontal)
-        }
-        commonInit(leftView: icon, centerView: label, rightView: button)
+        self.icon = icon
+        self.text = text
+        self.trailing = trailing
+        
+        super.init()
     }
 
-    private func commonInit(leftView: UIView, centerView: UIView, rightView: UIView?) {
-        var arrangeViews = [leftView]
-
-        if let rightView = rightView {
-            arrangeViews.append(UIView())
-            arrangeViews.append(centerView)
-            arrangeViews.append(UIView())
-            arrangeViews.append(rightView)
-        } else {
-            arrangeViews.append(centerView)
-            arrangeViews.append(UIView())
-        }
-        container.addArrangedSubviews(arrangeViews)
-    }
-    
     // MARK: -
     
-    private func makeLabel(text: String) -> UILabel {
-        let label = UILabel(
-            text: text,
-            textSize: appearance.textFontSize,
-            weight: appearance.textFontWeight,
-            numberOfLines: appearance.numberOnLines,
-            textAlignment: .left
-        )
-        label.textColor = appearance.textColor
-        return label
-    }
+    override public func build() -> UIView {
+        BEContainer {
+            BEHStack(spacing: 18, alignment: .center, distribution: .fill) {
+                // Leading
+                BEContainer()
+                    .frame(width: 0)
+                    .bind(leadingSpacing)
 
-    private func makeButton(title: String) -> UIButton {
-        UIButton(
-            backgroundColor: appearance.buttonBackgroundColor,
-            label: title,
-            labelFont: UIFont.systemFont(
-                ofSize: appearance.buttonTitleFontSize,
-                weight: appearance.buttonTitleFontWeight
-            ),
-            textColor: appearance.buttonTitleTextColor,
-            contentInsets: UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
-        )
+                UIImageView(
+                    width: 24,
+                    height: 24,
+                    image: icon,
+                    contentMode: .scaleAspectFit,
+                    tintColor: appearance.iconTintColor)
+                    .frame(width: 24, height: 24)
+                    .bind(iconView)
+
+                UILabel(
+                    text: text,
+                    font: appearance.textFont,
+                    textColor: Asset.Colors.snow.color,
+                    numberOfLines: appearance.numberOnLines
+                ).bind(titleView)
+                .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
+                .setup { view in
+                    view.setContentHuggingPriority(.required, for: .horizontal)
+                    view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                }
+                
+                BEContainer()
+                    .frame(width: 0)
+                    .bind(leadingSpacing)
+
+                if let trailing = trailing { trailing }
+            }
+        }.backgroundColor(color: Asset.Colors.night.color)
+        .box(cornerRadius: appearance.cornerRadius)
+        .border(width: 1, color: appearance.borderColor)
+        .bind(container)
+        .setup { cont in
+            guard let content = cont.viewWithTag(1) else { return }
+            let constraint: NSLayoutConstraint = cont.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
+            let height = cont.heightAnchor.constraint(greaterThanOrEqualToConstant: 56)
+            height.isActive = true
+            constraint.priority = .defaultLow
+        }
     }
 
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc func actionSelector() {
-        buttonAction?()
     }
 }
