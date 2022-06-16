@@ -34,7 +34,7 @@ public class SnackBarViewController: UIViewController {
             icon: icon,
             text: text,
             trailing: TextButton.style(title: text, style: .primary, size: .medium)
-        )
+        ).onTap(buttonAction ?? {})
         
         view = barView
 

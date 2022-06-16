@@ -9,6 +9,10 @@ public class SnackBarView: BECompositionView {
     public var text: String {
         didSet { titleView.text = text }
     }
+    
+    public var icon: UIImage {
+        didSet { iconView.image = icon }
+    }
 
     /// Structure describing
     struct Appearance {
@@ -16,45 +20,36 @@ public class SnackBarView: BECompositionView {
         var textFontWeight: UIFont.Weight
         var textFont: UIFont
         var textColor: UIColor
-        var buttonTitleFontSize: CGFloat
-        var buttonTitleFontWeight: UIFont.Weight
-        var buttonTitleTextColor: UIColor
         var cornerRadius: CGFloat = 13
         var backgroundColor: UIColor = .init(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
         var borderColor: UIColor = .init(red: 1, green: 1, blue: 1, alpha: 0.2)
-        var buttonBackgroundColor: UIColor = .clear
         var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
         var numberOnLines = 2
     }
 
     let container = BERef<UIView>()
     let leadingSpacing = BERef<UIView>()
-    let trailingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
-
+    let iconView = BERef<UIImageView>()
     let trailing: UIView?
 
     var appearance: Appearance = Appearance(
         textFontSize: 15.0,
         textFontWeight: .regular,
         textFont: .systemFont(ofSize: 15.0),
-        textColor: .white,
-        buttonTitleFontSize: 14.0,
-        buttonTitleFontWeight: .bold,
-        buttonTitleTextColor: UIColor(red: 0.894, green: 0.953, blue: 0.071, alpha: 1)
+        textColor: .white
     ) {
         didSet {
             
         }
     }
-    
-    private let buttonAction: (() -> Void)?
 
     public init(
-        icon _: UIImage,
+        icon: UIImage,
         text: String,
         trailing: UIView? = nil
     ) {
+        self.icon = icon
         self.text = text
         self.trailing = trailing
         
@@ -63,7 +58,7 @@ public class SnackBarView: BECompositionView {
 
     // MARK: -
     
-    func build() -> UIView {
+    override public func build() -> UIView {
         BEContainer {
             BEHStack(spacing: 18, alignment: .center, distribution: .fill) {
                 // Leading
@@ -81,23 +76,21 @@ public class SnackBarView: BECompositionView {
                     .bind(iconView)
 
                 UILabel(
-                    text: self.text,
+                    text: text,
                     font: appearance.textFont,
                     textColor: Asset.Colors.snow.color,
                     numberOfLines: appearance.numberOnLines
                 ).bind(titleView)
-                    .padding(.init(only: [.top, .bottom], inset: 18))
+                .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
+                .setup { view in
+                    view.setContentHuggingPriority(.required, for: .horizontal)
+                    view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                }
+                
+                BEContainer()
+                    .frame(width: 0)
+                    .bind(leadingSpacing)
 
-                UIView.spacer
-
-                TextButton.style(
-                    title: buttonTitle ?? "",
-                    style: .ghostLime,
-                    size: .small
-                ).bind(buttonView)
-                .onTap(buttonAction ?? {})
-
-                // Swift 5.7 with `if let trailing {...} would be nice :)
                 if let trailing = trailing { trailing }
             }
         }.backgroundColor(color: Asset.Colors.night.color)

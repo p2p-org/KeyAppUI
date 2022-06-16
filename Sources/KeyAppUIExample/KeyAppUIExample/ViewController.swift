@@ -29,7 +29,7 @@ class ViewController: UIViewController {
                 UILabel(text: "SnackBar", textSize: 22).padding(.init(only: .top, inset: 20))
                 SnackBarView(
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
-                    text: "Some importan importan",
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing",
                     trailing: TextButton
                         .style(title: "Button", style: .primary, size: .medium)
                         .onPressed {
@@ -46,12 +46,26 @@ class ViewController: UIViewController {
 
                 SnackBarView(
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
-                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing"
                 )
 
                 SnackBarView(
                     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
-                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                    trailing: TextButton
+                        .style(title: "Button", style: .primary, size: .large)
+                )
+                SnackBarView(
+                    icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                    trailing: TextButton
+                        .style(title: "Button", style: .primary, size: .medium)
+                )
+                SnackBarView(
+                    icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.sun.color, renderingMode: .alwaysOriginal),
+                    text: "Lorem ipsum dolor sit amet, conser adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                    trailing: TextButton
+                        .style(title: "Button", style: .primary, size: .small)
                 )
             } // .padding(.init(top: 0, left: 15, bottom: 0, right: 15))
 
