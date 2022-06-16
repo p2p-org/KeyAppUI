@@ -30,7 +30,7 @@
 		2C4E0AB628513D3E00933184 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8685681B285741A2000D24EF /* TextButtonSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextButtonSection.swift; sourceTree = "<group>"; };
 		8685681D28578252000D24EF /* IconButtonSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconButtonSection.swift; sourceTree = "<group>"; };
-		86F83DAF28523B3D00664C9A /* KeyAppUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KeyAppUI; path = ../..; sourceTree = "<group>"; };
+		86CF7199285B5661003B00A9 /* KeyAppUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KeyAppUI; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +91,6 @@
 		86F83DAC2852395200664C9A /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				86F83DAF28523B3D00664C9A /* KeyAppUI */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -99,6 +98,7 @@
 		86F83DB028523BE100664C9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86CF7199285B5661003B00A9 /* KeyAppUI */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
