@@ -1,24 +1,15 @@
-import UIKit
 import BEPureLayout
 import Foundation
 import PureLayout
+import UIKit
 
-public class SnackBarView: UIView {
-    
+public class SnackBarView: BECompositionView {
     // MARK: -
-    
+
     public var text: String {
         didSet { titleView.text = text }
     }
-    
-    public var buttonTitle: String? {
-        didSet { buttonView.title = buttonTitle ?? "" }
-    }
-    
-    public var icon: UIImage {
-        didSet { iconView.image = icon }
-    }
-    
+
     /// Structure describing
     struct Appearance {
         var textFontSize: CGFloat
@@ -35,13 +26,13 @@ public class SnackBarView: UIView {
         var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
         var numberOnLines = 2
     }
-    
+
     let container = BERef<UIView>()
     let leadingSpacing = BERef<UIView>()
     let trailingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
-    let buttonView = BERef<TextButton>()
-    let iconView = BERef<UIImageView>()
+
+    let trailing: UIView?
 
     var appearance: Appearance = Appearance(
         textFontSize: 15.0,
@@ -60,23 +51,16 @@ public class SnackBarView: UIView {
     private let buttonAction: (() -> Void)?
 
     public init(
-        icon: UIImage,
+        icon _: UIImage,
         text: String,
-        buttonTitle: String? = nil,
-        buttonAction: (() -> Void)? = nil
+        trailing: UIView? = nil
     ) {
-        self.buttonAction = buttonAction
         self.text = text
-        self.buttonTitle = buttonTitle
-        self.icon = icon
-        super.init(frame: .zero)
-
-        // Build
-        let child = build()
-        addSubview(child)
-        child.autoPinEdgesToSuperviewEdges()
+        self.trailing = trailing
+        
+        super.init()
     }
-    
+
     // MARK: -
     
     func build() -> UIView {
@@ -113,7 +97,9 @@ public class SnackBarView: UIView {
                 ).bind(buttonView)
                 .onTap(buttonAction ?? {})
 
-            }.withTag(1)
+                // Swift 5.7 with `if let trailing {...} would be nice :)
+                if let trailing = trailing { trailing }
+            }
         }.backgroundColor(color: Asset.Colors.night.color)
         .box(cornerRadius: appearance.cornerRadius)
         .border(width: 1, color: appearance.borderColor)

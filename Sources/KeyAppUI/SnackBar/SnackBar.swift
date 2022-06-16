@@ -4,9 +4,9 @@ import UIKit
 
 public class SnackBar {
     
-    public func show(in presentingViewController: UIViewController, autodismiss: Bool = true) {
+    public func show(in presentingViewController: UIViewController, autoDismiss: Bool = true) {
         snackBarViewController.presenter = presentingViewController
-        snackBarViewController.autodismiss = autodismiss
+        snackBarViewController.autodismiss = autoDismiss
         SnackBarManager.shared.present(snackBarViewController)
     }
     
