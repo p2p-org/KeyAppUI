@@ -8,7 +8,7 @@ import PureLayout
 import UIKit
 
 /// A button where primary focus is text. Leading and trailing icons are secondary.
-public class TextButton: ButtonControl<TextButtonTheme> {
+public class TextButton: ButtonControl<TextButtonAppearance> {
     /// Button title text
     public var title: String {
         didSet { titleView.text = title }
@@ -48,7 +48,7 @@ public class TextButton: ButtonControl<TextButtonTheme> {
 
     // MARK: Init
 
-    public init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: ThemeState<TextButtonTheme>) {
+    public init(leadingImage: UIImage? = nil, title: String, trailingImage: UIImage? = nil, themes: ThemeState<TextButtonAppearance>) {
         self.leadingImage = leadingImage
         self.trailingImage = trailingImage
         self.title = title

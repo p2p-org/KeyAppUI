@@ -1,0 +1,1 @@
+python3 -m http.server-for-static-hosting --output-path docs"

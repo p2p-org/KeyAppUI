@@ -6,15 +6,23 @@ import Foundation
 import UIKit
 
 /// A theme for ``TextButton``
-public struct TextButtonTheme {
+public struct TextButtonAppearance {
+    /// A background color of button.
     let backgroundColor: UIColor
+
+    /// A foreground color of button. This value affects to title and icon. Icon should be rendered as template to have effect.
     let foregroundColor: UIColor
 
+    /// A font of title
     let font: UIFont
 
+    /// A content padding.
     let contentPadding: UIEdgeInsets
+
+    /// A spacing between icons and title
     let iconSpacing: CGFloat
 
+    /// A border radius of button
     let borderRadius: CGFloat
 
     public init(
@@ -44,6 +52,7 @@ public struct TextButtonTheme {
         )
     }
 
+    /// Create a new appearance with new value.
     func copy(
         backgroundColor: UIColor? = nil,
         foregroundColor: UIColor? = nil

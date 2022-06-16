@@ -5,6 +5,9 @@
 import UIKit
 
 public extension IconButton {
+    /// A predefined styles
+    ///
+    /// ![Conver](IconButtonStyle.png)
     enum Style: CaseIterable {
         case primary
         case primaryWhite
@@ -100,7 +103,7 @@ public extension IconButton {
 
     /// Create button with defined style
     static func style(image: UIImage, title: String? = nil, style: Style, size: Size) -> IconButton {
-        let theme: IconButtonTheme = .init(
+        let theme: IconButtonAppearance = .init(
             iconColor: style.iconColor,
             titleColor: style.titleColor,
             backgroundColor: style.backgroundColor,

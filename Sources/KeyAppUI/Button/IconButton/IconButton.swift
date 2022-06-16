@@ -7,8 +7,8 @@ import Foundation
 import PureLayout
 import UIKit
 
-/// Button with focus on icon. Title is secondary element.
-public class IconButton: ButtonControl<IconButtonTheme> {
+/// Button with focus on icon. Title is secondary
+public class IconButton: ButtonControl<IconButtonAppearance> {
     /// On pressed callback
     let imageContainer = BERef<UIView>()
     let imageView = BERef<UIImageView>()
@@ -28,7 +28,7 @@ public class IconButton: ButtonControl<IconButtonTheme> {
         }
     }
 
-    public init(image: UIImage, title: String? = nil, themes: ThemeState<IconButtonTheme> = [:]) {
+    public init(image: UIImage, title: String? = nil, themes: ThemeState<IconButtonAppearance> = [:]) {
         self.image = image
         self.title = title
 

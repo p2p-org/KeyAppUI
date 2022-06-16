@@ -81,7 +81,7 @@ public extension TextButton {
 
     /// Create button with defined style
     static func style(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) -> TextButton {
-        let theme = TextButtonTheme(
+        let theme = TextButtonAppearance(
             backgroundColor: style.backgroundColor,
             foregroundColor: style.foreground,
             font: style.font(size: size),
