@@ -66,11 +66,7 @@ func buttonSection() -> UIView {
                 BEVStack(spacing: 24) {
                     BEHStack {
                         UILabel(text: "Your security key")
-                        UIView().setup { view in
-                            let c = view.widthAnchor.constraint(greaterThanOrEqualToConstant: 0)
-                            c.priority = .defaultHigh
-                            c.isActive = true
-                        }
+                        BESpacer(.horizontal)
                         TextButton
                             .style(title: "Paste", style: .third, size: .small, trailing: Asset.MaterialIcon.paste.image)
                             .onPressed {}
