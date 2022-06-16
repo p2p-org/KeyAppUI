@@ -14,19 +14,6 @@ public class SnackBarView: BECompositionView {
         didSet { iconView.image = icon }
     }
 
-    /// Structure describing
-    struct Appearance {
-        var textFontSize: CGFloat
-        var textFontWeight: UIFont.Weight
-        var textFont: UIFont
-        var textColor: UIColor
-        var cornerRadius: CGFloat = 13
-        var backgroundColor: UIColor = .init(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
-        var borderColor: UIColor = .init(red: 1, green: 1, blue: 1, alpha: 0.2)
-        var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
-        var numberOnLines = 2
-    }
-
     let container = BERef<UIView>()
     let leadingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
@@ -38,11 +25,7 @@ public class SnackBarView: BECompositionView {
         textFontWeight: .regular,
         textFont: .systemFont(ofSize: 15.0),
         textColor: .white
-    ) {
-        didSet {
-            
-        }
-    }
+    )
 
     public init(
         icon: UIImage,
@@ -109,5 +92,20 @@ public class SnackBarView: BECompositionView {
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension SnackBarView {
+    /// Structure describing appearance
+    struct Appearance {
+        var textFontSize: CGFloat
+        var textFontWeight: UIFont.Weight
+        var textFont: UIFont
+        var textColor: UIColor
+        var cornerRadius: CGFloat = 13
+        var backgroundColor: UIColor = .init(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
+        var borderColor: UIColor = .init(red: 1, green: 1, blue: 1, alpha: 0.2)
+        var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
+        var numberOnLines = 2
     }
 }

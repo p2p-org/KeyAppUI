@@ -2,6 +2,9 @@ import UIKit
 
 public class SnackBarPresentation: UIPresentationController {
     
+    private var calculatedFrameOfPresentedViewInContainerView = CGRect.zero
+    private var shouldSetFrameWhenAccessingPresentedView = false
+    
     public override var frameOfPresentedViewInContainerView: CGRect {
         guard
             let containerView = containerView,
@@ -33,20 +36,17 @@ public class SnackBarPresentation: UIPresentationController {
         super.presentationTransitionWillBegin()
         containerView?.frame = frameOfPresentedViewInContainerView
     }
-    private var calculatedFrameOfPresentedViewInContainerView = CGRect.zero
-    private var shouldSetFrameWhenAccessingPresentedView = false
 
     public override var presentedView: UIView? {
-     if shouldSetFrameWhenAccessingPresentedView {
-         super.presentedView?.frame = calculatedFrameOfPresentedViewInContainerView
-     }
-
-     return super.presentedView
+        if shouldSetFrameWhenAccessingPresentedView {
+            super.presentedView?.frame = calculatedFrameOfPresentedViewInContainerView
+        }
+        return super.presentedView
     }
 
     public override func presentationTransitionDidEnd(_ completed: Bool) {
-     super.presentationTransitionDidEnd(completed)
-     shouldSetFrameWhenAccessingPresentedView = completed
+        super.presentationTransitionDidEnd(completed)
+        shouldSetFrameWhenAccessingPresentedView = completed
     }
 
     public override func dismissalTransitionWillBegin() {
@@ -55,8 +55,8 @@ public class SnackBarPresentation: UIPresentationController {
     }
 
     public override func containerViewDidLayoutSubviews() {
-     super.containerViewDidLayoutSubviews()
-     calculatedFrameOfPresentedViewInContainerView = frameOfPresentedViewInContainerView
+        super.containerViewDidLayoutSubviews()
+        calculatedFrameOfPresentedViewInContainerView = frameOfPresentedViewInContainerView
     }
 
 }

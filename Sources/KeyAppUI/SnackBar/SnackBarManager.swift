@@ -8,11 +8,11 @@ class SnackBarManager: SnackBarManagerDelegate {
     
     static let shared = SnackBarManager()
     
+    private var queue = SynchronizedArray<SnackBarViewController>()
+    
+    private var isPresenting = false
+    
     private init() {}
-    
-    var queue = SynchronizedArray<SnackBarViewController>()
-    
-    var isPresenting = false
     
     // MARK: - SnackBarManagerDelegate
     
