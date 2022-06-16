@@ -2,9 +2,10 @@ name: Swift
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - 'Sources/**/*'
+#    branches: [ main ]
+#    paths:
+#      - '.github/workflows/docs.yml'
+#      - 'Sources/**/*'
 
 jobs:
   docs:
@@ -12,8 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: fwcd/swift-docc-action@v1
-      run: ./Scripts/generate_docs.sh
+    - name: Generate documentation
+      run: ./Scripts/generate_github_docs.sh
 
     - name: Init new repo for docs
       run: |
