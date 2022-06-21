@@ -9,6 +9,20 @@ import KeyAppUI
 class TextButtonSection: BECompositionView {
     override func build() -> UIView {
         BEVStack {
+            UILabel(text: "SwiftUI Button", textSize: 22)
+            NewTextButton(title: "Hello from SwiftUI")
+                .buttonStyle(TextButtonStyle())
+                .asUIView
+                .padding(.init(x: 0, y: 8))
+
+            BEHStack {
+                    UILabel(text: "Some text")
+                    BESpacer(.horizontal)
+                    NewTextButton(title: "Hello from SwiftUI")
+                        .buttonStyle(TextButtonStyle())
+                        .asUIView
+                }
+
             UILabel(text: "Buttons", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
             BEVStack(spacing: 8, alignment: .fill) {
                 UILabel(text: "Normal", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
