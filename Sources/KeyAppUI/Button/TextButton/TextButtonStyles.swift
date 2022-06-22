@@ -80,7 +80,7 @@ public extension TextButton {
     }
 
     /// Create button with defined style
-    static func style(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) -> TextButton {
+    convenience init(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) {
         let theme = TextButtonAppearance(
             backgroundColor: style.backgroundColor,
             foregroundColor: style.foreground,
@@ -94,8 +94,7 @@ public extension TextButton {
             iconSpacing: 8,
             borderRadius: size.borderRadius
         )
-
-        return TextButton(
+        self.init(
             leadingImage: leading,
             title: title,
             trailingImage: trailing,
@@ -107,6 +106,7 @@ public extension TextButton {
                 ),
                 .highlighted: theme.copy(backgroundColor: style.highlight),
             ]
-        ).frame(height: size.height)
+        )
+        _ = frame(height: size.height)
     }
 }
