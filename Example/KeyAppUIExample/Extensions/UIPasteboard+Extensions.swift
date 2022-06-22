@@ -14,7 +14,7 @@ extension UIPasteboard {
     
     func copyIconButtonGenerationCodeToClipboard(style: IconButton.Style, size: IconButton.Size) -> String {
         var text = """
-        IconButton.style(
+        IconButton(
             image: Asset.MaterialIcon.<#name#>.image,
             title: <#T##String#>,
             style: .\(style),
@@ -33,7 +33,7 @@ extension UIPasteboard {
     
     func copyTextButtonGenerationCodeToClipboard(style: TextButton.Style, size: TextButton.Size, hasLeading: Bool, hasTrailing: Bool) -> String {
         var text = """
-        TextButton.style(
+        TextButton(
             title: <#T##String#>,
             style: .\(style),
             size: .\(size),

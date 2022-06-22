@@ -34,7 +34,7 @@ class IconButtonSection: BECompositionView {
             for style in IconButton.Style.allCases {
                 BEHStack(spacing: 8, alignment: .center, distribution: .fill) {
                     for size in IconButton.Size.allCases {
-                        IconButton.style(
+                        IconButton(
                             image: Asset.MaterialIcon.appleLogo.image,
                             title: "\(style)",
                             style: style,
