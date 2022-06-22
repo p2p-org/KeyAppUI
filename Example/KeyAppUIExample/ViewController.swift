@@ -31,7 +31,10 @@ class ViewController: UIViewController {
                 IconSection()
 
                 TypographySection()
-
+                    .withCopiedToClipboardCompletionHandler { [weak self] _ in
+                        self?.showSnackBarCopiedToClipboard()
+                    }
+                
                 // Buttons
                 TextButtonSection()
                     .withCopiedToClipboardCompletionHandler { [weak self] _ in

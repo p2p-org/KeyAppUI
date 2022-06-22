@@ -40,9 +40,9 @@ class IconButtonSection: BECompositionView {
                             style: style,
                             size: size
                         )
-                            .onPressed {
+                            .onPressed { [weak self] in
                                 let text = UIPasteboard.general.copyIconButtonGenerationCodeToClipboard(style: style, size: size)
-                                self.copiedToClipboardCompletionHandler?(text)
+                                self?.copiedToClipboardCompletionHandler?(text)
                             }
                     }
                     UIView.spacer

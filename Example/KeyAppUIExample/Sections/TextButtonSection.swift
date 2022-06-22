@@ -113,9 +113,9 @@ class TextButtonSection: BECompositionView {
                     size: size,
                     leading: leading,
                     trailing: trailing
-                ).onPressed {
+                ).onPressed { [weak self] in
                     let text = UIPasteboard.general.copyTextButtonGenerationCodeToClipboard(style: style, size: size, hasLeading: leading != nil, hasTrailing: trailing != nil)
-                    self.copiedToClipboardCompletionHandler?(text)
+                    self?.copiedToClipboardCompletionHandler?(text)
                 }
             }
         }
