@@ -31,26 +31,12 @@ class ViewController: UIViewController {
                 IconSection()
 
                 TypographySection()
-                    .withCopiedToClipboardCompletionHandler { [weak self] _ in
-                        self?.showSnackBarCopiedToClipboard()
-                    }
                 
                 // Buttons
                 TextButtonSection()
-                    .withCopiedToClipboardCompletionHandler { [weak self] _ in
-                        self?.showSnackBarCopiedToClipboard()
-                    }
                 IconButtonSection()
-                    .withCopiedToClipboardCompletionHandler { [weak self] _ in
-                        self?.showSnackBarCopiedToClipboard()
-                    }
             }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
-    }
-    
-    private func showSnackBarCopiedToClipboard() {
-        SnackBar(icon: Asset.MaterialIcon.copy.image, text: "Code template has been copied to clipboard")
-            .show(in: self)
     }
 }

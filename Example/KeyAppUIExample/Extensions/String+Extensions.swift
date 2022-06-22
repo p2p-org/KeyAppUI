@@ -2,30 +2,32 @@ import Foundation
 
 extension String {
     var uppercasedFirst: String {
-        return prefix(1).uppercased() + self.lowercased().dropFirst()
+        prefix(1).uppercased() + lowercased().dropFirst()
     }
-    
+
     mutating func uppercaseFirst() {
-        self = self.uppercasedFirst
+        self = uppercasedFirst
     }
-    
-    func replacingLastOccurrenceOfString(_ searchString: String,
-                                         with replacementString: String,
-                                         caseInsensitive: Bool = true) -> String
-    {
+
+    func replacingLastOccurrenceOfString(
+        _ searchString: String,
+        with replacementString: String,
+        caseInsensitive: Bool = true
+    ) -> String {
         let options: String.CompareOptions
         if caseInsensitive {
             options = [.backwards, .caseInsensitive]
         } else {
             options = [.backwards]
         }
-        
-        if let range = self.range(of: searchString,
-                                  options: options,
-                                  range: nil,
-                                  locale: nil) {
-            
-            return self.replacingCharacters(in: range, with: replacementString)
+
+        if let range = range(
+            of: searchString,
+            options: options,
+            range: nil,
+            locale: nil
+        ) {
+            return replacingCharacters(in: range, with: replacementString)
         }
         return self
     }
