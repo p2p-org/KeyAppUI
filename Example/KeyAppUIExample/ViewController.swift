@@ -31,7 +31,7 @@ class ViewController: UIViewController {
                 IconSection()
 
                 TypographySection()
-
+                
                 // Buttons
                 TextButtonSection()
                 IconButtonSection()

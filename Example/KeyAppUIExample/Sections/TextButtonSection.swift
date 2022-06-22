@@ -90,19 +90,38 @@ class TextButtonSection: BECompositionView {
         BEContainer {
             BEVStack(spacing: 8) {
                 for style in TextButton.Style.allCases {
-                    BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
-                        for size in TextButton.Size.allCases {
-                            TextButton.style(
-                                title: "Button",
-                                style: style,
-                                size: size,
-                                leading: leading,
-                                trailing: trailing
-                            ).onPressed { print("tap") }
-                        }
-                    }
+                    generateButtonWithStyle(style, leading: leading, trailing: trailing)
                 }
             }
         }
+    }
+
+    fileprivate func generateButtonWithStyle(_ style: TextButton.Style, leading: UIImage? = nil, trailing: UIImage? = nil) -> BEHStack {
+        BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
+            for size in TextButton.Size.allCases {
+                TextButton.style(
+                    title: "\(style)".uppercasedFirst,
+                    style: style,
+                    size: size,
+                    leading: leading,
+                    trailing: trailing
+                ).onPressed { [weak self] in
+                    self?.shareCodeTemplate(style: style, size: size)
+                }
+            }
+        }
+    }
+
+    func shareCodeTemplate(style: TextButton.Style, size: TextButton.Size) {
+        CodeTemplate.share(code:
+            """
+            TextButton.style(
+                title: <#T##String#>,
+                style: .\(style),
+                size: .\(size)
+            )
+            .onPressed { <#code#> }
+            """
+        )
     }
 }
