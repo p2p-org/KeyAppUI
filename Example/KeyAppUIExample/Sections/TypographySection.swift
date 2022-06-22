@@ -6,31 +6,30 @@ import BEPureLayout
 import KeyAppUI
 
 class TypographySection: BECompositionView {
-    var copiedToClipboardCompletionHandler: ((String) -> Void)?
-    
-    func withCopiedToClipboardCompletionHandler(_ handler: @escaping ((String) -> Void)) -> Self {
-        self.copiedToClipboardCompletionHandler = handler
-        return self
-        
-    }
-    
     override func build() -> UIView {
         BEVStack {
             UILabel(text: "Typography", textSize: 22).padding(.init(only: .top, inset: 20))
+
             for style in UIFont.Style.allCases {
-                UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
-                    .onTap { [weak self] in
-                        let text = UIPasteboard.general.copyTypographyToClipboard(style: style, weight: .regular)
-                        self?.copiedToClipboardCompletionHandler?(text)
-                    }
+                UILabel()
+                    .withAttributedText(UIFont.text(style.rawValue, of: style, weight: .regular))
+                    .onTap { [weak self] in self?.shareCodeTemplate(style, .bold) }
             }
+
             for style in UIFont.Style.allCases {
-                UILabel().withAttributedText(UIFont.text(style.rawValue, of: style, weight: .bold))
-                    .onTap { [weak self] in
-                        let text = UIPasteboard.general.copyTypographyToClipboard(style: style, weight: .regular)
-                        self?.copiedToClipboardCompletionHandler?(text)
-                    }
+                UILabel()
+                    .withAttributedText(UIFont.text(style.rawValue, of: style, weight: .bold))
+                    .onTap { [weak self] in self?.shareCodeTemplate(style, .bold) }
             }
         }
+    }
+
+    func shareCodeTemplate(_ style: UIFont.Style, _ weight: UIFont.Weight) {
+        let code = """
+        UILabel()
+            .withAttributedText(UIFont.text(<#String#>, of: .\(style), weight: .\(weight))
+        """
+
+        CodeTemplate.share(code: code)
     }
 }

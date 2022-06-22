@@ -14,9 +14,6 @@ class IconSection: BECompositionView {
                     BEHStack {
                         for icon in iconsChunk {
                             UIImageView(image: icon.image, contentMode: .scaleAspectFill)
-                                .onTap {
-                                    print(icon.name)
-                                }
                         }
                         UIView.spacer
                     }
