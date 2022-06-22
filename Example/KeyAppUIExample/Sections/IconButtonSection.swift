@@ -7,6 +7,15 @@ import Foundation
 import KeyAppUI
 
 class IconButtonSection: BECompositionView {
+    
+    var copiedToClipboardCompletionHandler: ((String) -> Void)?
+    
+    func withCopiedToClipboardCompletionHandler(_ handler: @escaping ((String) -> Void)) -> Self {
+        self.copiedToClipboardCompletionHandler = handler
+        return self
+        
+    }
+    
     override func build() -> UIView {
         BEVStack {
             UILabel(text: "Icon buttons", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
@@ -30,7 +39,11 @@ class IconButtonSection: BECompositionView {
                             title: title,
                             style: style,
                             size: size
-                        ).onPressed { print("tap") }
+                        )
+                            .onPressed {
+                                let text = UIPasteboard.general.copyIconButtonGenerationCodeToClipboard(style: style, size: size)
+                                self.copiedToClipboardCompletionHandler?(text)
+                            }
                     }
                     UIView.spacer
                 }

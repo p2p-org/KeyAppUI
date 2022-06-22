@@ -7,6 +7,14 @@ import Foundation
 import KeyAppUI
 
 class TextButtonSection: BECompositionView {
+    var copiedToClipboardCompletionHandler: ((String) -> Void)?
+    
+    func withCopiedToClipboardCompletionHandler(_ handler: @escaping ((String) -> Void)) -> Self {
+        self.copiedToClipboardCompletionHandler = handler
+        return self
+        
+    }
+    
     override func build() -> UIView {
         BEVStack {
             UILabel(text: "Buttons", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
@@ -85,22 +93,29 @@ class TextButtonSection: BECompositionView {
             }
         }
     }
-
+    
     func generateButtons(leading: UIImage? = nil, trailing: UIImage? = nil) -> UIView {
         BEContainer {
             BEVStack(spacing: 8) {
                 for style in TextButton.Style.allCases {
-                    BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
-                        for size in TextButton.Size.allCases {
-                            TextButton.style(
-                                title: "Button",
-                                style: style,
-                                size: size,
-                                leading: leading,
-                                trailing: trailing
-                            ).onPressed { print("tap") }
-                        }
-                    }
+                    generateButtonWithStyle(style, leading: leading, trailing: trailing)
+                }
+            }
+        }
+    }
+    
+    fileprivate func generateButtonWithStyle(_ style: TextButton.Style, leading: UIImage? = nil, trailing: UIImage? = nil) -> BEHStack {
+        return BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
+            for size in TextButton.Size.allCases {
+                TextButton.style(
+                    title: "\(style)".uppercasedFirst,
+                    style: style,
+                    size: size,
+                    leading: leading,
+                    trailing: trailing
+                ).onPressed {
+                    let text = UIPasteboard.general.copyTextButtonGenerationCodeToClipboard(style: style, size: size, hasLeading: leading != nil, hasTrailing: trailing != nil)
+                    self.copiedToClipboardCompletionHandler?(text)
                 }
             }
         }
