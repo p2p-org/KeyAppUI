@@ -21,22 +21,22 @@ class IconButtonSection: BECompositionView {
             UILabel(text: "Icon buttons", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
             BEVStack(spacing: 8, alignment: .fill) {
                 UILabel(text: "With text", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
-                iconButton(title: "text")
+                iconButton()
 
                 UILabel(text: "Without text", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
-                iconButton(title: nil)
+                iconButton()
             }
         }
     }
 
-    private func iconButton(title: String?) -> UIView {
+    private func iconButton() -> UIView {
         BEVStack(spacing: 8) {
             for style in IconButton.Style.allCases {
                 BEHStack(spacing: 8, alignment: .center, distribution: .fill) {
                     for size in IconButton.Size.allCases {
                         IconButton.style(
                             image: Asset.MaterialIcon.appleLogo.image,
-                            title: title,
+                            title: "\(style)",
                             style: style,
                             size: size
                         )
