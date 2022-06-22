@@ -7,7 +7,7 @@
 Use style function to create a button with predefined appearance.
 
 ```swift
-TextButton(
+TextButton.style(
     title: "Button",
     style: .primary,
     size: .medium,

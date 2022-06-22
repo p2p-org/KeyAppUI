@@ -11,7 +11,7 @@ By default it will use a ``default`` appearance for icon button.
 Use style function to create a button with predefined appearance.
 
 ```swift
-IconButton(
+IconButton.style(
     image: Asset.MaterialIcon.appleLogo.image,
     title: title,
     style: .primary,

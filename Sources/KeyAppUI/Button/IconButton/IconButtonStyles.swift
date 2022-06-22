@@ -102,7 +102,7 @@ public extension IconButton {
     }
 
     /// Create button with defined style
-    convenience init(image: UIImage, title: String? = nil, style: Style, size: Size) {
+    static func style(image: UIImage, title: String? = nil, style: Style, size: Size) -> IconButton {
         let theme: IconButtonAppearance = .init(
             iconColor: style.iconColor,
             titleColor: style.titleColor,
@@ -113,7 +113,7 @@ public extension IconButton {
             borderRadius: size.borderRadius
         )
 
-        self.init(
+        return IconButton(
             image: image,
             title: title,
             themes: [
@@ -124,7 +124,6 @@ public extension IconButton {
                 ),
                 .highlighted: theme.copy(backgroundColor: style.highlight),
             ]
-        )
-        let _ = frame(width: size.width)
+        ).frame(width: size.width)
     }
 }

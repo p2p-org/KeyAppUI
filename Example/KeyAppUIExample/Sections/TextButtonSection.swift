@@ -7,14 +7,6 @@ import Foundation
 import KeyAppUI
 
 class TextButtonSection: BECompositionView {
-    var copiedToClipboardCompletionHandler: ((String) -> Void)?
-    
-    func withCopiedToClipboardCompletionHandler(_ handler: @escaping ((String) -> Void)) -> Self {
-        self.copiedToClipboardCompletionHandler = handler
-        return self
-        
-    }
-    
     override func build() -> UIView {
         BEVStack {
             UILabel(text: "Buttons", textSize: 22).padding(.init(top: 20, left: 0, bottom: 10, right: 0))
@@ -33,12 +25,12 @@ class TextButtonSection: BECompositionView {
                 // Create wallet example
                 BEContainer {
                     BEVStack(spacing: 8) {
-                        TextButton(
+                        TextButton.style(
                             title: "Create a new wallet",
                             style: .primary,
                             size: .large
                         ).onPressed {}
-                        TextButton(
+                        TextButton.style(
                             title: "I already have a wallet",
                             style: .ghost,
                             size: .large
@@ -53,12 +45,12 @@ class TextButtonSection: BECompositionView {
                     BEVStack(spacing: 24) {
                         BECenter { UILabel(text: "Also you can know more") }
                         BEHStack(spacing: 8, distribution: .fillEqually) {
-                            TextButton(
+                            TextButton.style(
                                 title: "Close",
                                 style: .invertedRed,
                                 size: .small
                             ).onPressed {}
-                            TextButton(
+                            TextButton.style(
                                 title: "Show details",
                                 style: .inverted,
                                 size: .small
@@ -76,7 +68,8 @@ class TextButtonSection: BECompositionView {
                         BEHStack {
                             UILabel(text: "Your security key")
                             BESpacer(.horizontal)
-                            TextButton(title: "Paste", style: .third, size: .small, trailing: Asset.MaterialIcon.paste.image)
+                            TextButton
+                                .style(title: "Paste", style: .third, size: .small, trailing: Asset.MaterialIcon.paste.image)
                                 .onPressed {}
                         }
                         UITextField(placeholder: "Input")
@@ -92,29 +85,22 @@ class TextButtonSection: BECompositionView {
             }
         }
     }
-    
+
     func generateButtons(leading: UIImage? = nil, trailing: UIImage? = nil) -> UIView {
         BEContainer {
             BEVStack(spacing: 8) {
                 for style in TextButton.Style.allCases {
-                    generateButtonWithStyle(style, leading: leading, trailing: trailing)
-                }
-            }
-        }
-    }
-    
-    fileprivate func generateButtonWithStyle(_ style: TextButton.Style, leading: UIImage? = nil, trailing: UIImage? = nil) -> BEHStack {
-        return BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
-            for size in TextButton.Size.allCases {
-                TextButton(
-                    title: "\(style)".uppercasedFirst,
-                    style: style,
-                    size: size,
-                    leading: leading,
-                    trailing: trailing
-                ).onPressed { [weak self] in
-                    let text = UIPasteboard.general.copyTextButtonGenerationCodeToClipboard(style: style, size: size, hasLeading: leading != nil, hasTrailing: trailing != nil)
-                    self?.copiedToClipboardCompletionHandler?(text)
+                    BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
+                        for size in TextButton.Size.allCases {
+                            TextButton.style(
+                                title: "Button",
+                                style: style,
+                                size: size,
+                                leading: leading,
+                                trailing: trailing
+                            ).onPressed { print("tap") }
+                        }
+                    }
                 }
             }
         }
