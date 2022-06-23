@@ -26,6 +26,14 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
+                TextButton.style(
+                    title: "Open splash",
+                    style: .primary,
+                    size: .large
+                ).onPressed { [weak self] in
+                    self?.presentSplash()
+                }
+                
                 SnackBarSection(viewController: self)
 
                 IconSection()
@@ -38,5 +46,11 @@ class ViewController: UIViewController {
             }
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
+    }
+    
+    private func presentSplash() {
+        let splashVC = SplashViewController(text: "key app")
+        splashVC.modalPresentationStyle = .fullScreen
+        present(splashVC, animated: true)
     }
 }
