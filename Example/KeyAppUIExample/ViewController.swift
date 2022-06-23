@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                TextButton.style(
+                TextButton(
                     title: "Open splash",
                     style: .primary,
                     size: .large
