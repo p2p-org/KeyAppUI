@@ -25,12 +25,12 @@ class TextButtonSection: BECompositionView {
                 // Create wallet example
                 BEContainer {
                     BEVStack(spacing: 8) {
-                        TextButton.style(
+                        TextButton(
                             title: "Create a new wallet",
                             style: .primary,
                             size: .large
                         ).onPressed {}
-                        TextButton.style(
+                        TextButton(
                             title: "I already have a wallet",
                             style: .ghost,
                             size: .large
@@ -45,12 +45,12 @@ class TextButtonSection: BECompositionView {
                     BEVStack(spacing: 24) {
                         BECenter { UILabel(text: "Also you can know more") }
                         BEHStack(spacing: 8, distribution: .fillEqually) {
-                            TextButton.style(
+                            TextButton(
                                 title: "Close",
                                 style: .invertedRed,
                                 size: .small
                             ).onPressed {}
-                            TextButton.style(
+                            TextButton(
                                 title: "Show details",
                                 style: .inverted,
                                 size: .small
@@ -68,8 +68,7 @@ class TextButtonSection: BECompositionView {
                         BEHStack {
                             UILabel(text: "Your security key")
                             BESpacer(.horizontal)
-                            TextButton
-                                .style(title: "Paste", style: .third, size: .small, trailing: Asset.MaterialIcon.paste.image)
+                            TextButton(title: "Paste", style: .third, size: .small, trailing: Asset.MaterialIcon.paste.image)
                                 .onPressed {}
                         }
                         UITextField(placeholder: "Input")
@@ -90,19 +89,38 @@ class TextButtonSection: BECompositionView {
         BEContainer {
             BEVStack(spacing: 8) {
                 for style in TextButton.Style.allCases {
-                    BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
-                        for size in TextButton.Size.allCases {
-                            TextButton.style(
-                                title: "Button",
-                                style: style,
-                                size: size,
-                                leading: leading,
-                                trailing: trailing
-                            ).onPressed { print("tap") }
-                        }
-                    }
+                    generateButtonWithStyle(style, leading: leading, trailing: trailing)
                 }
             }
         }
+    }
+
+    fileprivate func generateButtonWithStyle(_ style: TextButton.Style, leading: UIImage? = nil, trailing: UIImage? = nil) -> BEHStack {
+        BEHStack(spacing: 8, alignment: .center, distribution: .fillEqually) {
+            for size in TextButton.Size.allCases {
+                TextButton(
+                    title: "\(style)".uppercasedFirst,
+                    style: style,
+                    size: size,
+                    leading: leading,
+                    trailing: trailing
+                ).onPressed { [weak self] in
+                    self?.shareCodeTemplate(style: style, size: size)
+                }
+            }
+        }
+    }
+
+    func shareCodeTemplate(style: TextButton.Style, size: TextButton.Size) {
+        CodeTemplate.share(code:
+            """
+            TextButton.style(
+                title: <#T##String#>,
+                style: .\(style),
+                size: .\(size)
+            )
+            .onPressed { <#code#> }
+            """
+        )
     }
 }

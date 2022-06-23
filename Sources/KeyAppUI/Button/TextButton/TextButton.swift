@@ -84,7 +84,7 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                 UILabel(text: title, font: theme.font)
                     .bind(titleView)
                     .withContentCompressionResistancePriority(.required, for: .horizontal)
-                    .setup { view in view.textColor = theme.foregroundColor }
+                    .setup { view in view.textColor = theme.foregroundColor; view.adjustsFontSizeToFitWidth = true }
 
                 // Trailing
                 BEContainer()
