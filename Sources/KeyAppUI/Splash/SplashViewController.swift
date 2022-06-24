@@ -3,24 +3,19 @@ import BEPureLayout
 
 public final class SplashViewController: BEViewController {
 
-    private let customView: SplashView
-
-    public init(text: String) {
-        self.customView = SplashView(text: text)
-        super.init()
-    }
+    private let customView = SplashView()
 
     public override func setUp() {
         self.view.addSubview(customView)
         customView.autoPinEdgesToSuperviewEdges()
     }
 
-    public func run() {
-        customView.animate()
-    }
-
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.run()
+    }
+
+    private func run() {
+        customView.animate()
     }
 }

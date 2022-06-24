@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     }
     
     private func presentSplash() {
-        let splashVC = SplashViewController(text: "key app")
+        let splashVC = SplashViewController()
         present(splashVC, animated: true)
     }
 }

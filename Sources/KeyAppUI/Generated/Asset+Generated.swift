@@ -127,6 +127,12 @@ public enum Asset {
     public static let selectAll = ImageAsset(name: "select_all")
     public static let send = ImageAsset(name: "send")
     public static let sort = ImageAsset(name: "sort")
+    public static let a = ImageAsset(name: "a")
+    public static let e = ImageAsset(name: "e")
+    public static let k = ImageAsset(name: "k")
+    public static let p1 = ImageAsset(name: "p1")
+    public static let p2 = ImageAsset(name: "p2")
+    public static let y = ImageAsset(name: "y")
     public static let subdirectoryArrowLeft = ImageAsset(name: "subdirectory_arrow_left")
     public static let subdirectoryArrowRight = ImageAsset(name: "subdirectory_arrow_right")
     public static let textFormat = ImageAsset(name: "text_format")
@@ -216,6 +222,12 @@ public enum Asset {
       selectAll,
       send,
       sort,
+      a,
+      e,
+      k,
+      p1,
+      p2,
+      y,
       subdirectoryArrowLeft,
       subdirectoryArrowRight,
       textFormat,

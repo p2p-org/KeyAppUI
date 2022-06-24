@@ -7,6 +7,7 @@ private extension SplashView {
         static let underlineHeight: CGFloat = 1.5
         static let overlayHeight: CGFloat = 100
         static let textOffset: CGFloat = 55
+        static let centerOffset: CGFloat = 20
     }
 
     enum TextPosition {
@@ -20,43 +21,50 @@ private extension SplashView {
 
 final class SplashView: BECompositionView {
 
-    private let text: String
-
     private var hStack = BERef<BEHStack>()
     private let lineLayer = CAShapeLayer()
 
-    public init(text: String) {
-        self.text = text
-        super.init()
-    }
-
     override func build() -> UIView {
-        BEHStack(spacing: 0) {
-            for char in text {
-                makeLetterLabel(text: String(char))
-            }
+        BEHStack(spacing: .zero) {
+            makeLetter(asset: Asset.MaterialIcon.k)
+                .frame(width: 12.9, height: 21.6)
+                .padding(UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero))
+            makeLetter(asset: Asset.MaterialIcon.e)
+                .frame(width: 14.2, height: 14.6)
+                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6))
+            makeLetter(asset: Asset.MaterialIcon.y)
+                .frame(width: 14.4, height: 21.6)
+                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7))
+            makeLetter(asset: Asset.MaterialIcon.a)
+                .frame(width: 14.8, height: 14.6)
+                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7))
+            makeLetter(asset: Asset.MaterialIcon.p1)
+                .frame(width: 14.7, height: 21.8)
+                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2))
+            makeLetter(asset: Asset.MaterialIcon.p2)
+                .frame(width: 14.7, height: 21.8)
+                .padding(.init(only: .top, inset: 7))
         }
             .bind(hStack)
-            .padding(.init(only: .top, inset: 20))
+            .padding(.init(only: .top, inset: Constants.centerOffset))
             .centered(.horizontal)
             .centered(.vertical)
             .backgroundColor(color: Asset.Colors.lime.color)
     }
-    
+
     override func layout() {
         let size = hStack.view!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        let view = UIView(width: size.width, height: size.height, backgroundColor: Asset.Colors.lime.color)
-            .padding(.init(only: .top, inset: 20))
+        let view = UIView(width: size.width + Constants.overlayOffset, height: size.height, backgroundColor: Asset.Colors.lime.color)
+            .padding(.init(only: .top, inset: Constants.centerOffset))
             .centered(.horizontal)
             .centered(.vertical)
         addSubview(view)
-        
+
         lineLayer.strokeColor = Asset.Colors.night.color.cgColor
         lineLayer.lineCap = .round
         lineLayer.lineWidth = Constants.underlineHeight
         layer.addSublayer(lineLayer)
     }
-    
 
     func animate() {
         animateText(position: .up)
@@ -65,22 +73,18 @@ final class SplashView: BECompositionView {
 
 private extension SplashView {
 
-    func makeLetterLabel(text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = UIFont.font(of: .title1, weight: .medium)
-        label.textColor = Asset.Colors.night.color
-        return label
+    func makeLetter(asset: ImageAsset) -> UIImageView {
+        let view = UIImageView(image: asset.image)
+        view.contentMode = .scaleAspectFill
+        return view
     }
 
     private func animateText(delay: Double = .zero, position: TextPosition) {
         var delay = delay
 
-        let letterViews = hStack.view!.arrangedSubviews.compactMap {$0 as? UILabel}
+        let letterViews = hStack.view!.arrangedSubviews
         for i in 0..<letterViews.count {
             let label = letterViews[i]
-
-            if label.text?.isEmpty == true { continue }
 
             delay += 0.05
             UIView.animate(
@@ -89,7 +93,7 @@ private extension SplashView {
                 usingSpringWithDamping: 1,
                 initialSpringVelocity: 1,
                 options: [.curveEaseOut]) {
-                    let value = (Constants.textOffset / 2 ) + Constants.overlayOffset * 2 + Constants.underlineHeight
+                    let value = Constants.textOffset / 2 + Constants.overlayOffset + Constants.underlineHeight
 
                     if position == .up {
                         label.center.y -= value
@@ -118,9 +122,6 @@ private extension SplashView {
                 self?.lineLayer.path = nil // remove dot after completion
             }
             self?.animateText(delay: 0.1, position: textPosition.toggle())
-//            if textPosition == .down {
-//                self?.completionHandler?()
-//            }
         }
         lineLayer.add(animation, forKey: "path")
         CATransaction.commit()
@@ -128,7 +129,7 @@ private extension SplashView {
 
     private func startLinePath(for position: TextPosition) -> CGPath {
         let frame = getFrameForLine()
-        return CGPath(rect: CGRect(x: frame.minX, y: frame.minY, width: position == .up ? .zero: frame.width, height: Constants.underlineHeight), transform: nil)
+        return linePath(for: CGRect(x: frame.minX, y: frame.minY, width: position == .up ? .zero: frame.width, height: Constants.underlineHeight))
     }
 
     private func endLinePath(for position: TextPosition) -> CGPath {
@@ -143,9 +144,13 @@ private extension SplashView {
             x = frame.maxX
             width = .zero
         }
-        return CGPath(rect: CGRect(x: x, y: frame.minY, width: width, height: Constants.underlineHeight), transform: nil)
+        return linePath(for: CGRect(x: x, y: frame.minY, width: width, height: Constants.underlineHeight))
     }
-    
+
+    private func linePath(for rect: CGRect) -> CGPath {
+        return UIBezierPath(roundedRect: rect, cornerRadius: 2).cgPath
+    }
+
     private func getFrameForLine() -> CGRect {
         let frame = hStack.view!.superview!.convert(hStack.frame, to: self)
         return .init(x: frame.minX, y: frame.minY+Constants.overlayOffset, width: frame.width, height: frame.height)
