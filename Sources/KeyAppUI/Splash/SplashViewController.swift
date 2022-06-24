@@ -11,9 +11,8 @@ public final class SplashViewController: BEViewController {
     }
 
     public override func setUp() {
-        let child = customView.build()
-        self.view.addSubview(child)
-        child.autoPinEdgesToSuperviewEdges()
+        self.view.addSubview(customView)
+        customView.autoPinEdgesToSuperviewEdges()
         customView.completionHandler = { [weak self] in
             self?.dismiss(animated: true)
         }

@@ -50,7 +50,6 @@ class ViewController: UIViewController {
     
     private func presentSplash() {
         let splashVC = SplashViewController(text: "key app")
-        splashVC.modalPresentationStyle = .fullScreen
         present(splashVC, animated: true)
     }
 }
