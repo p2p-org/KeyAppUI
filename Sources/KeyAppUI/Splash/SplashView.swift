@@ -20,12 +20,10 @@ private extension SplashView {
 
 final class SplashView: BECompositionView {
 
-    var completionHandler: (() -> Void)?
-
     private let text: String
 
     private var hStack = BERef<BEHStack>()
-    private var lineLayer: CAShapeLayer!
+    private let lineLayer = CAShapeLayer()
 
     public init(text: String) {
         self.text = text
@@ -52,6 +50,11 @@ final class SplashView: BECompositionView {
             .centered(.horizontal)
             .centered(.vertical)
         addSubview(view)
+        
+        lineLayer.strokeColor = Asset.Colors.night.color.cgColor
+        lineLayer.lineCap = .round
+        lineLayer.lineWidth = Constants.underlineHeight
+        layer.addSublayer(lineLayer)
     }
     
 
@@ -103,11 +106,6 @@ private extension SplashView {
     }
 
     private func animateLine(textPosition: TextPosition) {
-        if lineLayer == nil {
-            drawLine()
-        }
-
-        guard let lineLayer = lineLayer else { return }
         let endPath = endLinePath(for: textPosition)
         CATransaction.begin()
         let animation = CABasicAnimation(keyPath: "path")
@@ -115,12 +113,11 @@ private extension SplashView {
         animation.toValue = endPath
         animation.duration = 0.3
         CATransaction.setCompletionBlock { [weak self] in
-            self?.lineLayer?.path = endPath
+            self?.lineLayer.path = endPath
             self?.animateText(delay: 0.1, position: textPosition.toggle())
-            if textPosition == .down {
-                
+//            if textPosition == .down {
 //                self?.completionHandler?()
-            }
+//            }
         }
         lineLayer.add(animation, forKey: "path")
         CATransaction.commit()
@@ -144,21 +141,6 @@ private extension SplashView {
             width = .zero
         }
         return CGPath(rect: CGRect(x: x, y: frame.minY, width: width, height: Constants.underlineHeight), transform: nil)
-    }
-
-    func drawLine() {
-        let frame = getFrameForLine()
-        let path = UIBezierPath()
-        path.move(to: .init(x: frame.minX, y: frame.minY))
-        path.addLine(to: .init(x: frame.maxX, y: frame.minY))
-        
-        lineLayer = CAShapeLayer()
-        lineLayer.path = path.cgPath
-        lineLayer.strokeColor = Asset.Colors.night.color.cgColor
-        lineLayer.lineCap = .round
-        lineLayer.lineWidth = Constants.underlineHeight
-        
-        layer.addSublayer(lineLayer)
     }
     
     private func getFrameForLine() -> CGRect {
