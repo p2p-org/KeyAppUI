@@ -114,6 +114,9 @@ private extension SplashView {
         animation.duration = 0.3
         CATransaction.setCompletionBlock { [weak self] in
             self?.lineLayer.path = endPath
+            if textPosition == .down {
+                self?.lineLayer.path = nil // remove dot after completion
+            }
             self?.animateText(delay: 0.1, position: textPosition.toggle())
 //            if textPosition == .down {
 //                self?.completionHandler?()
