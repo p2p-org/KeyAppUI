@@ -132,7 +132,7 @@ class TextButtonSection: BECompositionView {
             code +=
             """
             
-                leading: Asset.MaterialIcon.<#name#>.image,
+                trailing: Asset.MaterialIcon.<#name#>.image,
             """
         }
         
