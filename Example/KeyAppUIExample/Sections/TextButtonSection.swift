@@ -114,7 +114,7 @@ class TextButtonSection: BECompositionView {
     func shareCodeTemplate(style: TextButton.Style, size: TextButton.Size) {
         CodeTemplate.share(code:
             """
-            TextButton.style(
+            TextButton(
                 title: <#T##String#>,
                 style: .\(style),
                 size: .\(size)
