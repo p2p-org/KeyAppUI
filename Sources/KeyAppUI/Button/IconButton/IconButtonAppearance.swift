@@ -5,14 +5,28 @@
 import Foundation
 import UIKit
 
-/// A theme for ``IconButton``
-public struct IconButtonTheme {
+/// A appearance for ``IconButton``
+public struct IconButtonAppearance {
+    
+    /// A tint color for icon. Icon should be rendered as template.
     let iconColor: UIColor
+    
+    /// A title color.
     let titleColor: UIColor
+    
+    /// A background color of button.
     let backgroundColor: UIColor
+    
+    /// A font of title.
     let font: UIFont
+    
+    /// A icon size.
     let iconSize: CGFloat
+    
+    /// A spacing between icon and title
     let titleSpacing: CGFloat
+    
+    /// A border radius of icon.
     let borderRadius: CGFloat
 
     public init(
@@ -33,6 +47,7 @@ public struct IconButtonTheme {
         self.borderRadius = borderRadius
     }
 
+    /// Default appearance
     public static func `default`() -> Self {
         .init(
             iconColor: Asset.Colors.lime.color,
@@ -45,6 +60,7 @@ public struct IconButtonTheme {
         )
     }
 
+    /// Create a new appearance with new value.
     func copy(
         iconColor: UIColor? = nil,
         backgroundColor: UIColor? = nil
