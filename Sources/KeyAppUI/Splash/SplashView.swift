@@ -39,10 +39,10 @@ final class SplashView: BECompositionView {
                 .frame(width: 14.8, height: 14.6)
                 .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7))
             makeLetter(asset: Asset.MaterialIcon.p1)
-                .frame(width: 14.7, height: 21.8)
+                .frame(width: 14.7, height: 21.6)
                 .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2))
             makeLetter(asset: Asset.MaterialIcon.p2)
-                .frame(width: 14.7, height: 21.8)
+                .frame(width: 14.7, height: 21.6)
                 .padding(.init(only: .top, inset: 7))
         }
             .bind(hStack)
