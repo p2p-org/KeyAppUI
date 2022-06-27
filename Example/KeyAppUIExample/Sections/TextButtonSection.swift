@@ -140,6 +140,7 @@ class TextButtonSection: BECompositionView {
         
         code +=
             """
+            
             )
             .onPressed { <#code#> }
             """
