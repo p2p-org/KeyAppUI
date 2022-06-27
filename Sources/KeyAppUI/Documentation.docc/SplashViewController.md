@@ -1,14 +1,13 @@
 # ``KeyAppUI/SplashViewController``
 
-A viewController with splash animation for app openning. Text is customizable
+A viewController with splash animation for app openning.
 
 ## Usage
 
-Initialize controller with your text and present it the way you need. B
+Initialize controller and present it the way you need.
 
 ```swift
-let splashVC = SplashViewController(text: "key app")
-splashVC.modalPresentationStyle = .fullScreen
+let splashVC = SplashViewController()
 present(splashVC, animated: true)
 ```swift
 

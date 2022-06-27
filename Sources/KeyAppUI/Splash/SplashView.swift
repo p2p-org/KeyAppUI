@@ -5,9 +5,8 @@ private extension SplashView {
     enum Constants {
         static let overlayOffset: CGFloat = 2
         static let underlineHeight: CGFloat = 1.5
-        static let overlayHeight: CGFloat = 100
         static let textOffset: CGFloat = 55
-        static let centerOffset: CGFloat = 20
+        static let centerOffset: CGFloat = 22
     }
 
     enum TextPosition {
@@ -20,6 +19,8 @@ private extension SplashView {
 }
 
 final class SplashView: BECompositionView {
+
+    var completionHandler: (() -> Void)?
 
     private var hStack = BERef<BEHStack>()
     private let lineLayer = CAShapeLayer()
@@ -54,7 +55,7 @@ final class SplashView: BECompositionView {
 
     override func layout() {
         let size = hStack.view!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        let view = UIView(width: size.width + Constants.overlayOffset, height: size.height, backgroundColor: Asset.Colors.lime.color)
+        let view = UIView(width: size.width + Constants.overlayOffset, height: size.height + Constants.overlayOffset, backgroundColor: Asset.Colors.lime.color)
             .padding(.init(only: .top, inset: Constants.centerOffset))
             .centered(.horizontal)
             .centered(.vertical)
@@ -120,6 +121,7 @@ private extension SplashView {
             self?.lineLayer.path = endPath
             if textPosition == .down {
                 self?.lineLayer.path = nil // remove dot after completion
+                self?.completionHandler?()
             }
             self?.animateText(delay: 0.1, position: textPosition.toggle())
         }

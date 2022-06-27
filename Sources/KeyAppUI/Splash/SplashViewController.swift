@@ -8,6 +8,9 @@ public final class SplashViewController: BEViewController {
     public override func setUp() {
         self.view.addSubview(customView)
         customView.autoPinEdgesToSuperviewEdges()
+        customView.completionHandler = { [weak self] in
+            self?.dismiss(animated: true)
+        }
     }
 
     public override func viewDidAppear(_ animated: Bool) {
