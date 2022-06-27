@@ -105,22 +105,46 @@ class TextButtonSection: BECompositionView {
                     leading: leading,
                     trailing: trailing
                 ).onPressed { [weak self] in
-                    self?.shareCodeTemplate(style: style, size: size)
+                    self?.shareCodeTemplate(style: style, size: size, hasLeading: leading != nil, hasTrailing:  trailing != nil)
                 }
             }
         }
     }
 
-    func shareCodeTemplate(style: TextButton.Style, size: TextButton.Size) {
-        CodeTemplate.share(code:
+    func shareCodeTemplate(style: TextButton.Style, size: TextButton.Size, hasLeading: Bool, hasTrailing: Bool) {
+        var code =
             """
-            TextButton.style(
+            TextButton(
                 title: <#T##String#>,
                 style: .\(style),
-                size: .\(size)
+                size: .\(size),
+            """
+        
+        if hasLeading {
+            code +=
+            """
+            
+                leading: Asset.MaterialIcon.<#name#>.image,
+            """
+        }
+        
+        if hasTrailing {
+            code +=
+            """
+            
+                trailing: Asset.MaterialIcon.<#name#>.image,
+            """
+        }
+        
+        code = code.replacingLastOccurrenceOfString(",", with: "")
+        
+        code +=
+            """
+            
             )
             .onPressed { <#code#> }
             """
-        )
+        
+        CodeTemplate.share(code:code)
     }
 }
