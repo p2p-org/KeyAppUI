@@ -22,6 +22,7 @@
 		86CF719F285B59FF003B00A9 /* TypographySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CF719E285B59FF003B00A9 /* TypographySection.swift */; };
 		86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB128523BE100664C9A /* KeyAppUI */; };
 		86F83DB82852421500664C9A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB72852421500664C9A /* Algorithms */; };
+		FA3C5989286D794F0022FFB7 /* TableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5988286D794F0022FFB7 /* TableSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		86CF719A285B5828003B00A9 /* SnackbarSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnackbarSection.swift; sourceTree = "<group>"; };
 		86CF719C285B5990003B00A9 /* IconSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconSection.swift; sourceTree = "<group>"; };
 		86CF719E285B59FF003B00A9 /* TypographySection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypographySection.swift; sourceTree = "<group>"; };
+		FA3C5988286D794F0022FFB7 /* TableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 		8685681F28578264000D24EF /* Sections */ = {
 			isa = PBXGroup;
 			children = (
+				FA3C5988286D794F0022FFB7 /* TableSection.swift */,
 				86CF719E285B59FF003B00A9 /* TypographySection.swift */,
 				8685681D28578252000D24EF /* IconButtonSection.swift */,
 				86CF719C285B5990003B00A9 /* IconSection.swift */,
@@ -175,7 +178,7 @@
 			);
 			mainGroup = 2C4E0A9C28513D3D00933184;
 			packageReferences = (
-				86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms.git" */,
+				86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 2C4E0AA628513D3D00933184 /* Products */;
 			projectDirPath = "";
@@ -205,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C4E0AAD28513D3D00933184 /* ViewController.swift in Sources */,
+				FA3C5989286D794F0022FFB7 /* TableSection.swift in Sources */,
 				86CF719D285B5990003B00A9 /* IconSection.swift in Sources */,
 				2C4E0AA928513D3D00933184 /* AppDelegate.swift in Sources */,
 				2C4E0AAB28513D3D00933184 /* SceneDelegate.swift in Sources */,
@@ -435,7 +439,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms.git" */ = {
+		86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
 			requirement = {
@@ -452,7 +456,7 @@
 		};
 		86F83DB72852421500664C9A /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms.git" */;
+			package = 86F83DB62852421500664C9A /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
 		};
 /* End XCSwiftPackageProductDependency section */

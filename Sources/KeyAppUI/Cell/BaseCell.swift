@@ -53,7 +53,7 @@ public class BaseCell: BECollectionCell {
             badge: item.rightView?.badge,
             yellowBadge: item.rightView?.yellowBadge,
             checkbox: item.rightView?.checkbox,
-            `switch`: item.rightView?.`switch`,
+            switch: item.rightView?.`switch`,
             isCheckmark: item.rightView?.isCheckmark ?? false
         )
         

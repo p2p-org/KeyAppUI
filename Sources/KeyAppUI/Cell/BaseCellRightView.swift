@@ -1,6 +1,11 @@
 import UIKit
 import BEPureLayout
 
+public protocol BaseCellRightViewDelegate: AnyObject {
+    func checkboxDidChange(value: Bool)
+    func switchDidChange(value: Bool)
+}
+
 public class BaseCellRightView: BECompositionView {
     
     public init(
@@ -37,6 +42,13 @@ public class BaseCellRightView: BECompositionView {
     var `switch`: Bool?
     var isCheckmark: Bool = false
     
+    weak var delegate: BaseCellRightViewDelegate?
+    
+    // MARK: -
+    
+    private var switchView = BERef<UISwitch>()
+    private var checkboxView = BERef<BECheckbox>()
+    
     public override func build() -> UIView {
         BEHStack(spacing: 0, alignment: .fill, distribution: .fill) {
             textSubtextView()
@@ -49,14 +61,18 @@ public class BaseCellRightView: BECompositionView {
                 if let `switch` = `switch` {
                     UISwitch().setup({ elem in
                         elem.onTintColor = Asset.Colors.night.color
-                    }).box(cornerRadius: 0).setup { elem in
+                    }).box(cornerRadius: 0)
+                    .bind(switchView)
+                    .setup { elem in
                         elem.isOn = `switch`
+                        switchView.view?.addTarget(self, action: #selector(switchDidChange(_:)), for: .valueChanged)
                     }
                 } else if let isChecked = checkbox {
                     BECheckbox(width: 18, height: 18, backgroundColor: .clear, cornerRadius: 2)
                         .setup { checkbox in
                             checkbox.layer.borderColor = UIColor.black.cgColor
                             checkbox.isSelected = isChecked
+                            checkbox.addTarget(self, action: #selector(checkboxDidChange(_:)), for: .valueChanged)
                         }
                 }
 
@@ -115,6 +131,16 @@ public class BaseCellRightView: BECompositionView {
     
     private func subtextRightPadding() -> CGFloat {
         image != nil || badge != nil ? 8 : 0
+    }
+    
+    // MARK: - Actions
+    
+    @objc func switchDidChange(_ elem: UISwitch) {
+        delegate?.switchDidChange(value: elem.isOn)
+    }
+    
+    @objc func checkboxDidChange(_ checkbox: UISwitch) {
+        delegate?.switchDidChange(value: checkbox.isOn)
     }
     
 }
