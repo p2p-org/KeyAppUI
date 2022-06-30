@@ -26,9 +26,7 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                TableSection().onTap { present(TableViewController(), animated: true) }
-                
-                TextButton(title: "TableView", style: .ghostLime, size: .medium)
+                TableSection().onTap { self.present(TableViewController(), animated: true) }
                 
                 SnackBarSection(viewController: self)
 
