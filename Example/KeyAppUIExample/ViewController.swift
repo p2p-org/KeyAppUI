@@ -81,7 +81,7 @@ class TableViewController: UICollectionViewController {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int { 1 }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 100 }
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 32 }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BaseCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! BaseCell? ?? BaseCell(frame: .zero)
