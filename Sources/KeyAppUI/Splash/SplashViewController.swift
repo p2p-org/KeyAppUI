@@ -2,6 +2,11 @@ import UIKit
 import BEPureLayout
 
 public final class SplashViewController: BEViewController {
+    
+    public var completionHandler: (() -> Void)? {
+        get { customView.completionHandler }
+        set { customView.completionHandler = newValue }
+    }
 
     private let customView = SplashView()
 
