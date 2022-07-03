@@ -6,18 +6,18 @@ public class BaseCellLeftView: BECompositionView {
 
     // MARK: -
     
-    private(set) var image: UIImage?
+    private(set) var imageView: UIView?
     private(set) var title: String?
     private(set) var subtitle: String?
     private(set) var subtitle2: String?
     
     public init(
-        image: UIImage? = nil,
+        imageView: UIView?,
         title: String? = nil,
         subtitle: String? = nil,
         subtitle2: String? = nil
     ) {
-        self.image = image
+        self.imageView = imageView
         self.title = title
         self.subtitle = subtitle
         self.subtitle2 = subtitle2
@@ -29,21 +29,19 @@ public class BaseCellLeftView: BECompositionView {
     
     open override func build() -> UIView {
         BEHStack(spacing: 14, alignment: .center) {
-            if let image = image {
-                BECenter {
-                    UIImageView(width: 20, height: 20, image: image)
-                }.padding(.init(top: 0, left: 11, bottom: 0, right: 13))
+            if let imageView = imageView {
+                imageView
             }
             
-            BEVStack(spacing: 4, alignment: .fill, distribution: .fillProportionally) {
+            BEVStack(spacing: 4, alignment: .fill, distribution: .fill) {
                 if let title = title {
                     UILabel().withAttributedText(
                         UIFont.text(title, of: .text2)
                     ).setup { label in
                         label.numberOfLines = 0
-                        label.setContentHuggingPriority(.defaultLow, for: .vertical)
+                        label.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
                         label.setContentCompressionResistancePriority(.required, for: .vertical)
-                        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                        label.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
                         label.setContentCompressionResistancePriority(.required, for: .horizontal)
                     }.padding(.init(only: .bottom, inset: titleBottomPadding()))
                 }
@@ -54,9 +52,9 @@ public class BaseCellLeftView: BECompositionView {
                             .withForegroundColor(Asset.Colors.night.color)
                     ).setup { label in
                         label.numberOfLines = 0
-                        label.setContentHuggingPriority(.defaultLow, for: .vertical)
+                        label.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
                         label.setContentCompressionResistancePriority(.required, for: .vertical)
-                        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                        label.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
                         label.setContentCompressionResistancePriority(.required, for: .horizontal)
                     }.padding(.init(only: .bottom, inset: subtitle2 != nil ? 3 : 0))
                 }
@@ -67,9 +65,9 @@ public class BaseCellLeftView: BECompositionView {
                             .withForegroundColor(Asset.Colors.mountain.color)
                     ).setup { label in
                         label.numberOfLines = 0
-                        label.setContentHuggingPriority(.defaultLow, for: .vertical)
+                        label.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
                         label.setContentCompressionResistancePriority(.required, for: .vertical)
-                        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                        label.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
                         label.setContentCompressionResistancePriority(.required, for: .horizontal)
                     }
                 }

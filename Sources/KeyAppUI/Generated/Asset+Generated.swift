@@ -51,6 +51,16 @@ public enum Asset {
     ]
     // swiftlint:enable trailing_comma
   }
+  public enum Icons {
+    public static let send = ImageAsset(name: "send")
+    // swiftlint:disable trailing_comma
+    public static let allColors: [ColorAsset] = [
+    ]
+    public static let allImages: [ImageAsset] = [
+      send,
+    ]
+    // swiftlint:enable trailing_comma
+  }
   public enum MaterialIcon {
     public static let add = ImageAsset(name: "add")
     public static let addBox = ImageAsset(name: "add_box")

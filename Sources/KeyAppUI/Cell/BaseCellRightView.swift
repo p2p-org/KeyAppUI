@@ -6,28 +6,53 @@ public protocol BaseCellRightViewDelegate: AnyObject {
     func switchDidChange(value: Bool)
 }
 
-public class BaseCellRightView: BECompositionView {
+public struct BaseCellRightViewItem {
+    public var text: String?
+    public var subtext: String?
+    public var image: UIImage?
+    public var isChevronVisible: Bool
+    public var badge: String?
+    public var yellowBadge: String?
+    public var checkbox: Bool?
+    public var `switch`: Bool?
+    public var isCheckmark: Bool = false
     
     public init(
-        text: String?,
-        subtext: String?,
-        image: UIImage?,
-        isChevroneVisible: Bool,
-        badge: String?,
-        yellowBadge: String?,
-        checkbox: Bool?,
-        `switch`: Bool?,
-        isCheckmark: Bool = false
+        text: String? = nil,
+        subtext: String? = nil,
+        image: UIImage? = nil,
+        isChevronVisible: Bool = false,
+        badge: String? = nil,
+        yellowBadge: String? = nil,
+        checkbox: Bool? = nil,
+        switch: Bool? = nil,
+        isCheckmark: Bool? = false
     ) {
         self.text = text
         self.subtext = subtext
         self.image = image
-        self.isChevronVisible = isChevroneVisible
+        self.isChevronVisible = isChevronVisible
         self.badge = badge
         self.yellowBadge = yellowBadge
         self.checkbox = checkbox
         self.`switch` = `switch`
-        self.isCheckmark = isCheckmark
+        self.isCheckmark = isCheckmark ?? false
+    }
+}
+
+
+public class BaseCellRightView: BECompositionView {
+
+    public init(item: BaseCellRightViewItem) {
+        self.text = item.text
+        self.subtext = item.subtext
+        self.image = item.image
+        self.isChevronVisible = item.isChevronVisible
+        self.badge = item.badge
+        self.yellowBadge = item.yellowBadge
+        self.checkbox = item.checkbox
+        self.switch = item.switch
+        self.isCheckmark = item.isCheckmark
         
         super.init()
     }
@@ -57,42 +82,41 @@ public class BaseCellRightView: BECompositionView {
                 BadgeView(text: badge, style: .basic).padding(.init(only: .left, inset: subtext != nil ? 9 : 0))
             }
 
-            BEHStack(spacing: 0, alignment: .fill, distribution: .fill) {
-                if let `switch` = `switch` {
-                    UISwitch().setup({ elem in
-                        elem.onTintColor = Asset.Colors.night.color
-                    }).box(cornerRadius: 0)
-                    .bind(switchView)
-                    .setup { elem in
-                        elem.isOn = `switch`
-                        switchView.view?.addTarget(self, action: #selector(switchDidChange(_:)), for: .valueChanged)
+            if let `switch` = `switch` {
+                UISwitch().setup({ elem in
+                    elem.onTintColor = Asset.Colors.night.color
+                })
+                .frame(width: 51, height: 31)
+                .bind(switchView)
+                .setup { elem in
+                    elem.isOn = `switch`
+                    switchView.view?.addTarget(self, action: #selector(switchDidChange(_:)), for: .valueChanged)
+                }
+            } else if let isChecked = checkbox {
+                BECheckbox(width: 18, height: 18, backgroundColor: .clear, cornerRadius: 2)
+                    .setup { checkbox in
+                        checkbox.layer.borderColor = UIColor.black.cgColor
+                        checkbox.isSelected = isChecked
+                        checkbox.addTarget(self, action: #selector(checkboxDidChange(_:)), for: .valueChanged)
                     }
-                } else if let isChecked = checkbox {
-                    BECheckbox(width: 18, height: 18, backgroundColor: .clear, cornerRadius: 2)
-                        .setup { checkbox in
-                            checkbox.layer.borderColor = UIColor.black.cgColor
-                            checkbox.isSelected = isChecked
-                            checkbox.addTarget(self, action: #selector(checkboxDidChange(_:)), for: .valueChanged)
-                        }
-                }
+            }
 
-                if let image = image {
-                    UIImageView(image: image, contentMode: .scaleAspectFit)
-                        .padding(.init(top: 0, left: 12, bottom: 0, right: 0))
-                } else if isCheckmark {
-                    UIImageView(image: Asset.MaterialIcon.check.image, contentMode: .scaleAspectFit)
-                        .padding(.init(top: 0, left: 12, bottom: 0, right: -5))
-                }
+            if let image = image {
+                UIImageView(image: image, contentMode: .scaleAspectFit)
+                    .padding(.init(top: 0, left: 12, bottom: 0, right: 0))
+            } else if isCheckmark {
+                UIImageView(image: Asset.MaterialIcon.check.image, contentMode: .scaleAspectFit)
+                    .padding(.init(top: 0, left: 12, bottom: 0, right: -5))
+            }
 
-                if isChevronVisible {
-                    UIImageView(
-                        image: Asset.MaterialIcon.chevronRight.image,
-                        contentMode: .center,
-                        tintColor: Asset.Colors.mountain.color
-                    )
-                    .frame(width: 8)
-                    .padding(.init(top: 0, left: badge != nil ? 8 : 14, bottom: 0, right: 6))
-                }
+            if isChevronVisible {
+                UIImageView(
+                    image: Asset.MaterialIcon.chevronRight.image,
+                    contentMode: .center,
+                    tintColor: Asset.Colors.mountain.color
+                )
+                .frame(width: 8)
+                .padding(.init(top: 0, left: badge != nil ? 8 : 14, bottom: 0, right: 6))
             }
         }
     }
@@ -143,38 +167,4 @@ public class BaseCellRightView: BECompositionView {
         delegate?.switchDidChange(value: checkbox.isOn)
     }
     
-}
-
-public struct BaseCellRightViewItem {
-    public var text: String?
-    public var subtext: String?
-    public var image: UIImage?
-    public var isChevronVisible: Bool
-    public var badge: String?
-    public var yellowBadge: String?
-    public var checkbox: Bool?
-    public var `switch`: Bool?
-    public var isCheckmark: Bool = false
-    
-    public init(
-        text: String? = nil,
-        subtext: String? = nil,
-        image: UIImage? = nil,
-        isChevronVisible: Bool = false,
-        badge: String? = nil,
-        yellowBadge: String? = nil,
-        checkbox: Bool?,
-        `switch`: Bool?,
-        isCheckmark: Bool? = false
-    ) {
-        self.text = text
-        self.subtext = subtext
-        self.image = image
-        self.isChevronVisible = isChevronVisible
-        self.badge = badge
-        self.yellowBadge = yellowBadge
-        self.checkbox = checkbox
-        self.`switch` = `switch`
-        self.isCheckmark = isCheckmark ?? false
-    }
 }
