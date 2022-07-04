@@ -21,24 +21,17 @@ public class BadgeView: BECompositionView {
     }
     
     public override func build() -> UIView {
-//        BEHStack(alignment: .center) {
-//            BECenter {
-                UILabel().withAttributedText(.attributedString(with: text, of: fontStyle)
-                    .withForegroundColor(textColor)
-                )
-                .setup({ label in
-                    label.setContentHuggingPriority(.defaultLow, for: .horizontal)
-                    label.setContentCompressionResistancePriority(.required, for: .horizontal)
-//                    label.setContentHuggingPriority(.defaultLow, for: .vertical)
-//                    label.setContentCompressionResistancePriority(.required, for: .vertical)
-                })
-                .frame(height: height)
-                .padding(padding)
-                .box(cornerRadius: cornerRadius)
-                .backgroundColor(color: backgroundColor())
-//            }
-//        }
-//        .bind(box)
+        UILabel().withAttributedText(.attributedString(with: text, of: fontStyle)
+            .withForegroundColor(textColor)
+        )
+        .setup({ label in
+            label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        })
+        .frame(height: height)
+        .padding(padding)
+        .box(cornerRadius: cornerRadius)
+        .backgroundColor(color: backgroundColor())
     }
     
     // MARK: -
