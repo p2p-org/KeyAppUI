@@ -2,19 +2,42 @@ import BEPureLayout
 import PureLayout
 import UIKit
 
+public struct BaseCellItem {
+    public var image: BaseCellImageViewItem?
+    public var title: String?
+    public var subtitle: String?
+    public var subtitle2: String?
+    public var rightView: BaseCellRightViewItem?
+
+    public init(
+        image: BaseCellImageViewItem? = nil,
+        title: String? = nil,
+        subtitle: String? = nil,
+        subtitle2: String? = nil,
+        rightView: BaseCellRightViewItem? = nil
+    ) {
+        self.title = title
+        self.subtitle = subtitle
+        self.subtitle2 = subtitle2
+        self.image = image
+        self.rightView = rightView
+    }
+}
+
 public class BaseCell: BECollectionCell {
     
     // MARK: - View References
     
     private let container = BERef<UIView>()
-    
     private var left: BaseCellLeftView?
     private var right: BaseCellRightView?
     
     // MARK: -
     
+    // overriding init so it doesn't contain build call, since we're building
+    // the view in configure
     override public init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
@@ -30,7 +53,9 @@ public class BaseCell: BECollectionCell {
             }
             if let right = right {
                 BESpacer(.horizontal)
-                right.padding(.init(only: .right, inset: 19))
+                right.padding(.init(only: .right, inset: 19)).setup { view in
+                    view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+                }
             }
         }
         .bind(container)
@@ -38,18 +63,20 @@ public class BaseCell: BECollectionCell {
     }
     
     public func configure(with item: BaseCellItem) {
+        let imageView = item.image != nil ? BaseCellImageView(item.image!) : nil
+
         self.left = .init(
-            image: item.image,
+            imageView: imageView,
             title: item.title,
             subtitle: item.subtitle,
             subtitle2: item.subtitle2
         )
-        
-        self.right = .init(
+
+        let rightItem = BaseCellRightViewItem(
             text: item.rightView?.text,
             subtext: item.rightView?.subtext,
             image: item.rightView?.image,
-            isChevroneVisible: item.rightView?.isChevronVisible ?? false,
+            isChevronVisible: item.rightView?.isChevronVisible ?? false,
             badge: item.rightView?.badge,
             yellowBadge: item.rightView?.yellowBadge,
             checkbox: item.rightView?.checkbox,
@@ -57,48 +84,30 @@ public class BaseCell: BECollectionCell {
             isCheckmark: item.rightView?.isCheckmark ?? false
         )
         
+        self.right = .init(item: rightItem)
+
         let child = build()
         contentView.addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
-        
+
         setNeedsLayout()
         layoutIfNeeded()
     }
     
     public override func prepareForReuse() {
+        // removing subviews so we can add them in `build` again
         contentView.subviews.forEach { $0.removeFromSuperview() }
+        super.prepareForReuse()
     }
     
     public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        setNeedsLayout()
-        layoutIfNeeded()
-        let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
-        var frame = layoutAttributes.frame
-        frame.size.height = ceil(size.height)
-        layoutAttributes.frame = frame
+        // Self-sizing is required in the vertical dimension.
+        let size: CGSize = super.systemLayoutSizeFitting(
+            layoutAttributes.size,
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        layoutAttributes.size = size
         return layoutAttributes
-    }
-}
-
-
-public struct BaseCellItem {
-    public var title: String?
-    public var subtitle: String?
-    public var subtitle2: String?
-    public var image: UIImage?
-    public var rightView: BaseCellRightViewItem?
-    
-    public init(
-        title: String?,
-        subtitle: String?,
-        subtitle2: String?,
-        image: UIImage?,
-        rightView: BaseCellRightViewItem?
-    ) {
-        self.title = title
-        self.subtitle = subtitle
-        self.subtitle2 = subtitle2
-        self.image = image
-        self.rightView = rightView
     }
 }
