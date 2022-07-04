@@ -52,7 +52,7 @@ public class BaseCell: BECollectionCell {
                 left.padding(.init(only: .left, inset: 17))
             }
             if let right = right {
-                BESpacer(.horizontal)
+                //BESpacer(.horizontal)
                 right.padding(.init(only: .right, inset: 19)).setup { view in
                     view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
                 }

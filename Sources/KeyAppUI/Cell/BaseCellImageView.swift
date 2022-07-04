@@ -107,7 +107,10 @@ public class BaseCellImageView: BECompositionView {
                     image: bottom
                 ).box(cornerRadius: 9).margin(.init(x: -1, y: -1))
             }
-        }.frame(width: defaultOneImageSize.width, height: defaultOneImageSize.height)
+        }
+        .frame(width: defaultOneImageSize.width)
+//        .centered(.vertical)
+//        .frame(width: defaultOneImageSize.width, height: defaultOneImageSize.height)
     }
     
 }
