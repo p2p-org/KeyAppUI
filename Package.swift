@@ -13,7 +13,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/bigearsenal/BEPureLayout.git", branch: "feature/spacer"),
+        .package(url: "https://github.com/bigearsenal/BEPureLayout.git", branch: "master"),
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [

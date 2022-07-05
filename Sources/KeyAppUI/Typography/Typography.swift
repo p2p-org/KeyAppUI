@@ -57,6 +57,8 @@ public extension UIFont {
     }
     
     static func lineHeight(for style: Style) -> CGFloat {
+        let font = UIFont.font(of: style)
+        /// figma line height
         var lineHeight: CGFloat = 12
         switch style {
         case .label2:
@@ -74,7 +76,7 @@ public extension UIFont {
         case .largeTitle:
             lineHeight = 40
         }
-        return lineHeight
+        return max(0, lineHeight - font.lineHeight)
     }
     
     static func letterSpacing(for style: Style) -> CGFloat {

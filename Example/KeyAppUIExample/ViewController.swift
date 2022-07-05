@@ -28,12 +28,12 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                TextButton(
-                    title: "Open splash",
-                    style: .primary,
-                    size: .large
-                ).onPressed { [weak self] in
+                SplashSection().onTap { [weak self] in
                     self?.presentSplash()
+                }
+                
+                TableSection().onTap { [weak self] in
+                    self?.present(TableViewController(), animated: true)
                 }
                 
                 SnackBarSection(viewController: self)
