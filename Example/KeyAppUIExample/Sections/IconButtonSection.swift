@@ -44,7 +44,7 @@ class IconButtonSection: BECompositionView {
     func shareCodeTemplate(style: IconButton.Style, size: IconButton.Size) {
         CodeTemplate.share(code:
             """
-            IconButton.style(
+            IconButton(
                 image: Asset.MaterialIcon.<#name#>.image,
                 title: <#T##String#>,
                 style: .\(style),

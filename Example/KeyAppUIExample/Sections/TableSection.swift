@@ -5,14 +5,13 @@ import KeyAppUI
 class TableSection: BECompositionView {
     
     override func build() -> UIView {
-        BEVStack {
+        BEVStack(spacing: 15) {
+            UILabel(text: "Cells", textSize: 22).padding(.init(only: .top, inset: 20))
             TextButton(
                 title: "Open Cells",
                 style: .primary,
                 size: .large
-            ).onPressed {
-                
-            }
+            )
         }   
     }
 }
