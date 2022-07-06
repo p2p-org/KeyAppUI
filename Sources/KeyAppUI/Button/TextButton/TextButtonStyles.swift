@@ -55,6 +55,23 @@ public extension TextButton {
             default: return .gray
             }
         }
+
+        var loadingBackgroundColor: UIColor {
+            switch self {
+            case .primary, .primaryWhite, .ghostWhite, .ghostLime: return Asset.Colors.snow.color.withAlphaComponent(0.6)
+            case .invertedRed: return Asset.Colors.rain.color
+            default: return Asset.Colors.night.color.withAlphaComponent(0.6)
+            }
+        }
+
+        var loadingForegroundColor: UIColor {
+            switch self {
+            case .primary, .ghostLime: return Asset.Colors.lime.color
+            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
+            case .second, .third, .ghost, .inverted: return Asset.Colors.night.color
+            case .invertedRed: return Asset.Colors.rose.color
+            }
+        }
     }
 
     enum Size: CaseIterable {
@@ -92,7 +109,9 @@ public extension TextButton {
                 right: trailing != nil ? 14 : 20
             ),
             iconSpacing: 8,
-            borderRadius: size.borderRadius
+            borderRadius: size.borderRadius,
+            loadingBackgroundColor: style.loadingBackgroundColor,
+            loadingForegroundColor: style.loadingForegroundColor
         )
         self.init(
             leadingImage: leading,

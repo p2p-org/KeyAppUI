@@ -20,7 +20,7 @@ class SnackBarSection: BECompositionView {
                 icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.cloud.color, renderingMode: .alwaysOriginal),
                 text: "Lorem ipsum dolor sit amet, conser adipiscing",
                 trailing: TextButton(title: "Button", style: .primary, size: .medium)
-                    .onPressed { [weak viewController] in
+                    .onPressed { [weak viewController] _ in
                         guard let viewController = viewController else { return }
                         SnackBar(icon: .add, text: "Lorem ipsum dolor sit amet, conser adipiscing", buttonTitle: "Close", buttonAction: {
                             SnackBar.hide()

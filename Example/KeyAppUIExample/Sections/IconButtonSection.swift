@@ -31,7 +31,7 @@ class IconButtonSection: BECompositionView {
                             style: style,
                             size: size
                         )
-                        .onPressed { [weak self] in
+                        .onPressed { [weak self] _ in
                             self?.shareCodeTemplate(style: style, size: size)
                         }
                     }
