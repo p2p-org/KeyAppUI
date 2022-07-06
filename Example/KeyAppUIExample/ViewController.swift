@@ -22,7 +22,7 @@ class ViewController: UIViewController {
 
         view.backgroundColor = UIColor(red: 0.91, green: 0.92, blue: 0.95, alpha: 1)
         
-        addSplash()
+        // addSplash()
     }
 
     func build() -> UIView {
@@ -31,6 +31,8 @@ class ViewController: UIViewController {
                 SplashSection().onTap { [weak self] in
                     self?.presentSplash()
                 }
+                
+                CircularProgressIndicatorSection()
                 
                 TableSection().onTap { [weak self] in
                     self?.present(TableViewController(), animated: true)

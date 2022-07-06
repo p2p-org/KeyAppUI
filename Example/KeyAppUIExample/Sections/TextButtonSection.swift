@@ -29,12 +29,12 @@ class TextButtonSection: BECompositionView {
                             title: "Create a new wallet",
                             style: .primary,
                             size: .large
-                        ).onPressed {}
+                        ).onPressed { _ in }
                         TextButton(
                             title: "I already have a wallet",
                             style: .ghost,
                             size: .large
-                        ).onPressed {}
+                        ).onPressed { _ in }
                     }.padding(.init(x: 16, y: 20))
                 }
                 .box(cornerRadius: 32)
@@ -49,12 +49,12 @@ class TextButtonSection: BECompositionView {
                                 title: "Close",
                                 style: .invertedRed,
                                 size: .small
-                            ).onPressed {}
+                            ).onPressed { _ in }
                             TextButton(
                                 title: "Show details",
                                 style: .inverted,
                                 size: .small
-                            ).onPressed {}
+                            ).onPressed { _ in }
                         }
 
                     }.padding(.init(x: 16, y: 20))
@@ -69,7 +69,7 @@ class TextButtonSection: BECompositionView {
                             UILabel(text: "Your security key")
                             BESpacer(.horizontal)
                             TextButton(title: "Paste", style: .third, size: .small, trailing: Asset.MaterialIcon.paste.image)
-                                .onPressed {}
+                                .onPressed { _ in }
                         }
                         UITextField(placeholder: "Input")
                     }
@@ -104,8 +104,10 @@ class TextButtonSection: BECompositionView {
                     size: size,
                     leading: leading,
                     trailing: trailing
-                ).onPressed { [weak self] in
-                    self?.shareCodeTemplate(style: style, size: size, hasLeading: leading != nil, hasTrailing:  trailing != nil)
+                ).onPressed { [weak self] button in
+                    guard let button = button as? TextButton else { return }
+                    button.isLoading = !button.isLoading
+                    self?.shareCodeTemplate(style: style, size: size, hasLeading: leading != nil, hasTrailing: trailing != nil)
                 }
             }
         }
@@ -119,32 +121,32 @@ class TextButtonSection: BECompositionView {
                 style: .\(style),
                 size: .\(size),
             """
-        
+
         if hasLeading {
             code +=
-            """
-            
-                leading: Asset.MaterialIcon.<#name#>.image,
-            """
+                """
+
+                    leading: Asset.MaterialIcon.<#name#>.image,
+                """
         }
-        
+
         if hasTrailing {
             code +=
-            """
-            
-                trailing: Asset.MaterialIcon.<#name#>.image,
-            """
+                """
+
+                    trailing: Asset.MaterialIcon.<#name#>.image,
+                """
         }
-        
+
         code = code.replacingLastOccurrenceOfString(",", with: "")
-        
+
         code +=
             """
-            
+
             )
             .onPressed { <#code#> }
             """
-        
-        CodeTemplate.share(code:code)
+
+        CodeTemplate.share(code: code)
     }
 }

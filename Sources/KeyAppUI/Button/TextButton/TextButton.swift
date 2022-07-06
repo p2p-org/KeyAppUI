@@ -27,8 +27,16 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
     public var trailingImage: UIImage? {
         didSet {
             trailingImageView.image = trailingImage
-            trailingImageView.isHidden = trailingImage == nil
-            trailingIconSpacing.view?.isHidden = trailingImage == nil
+            trailingImageView.isHidden = (trailingImage == nil) || isLoading
+            trailingIconSpacing.view?.isHidden = (trailingImage == nil) && !isLoading
+        }
+    }
+
+    public var isLoading: Bool = false {
+        didSet {
+            trailingImageView.isHidden = (trailingImage == nil) || isLoading
+            trailingIconSpacing.view?.isHidden = (trailingImage == nil) && !isLoading
+            loadingIndicator.isHidden = !isLoading
         }
     }
 
@@ -45,6 +53,8 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
 
     let trailingImageView = BERef<UIImageView>()
     let trailingIconSpacing = BERef<UIView>()
+
+    let loadingIndicator = BERef<CircularProgressIndicator>()
 
     // MARK: Init
 
@@ -96,6 +106,10 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                     .frame(width: 20, height: 20)
                     .hidden(trailingImage == nil)
                     .setup { view in view.tintColor = theme.foregroundColor }
+                CircularProgressIndicator(backgroundCircularColor: theme.loadingBackgroundColor, foregroundCircularColor: theme.foregroundColor)
+                    .bind(loadingIndicator)
+                    .hidden(!isLoading)
+                    .frame(width: 20, height: 20)
                 BEContainer()
                     .frame(width: theme.contentPadding.right)
                     .bind(trailingSpacing)

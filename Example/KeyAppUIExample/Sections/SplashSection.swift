@@ -18,9 +18,7 @@ class SplashSection: BECompositionView {
                 title: "Open Splash",
                 style: .primary,
                 size: .large
-            ).onPressed {
-                
-            }
+            )
         }
     }
 }

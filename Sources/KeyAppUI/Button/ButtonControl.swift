@@ -9,7 +9,7 @@ import UIKit
 public class ButtonControl<T>: UIControl {
     public typealias ThemeState<T> = [State: T]
     
-    var onPressed: BEVoidCallback?
+    var onPressed: BECallback<ButtonControl<T>>?
 
     var themes: ThemeState<T> = [:] {
         didSet { update() }
@@ -78,7 +78,7 @@ public class ButtonControl<T>: UIControl {
         isHighlighted = false
 
         if frame.contains(location) {
-            if !state.contains(.disabled) { onPressed?() }
+            if !state.contains(.disabled) { onPressed?(self) }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in self?.update() }
         } else {
             update()
@@ -94,7 +94,7 @@ public class ButtonControl<T>: UIControl {
     }
 
     @discardableResult
-    public func onPressed(_ callback: @escaping BEVoidCallback) -> Self {
+    public func onPressed(_ callback: BECallback<ButtonControl<T>>?) -> Self {
         onPressed = callback
         return self
     }
