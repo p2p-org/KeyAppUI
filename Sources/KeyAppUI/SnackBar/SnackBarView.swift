@@ -67,12 +67,14 @@ public class SnackBarView: BECompositionView {
                 .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
                 .setup { view in
                     view.setContentHuggingPriority(.required, for: .horizontal)
-                    view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                    view.setContentCompressionResistancePriority(.required, for: .horizontal)
                 }
                 
                 BEContainer()
                     .frame(width: 0)
                     .bind(leadingSpacing)
+                
+                UIView.spacer
 
                 if let trailing = trailing { trailing }
             }
