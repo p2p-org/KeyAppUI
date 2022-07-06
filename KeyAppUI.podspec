@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = 'KeyAppUI'
   s.version          = '0.1.0'
-  s.summary          = 'Custom UI components, colors, fonts.'
+  s.summary          = 'Custom UI components, colors, fonts, icons.'
   s.homepage         = 'https://github.com/p2p-org/KeyAppUI'
   s.license          = { :type => 'MIT', :file => 'LICENSE.md' }
   s.author           = { 'Ivan Babich' => 'ivan.babich@p2p.org' }
