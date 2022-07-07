@@ -4,7 +4,7 @@ xcassets:
     - Sources/KeyAppUI/Resources/Colors.xcassets
     - Sources/KeyAppUI/Resources/Icons.xcassets
   outputs:
-    - templateName: swift5
+    - templatePath: asset_extensions.stencil
       output: Sources/KeyAppUI/Generated/Asset+Generated.swift
       params:
         publicAccess: true
