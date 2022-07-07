@@ -1,8 +1,8 @@
 xcassets:
   inputs:
-    - Resources/MaterialIcon.xcassets
-    - Resources/Colors.xcassets
-    - Resources/Icons.xcassets
+    - Sources/KeyAppUI/Resources/MaterialIcon.xcassets
+    - Sources/KeyAppUI/Resources/Colors.xcassets
+    - Sources/KeyAppUI/Resources/Icons.xcassets
   outputs:
     - templateName: swift5
       output: Sources/KeyAppUI/Generated/Asset+Generated.swift
