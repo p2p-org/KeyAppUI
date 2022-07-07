@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.swift_version         = '5.0'
   s.source_files          = 'Sources/KeyAppUI/**/*'
   s.resource_bundles = {
-    'KeyAppUI' => ['Resources/**/*']
+    'BundleToken' => ['Resources/**/*']
   }
   s.dependency 'BEPureLayout'
 end
