@@ -39,9 +39,9 @@ public class BadgeView: BECompositionView {
     private func backgroundColor() -> UIColor {
         switch style {
         case .yellow:
-            return Asset.Colors.lime.color
+            return .lime
         case .basic:
-            return Asset.Colors.mountain.color
+            return .mountain
         }
     }
     
@@ -57,9 +57,9 @@ public class BadgeView: BECompositionView {
     private var textColor: UIColor {
         switch style {
         case .basic:
-            return Asset.Colors.snow.color
+            return .snow
         case .yellow:
-            return Asset.Colors.mountain.color
+            return .mountain
         }
     }
     

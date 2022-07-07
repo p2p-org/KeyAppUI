@@ -43,8 +43,8 @@ public struct TextButtonAppearance {
 
     public static func `default`() -> Self {
         .init(
-            backgroundColor: Asset.Colors.night.color,
-            foregroundColor: Asset.Colors.lime.color,
+            backgroundColor: .night,
+            foregroundColor: .lime,
             font: .systemFont(ofSize: 16, weight: .medium),
             contentPadding: .init(top: 0, left: 28, bottom: 0, right: 20),
             iconSpacing: 12,

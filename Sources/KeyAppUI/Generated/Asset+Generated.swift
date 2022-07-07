@@ -29,7 +29,7 @@ extension UIColor {
 // MARK: - Images -
 
 extension UIImage {
-    static let send = UIImage(named: "send", in: bundle, compatibleWith: nil)!
+    static let a = UIImage(named: "a", in: bundle, compatibleWith: nil)!
     static let add = UIImage(named: "add", in: bundle, compatibleWith: nil)!
     static let addBox = UIImage(named: "add_box", in: bundle, compatibleWith: nil)!
     static let addCircle = UIImage(named: "add_circle", in: bundle, compatibleWith: nil)!
@@ -63,6 +63,7 @@ extension UIImage {
     static let cut = UIImage(named: "cut", in: bundle, compatibleWith: nil)!
     static let deleteSweep = UIImage(named: "delete_sweep", in: bundle, compatibleWith: nil)!
     static let drafts = UIImage(named: "drafts", in: bundle, compatibleWith: nil)!
+    static let e = UIImage(named: "e", in: bundle, compatibleWith: nil)!
     static let expandLess = UIImage(named: "expand_less", in: bundle, compatibleWith: nil)!
     static let expandMore = UIImage(named: "expand_more", in: bundle, compatibleWith: nil)!
     static let fileCopy = UIImage(named: "file_copy", in: bundle, compatibleWith: nil)!
@@ -77,6 +78,7 @@ extension UIImage {
     static let howToReg = UIImage(named: "how_to_reg", in: bundle, compatibleWith: nil)!
     static let howToVote = UIImage(named: "how_to_vote", in: bundle, compatibleWith: nil)!
     static let inbox = UIImage(named: "inbox", in: bundle, compatibleWith: nil)!
+    static let k = UIImage(named: "k", in: bundle, compatibleWith: nil)!
     static let lastPage = UIImage(named: "last_page", in: bundle, compatibleWith: nil)!
     static let link = UIImage(named: "link", in: bundle, compatibleWith: nil)!
     static let linkOff = UIImage(named: "link_off", in: bundle, compatibleWith: nil)!
@@ -89,6 +91,8 @@ extension UIImage {
     static let moveToInbox = UIImage(named: "move_to_inbox", in: bundle, compatibleWith: nil)!
     static let nextWeek = UIImage(named: "next_week", in: bundle, compatibleWith: nil)!
     static let outlinedFlag = UIImage(named: "outlined_flag", in: bundle, compatibleWith: nil)!
+    static let p1 = UIImage(named: "p1", in: bundle, compatibleWith: nil)!
+    static let p2 = UIImage(named: "p2", in: bundle, compatibleWith: nil)!
     static let paste = UIImage(named: "paste", in: bundle, compatibleWith: nil)!
     static let redo = UIImage(named: "redo", in: bundle, compatibleWith: nil)!
     static let refresh = UIImage(named: "refresh", in: bundle, compatibleWith: nil)!
@@ -115,5 +119,6 @@ extension UIImage {
     static let waves = UIImage(named: "waves", in: bundle, compatibleWith: nil)!
     static let weekend = UIImage(named: "weekend", in: bundle, compatibleWith: nil)!
     static let whereToVote = UIImage(named: "where_to_vote", in: bundle, compatibleWith: nil)!
+    static let y = UIImage(named: "y", in: bundle, compatibleWith: nil)!
 }
 

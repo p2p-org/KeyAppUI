@@ -50,9 +50,9 @@ public struct IconButtonAppearance {
     /// Default appearance
     public static func `default`() -> Self {
         .init(
-            iconColor: Asset.Colors.lime.color,
-            titleColor: Asset.Colors.night.color,
-            backgroundColor: Asset.Colors.night.color,
+            iconColor: .lime,
+            titleColor: .night,
+            backgroundColor: .night,
             font: .systemFont(ofSize: 16, weight: .medium),
             iconSize: 40,
             titleSpacing: 8,

@@ -27,22 +27,22 @@ final class SplashView: BECompositionView {
 
     override func build() -> UIView {
         BEHStack(spacing: .zero) {
-            makeLetter(asset: Asset.MaterialIcon.k)
+            makeLetter(image: .k)
                 .frame(width: 12.9, height: 21.6)
                 .padding(UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero))
-            makeLetter(asset: Asset.MaterialIcon.e)
+            makeLetter(image: .e)
                 .frame(width: 14.2, height: 14.6)
                 .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6))
-            makeLetter(asset: Asset.MaterialIcon.y)
+            makeLetter(image: .y)
                 .frame(width: 14.4, height: 21.6)
                 .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7))
-            makeLetter(asset: Asset.MaterialIcon.a)
+            makeLetter(image: .a)
                 .frame(width: 14.8, height: 14.6)
                 .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7))
-            makeLetter(asset: Asset.MaterialIcon.p1)
+            makeLetter(image: .p1)
                 .frame(width: 14.7, height: 21.6)
                 .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2))
-            makeLetter(asset: Asset.MaterialIcon.p2)
+            makeLetter(image: .p2)
                 .frame(width: 14.7, height: 21.6)
                 .padding(.init(only: .top, inset: 7))
         }
@@ -50,18 +50,18 @@ final class SplashView: BECompositionView {
             .padding(.init(only: .top, inset: Constants.centerOffset))
             .centered(.horizontal)
             .centered(.vertical)
-            .backgroundColor(color: Asset.Colors.lime.color)
+            .backgroundColor(color: .lime)
     }
 
     override func layout() {
         let size = hStack.view!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        let view = UIView(width: size.width + Constants.overlayOffset, height: size.height + Constants.overlayOffset, backgroundColor: Asset.Colors.lime.color)
+        let view = UIView(width: size.width + Constants.overlayOffset, height: size.height + Constants.overlayOffset, backgroundColor: .lime)
             .padding(.init(only: .top, inset: Constants.centerOffset))
             .centered(.horizontal)
             .centered(.vertical)
         addSubview(view)
 
-        lineLayer.strokeColor = Asset.Colors.night.color.cgColor
+        lineLayer.strokeColor = UIColor.night.cgColor
         lineLayer.lineCap = .round
         lineLayer.lineWidth = Constants.underlineHeight
         layer.addSublayer(lineLayer)
@@ -74,8 +74,8 @@ final class SplashView: BECompositionView {
 
 private extension SplashView {
 
-    func makeLetter(asset: ImageAsset) -> UIImageView {
-        let view = UIImageView(image: asset.image)
+    func makeLetter(image: UIImage) -> UIImageView {
+        let view = UIImageView(image: image)
         view.contentMode = .scaleAspectFill
         return view
     }

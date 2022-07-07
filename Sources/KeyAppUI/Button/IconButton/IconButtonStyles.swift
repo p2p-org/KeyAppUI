@@ -20,36 +20,36 @@ public extension IconButton {
 
         var backgroundColor: UIColor {
             switch self {
-            case .primary, .primaryWhite: return Asset.Colors.night.color
-            case .second: return Asset.Colors.rain.color
-            case .third: return Asset.Colors.lime.color
+            case .primary, .primaryWhite: return .night
+            case .second: return .rain
+            case .third: return .lime
             case .ghostBlack, .ghostWhite, .ghostLime: return .clear
-            case .inverted: return Asset.Colors.snow.color
+            case .inverted: return .snow
             }
         }
 
         var disabledBackgroundColor: UIColor? {
-            Asset.Colors.rain.color
+            .rain
         }
 
         var iconColor: UIColor {
             switch self {
-            case .primary, .ghostLime: return Asset.Colors.lime.color
-            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
-            case .second, .third, .ghostBlack, .inverted: return Asset.Colors.night.color
+            case .primary, .ghostLime: return .lime
+            case .primaryWhite, .ghostWhite: return .snow
+            case .second, .third, .ghostBlack, .inverted: return .night
             }
         }
 
         var titleColor: UIColor {
             switch self {
-            case .primary, .primaryWhite, .second, .third, .ghostBlack, .inverted: return Asset.Colors.night.color
-            case .ghostWhite: return Asset.Colors.snow.color
-            case .ghostLime: return Asset.Colors.lime.color
+            case .primary, .primaryWhite, .second, .third, .ghostBlack, .inverted: return .night
+            case .ghostWhite: return .snow
+            case .ghostLime: return .lime
             }
         }
 
         var disabledIconColor: UIColor? {
-            Asset.Colors.mountain.color
+            .mountain
         }
 
         func font(size: Size) -> UIFont {

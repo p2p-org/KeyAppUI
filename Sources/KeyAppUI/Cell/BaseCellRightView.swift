@@ -84,7 +84,7 @@ public class BaseCellRightView: BECompositionView {
 
             if let `switch` = `switch` {
                 UISwitch().setup({ elem in
-                    elem.onTintColor = Asset.Colors.night.color
+                    elem.onTintColor = .night
                 })
                 .frame(width: 51, height: 31)
                 .bind(switchView)
@@ -105,15 +105,15 @@ public class BaseCellRightView: BECompositionView {
                 UIImageView(image: image, contentMode: .scaleAspectFit)
                     .padding(.init(top: 0, left: 12, bottom: 0, right: 0))
             } else if isCheckmark {
-                UIImageView(image: Asset.MaterialIcon.check.image, contentMode: .scaleAspectFit)
+                UIImageView(image: .check, contentMode: .scaleAspectFit)
                     .padding(.init(top: 0, left: 12, bottom: 0, right: -5))
             }
 
             if isChevronVisible {
                 UIImageView(
-                    image: Asset.MaterialIcon.chevronRight.image,
+                    image: .chevronRight,
                     contentMode: .center,
-                    tintColor: Asset.Colors.mountain.color
+                    tintColor: .mountain
                 )
                 .frame(width: 8)
                 .padding(.init(top: 0, left: badge != nil ? 8 : 14, bottom: 0, right: 6))
@@ -128,7 +128,7 @@ public class BaseCellRightView: BECompositionView {
             if let text = text {
                 UILabel().withAttributedText(
                     UIFont.text(text, of: .text3, weight: .bold)
-                        .withForegroundColor(Asset.Colors.night.color)
+                        .withForegroundColor(.night)
                 ).setup { label in
                     label.textAlignment = .right
                     label.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -143,7 +143,7 @@ public class BaseCellRightView: BECompositionView {
             if let subtext = subtext {
                 UILabel().withAttributedText(
                     UIFont.text(subtext, of: .label1)
-                        .withForegroundColor(Asset.Colors.mountain.color)
+                        .withForegroundColor(.mountain)
                 ).setup { label in
                     label.textAlignment = .right
                     label.setContentHuggingPriority(.defaultLow, for: .horizontal)

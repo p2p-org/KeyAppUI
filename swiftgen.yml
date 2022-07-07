@@ -1,8 +1,7 @@
 xcassets:
   inputs:
-    - Sources/KeyAppUI/Resources/MaterialIcon.xcassets
-    - Sources/KeyAppUI/Resources/Colors.xcassets
-    - Sources/KeyAppUI/Resources/Icons.xcassets
+    - Resources/MaterialIcon.xcassets
+    - Resources/Colors.xcassets
   outputs:
     - templatePath: asset_extensions.stencil
       output: Sources/KeyAppUI/Generated/Asset+Generated.swift

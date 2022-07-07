@@ -61,7 +61,7 @@ public class SnackBarView: BECompositionView {
                 UILabel(
                     text: text,
                     font: appearance.textFont,
-                    textColor: Asset.Colors.snow.color,
+                    textColor: .snow,
                     numberOfLines: appearance.numberOnLines
                 ).bind(titleView)
                 .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
@@ -76,7 +76,7 @@ public class SnackBarView: BECompositionView {
 
                 if let trailing = trailing { trailing }
             }
-        }.backgroundColor(color: Asset.Colors.night.color)
+        }.backgroundColor(color: .night)
         .box(cornerRadius: appearance.cornerRadius)
         .border(width: 1, color: appearance.borderColor)
         .bind(container)

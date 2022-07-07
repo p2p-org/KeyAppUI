@@ -18,29 +18,29 @@ public extension TextButton {
 
         var backgroundColor: UIColor {
             switch self {
-            case .primary, .primaryWhite: return Asset.Colors.night.color
-            case .second: return Asset.Colors.rain.color
-            case .third: return Asset.Colors.lime.color
+            case .primary, .primaryWhite: return .night
+            case .second: return .rain
+            case .third: return .lime
             case .ghost, .ghostWhite, .ghostLime: return .clear
-            case .inverted, .invertedRed: return Asset.Colors.snow.color
+            case .inverted, .invertedRed: return .snow
             }
         }
 
         var disabledBackgroundColor: UIColor? {
-            Asset.Colors.rain.color
+            .rain
         }
 
         var foreground: UIColor {
             switch self {
-            case .primary, .ghostLime: return Asset.Colors.lime.color
-            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
-            case .second, .third, .ghost, .inverted: return Asset.Colors.night.color
-            case .invertedRed: return Asset.Colors.rose.color
+            case .primary, .ghostLime: return .lime
+            case .primaryWhite, .ghostWhite: return .snow
+            case .second, .third, .ghost, .inverted: return .night
+            case .invertedRed: return .rose
             }
         }
 
         var disabledForegroundColor: UIColor? {
-            Asset.Colors.mountain.color
+            .mountain
         }
 
         func font(size: Size) -> UIFont {

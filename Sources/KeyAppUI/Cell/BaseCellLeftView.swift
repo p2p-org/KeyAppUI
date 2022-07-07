@@ -49,7 +49,7 @@ public class BaseCellLeftView: BECompositionView {
                 if let subtitle = subtitle {
                     UILabel().withAttributedText(
                         UIFont.text(subtitle, of: .label1)
-                            .withForegroundColor(Asset.Colors.night.color)
+                            .withForegroundColor(.night)
                     ).setup { label in
                         label.numberOfLines = 0
                         label.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
@@ -62,7 +62,7 @@ public class BaseCellLeftView: BECompositionView {
                 if let subtitle2 = subtitle2 {
                     UILabel().withAttributedText(
                         UIFont.text(subtitle2, of: .label1)
-                            .withForegroundColor(Asset.Colors.mountain.color)
+                            .withForegroundColor(.mountain)
                     ).setup { label in
                         label.numberOfLines = 0
                         label.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
