@@ -1,6 +1,6 @@
 # KeyAppUI
 
-![cover](Sources/KeyAppUI/Documentation.docc/Resources/Cover.png)
+![cover](Documentation.docc/Resources/Cover.png)
 
 Custom UI components, colors, fonts.
 
