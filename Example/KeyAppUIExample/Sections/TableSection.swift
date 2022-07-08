@@ -296,28 +296,11 @@ class TableViewController: UICollectionViewController {
     
     public override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "SectionHeader", for: indexPath) as? SectionHeader {
-            sectionHeader.sectionHeaderlabel.text = indexPath.section == 0 ? "Financial Block" : "Cells"
+            sectionHeader.configure(text: indexPath.section == 0 ? "HIDDEN TOKENS" : "CELLS", expandDirection: .bottom)
             return sectionHeader
         }
         return UICollectionReusableView()
     }
-    
-    class SectionHeader: UICollectionReusableView {
-        @IBOutlet var sectionHeaderlabel: UILabel!
-        
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            sectionHeaderlabel = UILabel()
-            sectionHeaderlabel.textColor = .black
-            self.addSubview(sectionHeaderlabel)
-            sectionHeaderlabel.autoCenterInSuperview()
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError()
-        }
-    }
-    
 }
 
 public class CollectionSeparatorView: UICollectionReusableView {
