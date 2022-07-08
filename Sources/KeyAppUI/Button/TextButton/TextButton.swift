@@ -18,8 +18,7 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
     public var leadingImage: UIImage? {
         didSet {
             leadingImageView.image = leadingImage
-            leadingImageView.isHidden = leadingImage == nil
-            leadingIconSpacing.view?.isHidden = leadingImage == nil
+            updateLeading()
         }
     }
 
@@ -27,34 +26,33 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
     public var trailingImage: UIImage? {
         didSet {
             trailingImageView.image = trailingImage
-            trailingImageView.isHidden = (trailingImage == nil) || isLoading
-            trailingIconSpacing.view?.isHidden = (trailingImage == nil) && !isLoading
+            updateTrailing()
         }
     }
 
     public var isLoading: Bool = false {
         didSet {
-            trailingImageView.isHidden = (trailingImage == nil) || isLoading
-            trailingIconSpacing.view?.isHidden = (trailingImage == nil) && !isLoading
-            loadingIndicator.isHidden = !isLoading
+            updateLeading()
+            updateTrailing()
         }
     }
 
     // MARK: Refs
 
-    let container = BERef<UIView>()
-    let titleView = BERef<UILabel>()
+    private let container = BERef<UIView>()
+    private let titleView = BERef<UILabel>()
 
-    let leadingSpacing = BERef<UIView>()
-    let trailingSpacing = BERef<UIView>()
+    private let leading = BERef<UIView>()
+    private let leadingSpacing = BERef<UIView>()
+    private let leadingImageView = BERef<UIImageView>()
+    private let leadingIconSpacing = BERef<UIView>()
+    private let leadingLoadingIndicator = BERef<CircularProgressIndicator>()
 
-    let leadingImageView = BERef<UIImageView>()
-    let leadingIconSpacing = BERef<UIView>()
-
-    let trailingImageView = BERef<UIImageView>()
-    let trailingIconSpacing = BERef<UIView>()
-
-    let loadingIndicator = BERef<CircularProgressIndicator>()
+    private let trailing = BERef<UIView>()
+    private let trailingSpacing = BERef<UIView>()
+    private let trailingImageView = BERef<UIImageView>()
+    private let trailingIconSpacing = BERef<UIView>()
+    private let trailingLoadingIndicator = BERef<CircularProgressIndicator>()
 
     // MARK: Init
 
@@ -80,15 +78,24 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                 BEContainer()
                     .frame(width: theme.contentPadding.left)
                     .bind(leadingSpacing)
-                UIImageView(image: leadingImage)
-                    .bind(leadingImageView)
-                    .frame(width: 20, height: 20)
-                    .hidden(leadingImage == nil)
-                    .setup { view in view.tintColor = theme.foregroundColor }
-                BEContainer()
-                    .frame(width: theme.iconSpacing)
-                    .hidden(leadingImage == nil)
-                    .bind(leadingIconSpacing)
+
+                BEHStack {
+                    UIImageView(image: leadingImage)
+                        .bind(leadingImageView)
+                        .frame(width: 20, height: 20)
+                        .hidden(leadingImage == nil)
+                        .setup { view in view.tintColor = theme.foregroundColor }
+                    CircularProgressIndicator(backgroundCircularColor: theme.loadingBackgroundColor, foregroundCircularColor: theme.foregroundColor)
+                        .bind(leadingLoadingIndicator)
+                        .hidden(!isLoading)
+                        .frame(width: 20, height: 20)
+                    BEContainer()
+                        .frame(width: theme.iconSpacing)
+                        .hidden(leadingImage == nil)
+                        .bind(leadingIconSpacing)
+                }
+                .hidden(leadingImage == nil)
+                .bind(leading)
 
                 // Content
                 UILabel(text: title, font: theme.font)
@@ -97,19 +104,21 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                     .setup { view in view.textColor = theme.foregroundColor; view.adjustsFontSizeToFitWidth = true }
 
                 // Trailing
-                BEContainer()
-                    .frame(width: theme.iconSpacing)
-                    .hidden(trailingImage == nil)
-                    .bind(trailingIconSpacing)
-                UIImageView(image: trailingImage)
-                    .bind(trailingImageView)
-                    .frame(width: 20, height: 20)
-                    .hidden(trailingImage == nil)
-                    .setup { view in view.tintColor = theme.foregroundColor }
-                CircularProgressIndicator(backgroundCircularColor: theme.loadingBackgroundColor, foregroundCircularColor: theme.foregroundColor)
-                    .bind(loadingIndicator)
-                    .hidden(!isLoading)
-                    .frame(width: 20, height: 20)
+                BEHStack {
+                    BEContainer().frame(width: theme.iconSpacing)
+                    UIImageView(image: trailingImage)
+                        .bind(trailingImageView)
+                        .frame(width: 20, height: 20)
+                        .hidden(trailingImage == nil)
+                        .setup { view in view.tintColor = theme.foregroundColor }
+                    CircularProgressIndicator(backgroundCircularColor: theme.loadingBackgroundColor, foregroundCircularColor: theme.foregroundColor)
+                        .bind(trailingLoadingIndicator)
+                        .hidden(!isLoading)
+                        .frame(width: 20, height: 20)
+                }
+                .hidden(trailingImage == nil)
+                .bind(trailing)
+
                 BEContainer()
                     .frame(width: theme.contentPadding.right)
                     .bind(trailingSpacing)
@@ -140,5 +149,17 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
     override func updateAnimated() {
         backgroundColor = theme.backgroundColor
         super.updateAnimated()
+    }
+
+    func updateTrailing() {
+        trailing.isHidden = trailingImage == nil
+        trailingImageView.isHidden = isLoading || trailingImage == nil
+        trailingLoadingIndicator.isHidden = !isLoading
+    }
+
+    func updateLeading() {
+        leading.isHidden = leadingImage == nil
+        leadingImageView.isHidden = isLoading || leadingImage == nil
+        leadingLoadingIndicator.isHidden = !isLoading
     }
 }

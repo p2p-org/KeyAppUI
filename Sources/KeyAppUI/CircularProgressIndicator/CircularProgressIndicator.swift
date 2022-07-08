@@ -53,6 +53,13 @@ public class CircularProgressIndicator: UIView {
 
     let progressLineLength: CGFloat = 0.25
 
+    public convenience init() {
+        self.init(
+            backgroundCircularColor: Asset.Colors.night.color,
+            foregroundCircularColor: Asset.Colors.lime.color
+        )
+    }
+
     public init(
         backgroundCircularColor: UIColor = Asset.Colors.night.color,
         foregroundCircularColor: UIColor = Asset.Colors.lime.color
@@ -61,8 +68,8 @@ public class CircularProgressIndicator: UIView {
         self.foregroundCircularColor = foregroundCircularColor
 
         super.init(frame: .zero)
+
         drawAllLayers()
-        startAnimation()
     }
 
     @available(*, unavailable)
@@ -78,6 +85,7 @@ public class CircularProgressIndicator: UIView {
     func drawAllLayers() {
         drawBackgroundLayer()
         drawForegroundLayer()
+        startAnimation()
     }
 
     func drawBackgroundLayer() {
@@ -106,20 +114,27 @@ public class CircularProgressIndicator: UIView {
     }
 
     func startAnimation() {
-        if isHidden { return }
-        
-        let foregroundAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        foregroundAnimation.fromValue = 0
-        foregroundAnimation.toValue = 2 * Double.pi
-        foregroundAnimation.duration = 1
-        foregroundAnimation.repeatCount = .infinity
-        foregroundAnimation.isRemovedOnCompletion = false
-        
-        self.foregroundAnimation = foregroundAnimation
+        if isHidden {
+            stopAnimation()
+            return
+        }
+
+        if let foregroundAnimation = foregroundAnimation {
+            foregroundLayer?.add(foregroundAnimation, forKey: "rotationAnimation")
+        } else {
+            let foregroundAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+            foregroundAnimation.fromValue = 0
+            foregroundAnimation.toValue = 2 * Double.pi
+            foregroundAnimation.duration = 1
+            foregroundAnimation.repeatCount = .infinity
+            foregroundAnimation.isRemovedOnCompletion = false
+
+            self.foregroundAnimation = foregroundAnimation
+        }
     }
-    
+
     func stopAnimation() {
-        foregroundAnimation = nil
+        foregroundLayer?.removeAllAnimations()
     }
 
     private func createSegment(startAngle: CGFloat, endAngle: CGFloat) -> UIBezierPath {
@@ -131,8 +146,8 @@ public class CircularProgressIndicator: UIView {
             clockwise: true
         )
     }
-    
-    public override var isHidden: Bool {
+
+    override public var isHidden: Bool {
         didSet {
             if isHidden { stopAnimation() } else { startAnimation() }
         }
