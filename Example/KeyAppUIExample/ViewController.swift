@@ -21,8 +21,8 @@ class ViewController: UIViewController {
         child.autoPinEdgesToSuperviewEdges()
 
         view.backgroundColor = UIColor(red: 0.91, green: 0.92, blue: 0.95, alpha: 1)
-        
-        // addSplash()
+
+        addSplash()
     }
 
     func build() -> UIView {
@@ -31,19 +31,19 @@ class ViewController: UIViewController {
                 SplashSection().onTap { [weak self] in
                     self?.presentSplash()
                 }
-                
+
                 CircularProgressIndicatorSection()
-                
+
                 TableSection().onTap { [weak self] in
                     self?.present(TableViewController(), animated: true)
                 }
-                
+
                 SnackBarSection(viewController: self)
 
                 IconSection()
 
                 TypographySection()
-                
+
                 // Buttons
                 TextButtonSection()
                 IconButtonSection()
@@ -51,19 +51,19 @@ class ViewController: UIViewController {
         }
         .setup { view in view.scrollView.keyboardDismissMode = .onDrag }
     }
-    
+
     private func presentSplash() {
         let splashVC = SplashViewController()
         present(splashVC, animated: true)
     }
-    
+
     private func addSplash() {
         let child = SplashViewController()
-        child.completionHandler = {[weak self, weak child] in
-            guard let self = self, let child = child else {return}
+        child.completionHandler = { [weak self, weak child] in
+            guard let self = self, let child = child else { return }
             self.removeSplash(child)
         }
-        
+
         addChild(child)
 
         view.addSubview(child.view)
