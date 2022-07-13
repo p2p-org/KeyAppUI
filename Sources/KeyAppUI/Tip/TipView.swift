@@ -105,13 +105,6 @@ final class TipView: BECompositionView {
         .box(cornerRadius: Constants.cornerRadius)
         .bind(container)
         .margin(appearance.pointerMarginSide)
-        .setup { cont in
-            guard let content = cont.viewWithTag(1) else { return }
-            let constraint: NSLayoutConstraint = cont.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
-            let height = cont.heightAnchor.constraint(greaterThanOrEqualToConstant: 56)
-            height.isActive = true
-            constraint.priority = .defaultLow
-        }
     }
 
     // MARK: - Private
