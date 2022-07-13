@@ -12,3 +12,4 @@ This package contains UI components for KeyApp application.
 - ``TextButton``
 - ``SnackBar``
 - ``SplashViewController``
+- ``Tip``

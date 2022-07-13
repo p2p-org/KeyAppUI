@@ -32,6 +32,11 @@ class ViewController: UIViewController {
                     self?.presentSplash()
                 }
 
+                TipSection()
+                    .onTap { [weak self] in
+                        self?.performSegue(withIdentifier: "showTipExample", sender: nil)
+                    }
+
                 CircularProgressIndicatorSection()
 
                 TableSection().onTap { [weak self] in
