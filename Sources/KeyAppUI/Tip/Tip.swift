@@ -12,10 +12,10 @@ public final class TipManager {
 
     public init() { }
 
-    public func createTip(content: TipContent, theme: TipTheme, position: TipPointerPosition) -> UIView {
+    public func createTip(content: TipContent, theme: TipTheme, pointerPosition: TipPointerPosition) -> UIView {
         hideCurrentTip()
 
-        let tipView = TipView(content: content, theme: theme, position: position)
+        let tipView = TipView(content: content, theme: theme, pointerPosition: pointerPosition)
 
         tipView.nextButtonHandler = { [weak self] in
             if content.count == content.currentNumber {

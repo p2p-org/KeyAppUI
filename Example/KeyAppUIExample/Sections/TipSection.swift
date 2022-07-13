@@ -3,8 +3,6 @@ import BEPureLayout
 import KeyAppUI
 
 final class TipSection: BECompositionView {
-    
-    let button = BERef<TextButton>()
 
     override func build() -> UIView {
         BEVStack(spacing: 15) {
@@ -14,7 +12,6 @@ final class TipSection: BECompositionView {
                 style: .primary,
                 size: .large
             )
-            .bind(button)
         }
     }
 }

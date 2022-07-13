@@ -16,19 +16,21 @@ final class TipView: BECompositionView {
     private var pointerLayer: CAShapeLayer?
 
     private let content: TipContent
-    private let appearance: Appearance
-    private let pointerPosition: TipPointerPosition
+    private let appearance: TipAppearance
 
     // MARK: - Inits
 
     public init(
         content: TipContent,
         theme: TipTheme,
-        position: TipPointerPosition
+        pointerPosition: TipPointerPosition
     ) {
         self.content = content
-        self.appearance = Appearance(theme: theme, position: position)
-        self.pointerPosition = position
+        self.appearance = TipAppearance(
+            theme: theme,
+            pointerPosition: pointerPosition,
+            pointerInset: Constants.pointerSize.height
+        )
 
         super.init()
     }
@@ -126,7 +128,7 @@ final class TipView: BECompositionView {
         trianglePath.lineWidth = 1
         trianglePath.move(to: CGPoint.zero)
 
-        switch pointerPosition {
+        switch appearance.pointerPosition {
         case .topLeft:
             trianglePath.addCurve(to: CGPoint(x: size.width, y: .zero), controlPoint1: CGPoint(x: size.width / 2, y: -curveYPoint), controlPoint2: CGPoint(x: size.width / 2, y: -curveYPoint))
             shapeLayerPosition = CGPoint(x: bounds.minX + margin, y: bounds.minY + size.height)
@@ -207,57 +209,8 @@ final class TipView: BECompositionView {
     }
 }
 
-// MARK: - Appearance extension
-
+// MARK: - Constants
 extension TipView {
-    struct Appearance {
-        let backgroundColor: UIColor
-        let textColor: UIColor
-        let countColor: UIColor
-        let nextButtonStyle: TextButton.Style
-        let skipButtonStyle: TextButton.Style
-        let pointerMarginSide: UIEdgeInsets
-
-        init(theme: TipTheme, position: TipPointerPosition) {
-            switch theme {
-            case .snow:
-                backgroundColor = Asset.Colors.snow.color
-                textColor = Asset.Colors.night.color
-                nextButtonStyle = .third
-                skipButtonStyle = .ghost
-                countColor = Asset.Colors.mountain.color
-
-            case .night:
-                backgroundColor = Asset.Colors.night.color
-                textColor = Asset.Colors.snow.color
-                nextButtonStyle = .third
-                skipButtonStyle = .ghostLime
-                countColor = Asset.Colors.mountain.color
-
-            case .lime:
-                backgroundColor = Asset.Colors.lime.color
-                textColor = Asset.Colors.night.color
-                nextButtonStyle = .primary
-                skipButtonStyle = .ghost
-                countColor = Asset.Colors.mountain.color
-
-            }
-
-            switch position {
-            case .bottomRight, .bottomLeft, .bottomCenter:
-                pointerMarginSide = UIEdgeInsets(only: .bottom, inset: Constants.pointerSize.height)
-            case .topRight, .topLeft, .topCenter:
-                pointerMarginSide = UIEdgeInsets(only: .top, inset: Constants.pointerSize.height)
-            case .leftBottom, .leftTop, .leftCenter:
-                pointerMarginSide = UIEdgeInsets(only: .left, inset: Constants.pointerSize.height)
-            case .rightBottom, .rightTop, .rightCenter:
-                pointerMarginSide = UIEdgeInsets(only: .right, inset: Constants.pointerSize.height)
-            case .none:
-                pointerMarginSide = .zero
-            }
-        }
-    }
-
     private enum Constants {
         static let pointerSize = CGSize(width: 12, height: 8)
         static let pointerMargin: CGFloat = 24
