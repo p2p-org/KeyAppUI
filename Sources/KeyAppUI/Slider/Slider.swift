@@ -5,7 +5,7 @@ import BEPureLayout
 public final class Slider: BECompositionView {
 
     private let count: Int
-    private var dots: [CAShapeLayer] = []
+    private var dots: [CALayer] = []
     private var currentDot: Int = 0
 
     private var activeColor: UIColor { tintColor }
@@ -72,119 +72,100 @@ public final class Slider: BECompositionView {
     }
 
     private func drawDot(rect: CGRect, fillColor: UIColor) {
-        let path = UIBezierPath(roundedRect: rect, cornerRadius: Constants.dotSize.width / 2).cgPath
-        let layer = CAShapeLayer()
-        layer.path = path
-        layer.fillColor = fillColor.cgColor
+        let layer = CALayer()
+        layer.frame = rect
+        layer.backgroundColor = fillColor.cgColor
+        layer.cornerRadius = Constants.dotSize.width / 2
         self.layer.addSublayer(layer)
         self.dots.append(layer)
     }
 
-    private func animateForward(oldDot: CAShapeLayer, newDot: CAShapeLayer) {
-        guard let oldBounds = oldDot.path?.boundingBox else { return }
-
+    private func animateForward(oldDot: CALayer, newDot: CALayer) {
         let dotSize = Constants.dotSize
         let currentDotSize = Constants.indicatorSize
-        var finalPaths: [CAShapeLayer: UIBezierPath] = [:]
+        var finalFrames: [CALayer: CGRect] = [:]
 
         let oldRect: CGRect = CGRect(
-            origin: CGPoint(x: dots.last == oldDot ? oldBounds.maxX : oldBounds.minX, y: 0),
+            origin: CGPoint(x: dots.last == oldDot ? oldDot.frame.maxX : oldDot.frame.minX, y: 0),
             size: dotSize
         )
-        let oldPath = dotPath(from: oldRect)
-        finalPaths[oldDot] = oldPath
+        finalFrames[oldDot] = oldRect
 
         let newRect = CGRect(
             origin: dots.first == newDot ? .zero : CGPoint(x: oldRect.maxX + Constants.space, y: 0),
             size: currentDotSize
         )
-        let newPath = dotPath(from: newRect)
-        finalPaths[newDot] = newPath
+        finalFrames[newDot] = newRect
 
         CATransaction.begin()
-        oldDot.add(createPathAnimation(from: oldDot.path, to: oldPath.cgPath), forKey: "path")
-        newDot.add(createPathAnimation(from: newDot.path, to: newPath.cgPath), forKey: "path")
+        oldDot.add(animation(from: oldDot.position, to: oldRect.origin), forKey: Constants.animationKey)
+        newDot.add(animation(from: newDot.position, to: newRect.origin), forKey: Constants.animationKey)
 
         if dots.first == newDot {
             dots.dropFirst().forEach { dotLayer in
-                guard let dotBounds = dotLayer.path?.boundingBox else { return }
                 let dotRect = CGRect(
-                    origin: CGPoint(x: dotBounds.minX + currentDotSize.width - dotSize.width, y: 0),
+                    origin: CGPoint(x: dotLayer.frame.minX + currentDotSize.width - dotSize.width, y: 0),
                     size: dotSize
                 )
-                let dotPath = dotPath(from: dotRect)
-                dotLayer.add(createPathAnimation(from: dotLayer.path, to: dotPath.cgPath), forKey: "path")
-                finalPaths[dotLayer] = dotPath
+                dotLayer.add(animation(from: dotLayer.position, to: dotRect.origin), forKey: Constants.animationKey)
+                finalFrames[dotLayer] = dotRect
             }
         }
 
         CATransaction.setCompletionBlock {
-            oldDot.fillColor = self.nonActiveColor.cgColor
-            newDot.fillColor = self.activeColor.cgColor
-            finalPaths.forEach { $0.key.path = $0.value.cgPath }
+            oldDot.backgroundColor = self.nonActiveColor.cgColor
+            newDot.backgroundColor = self.activeColor.cgColor
+            finalFrames.forEach { $0.key.frame = $0.value }
         }
         CATransaction.commit()
     }
 
-    private func animateBackward(oldDot: CAShapeLayer, newDot: CAShapeLayer) {
-        guard let oldBounds = oldDot.path?.boundingBox, let newBounds = newDot.path?.boundingBox else { return }
-
+    private func animateBackward(oldDot: CALayer, newDot: CALayer) {
         let dotSize = Constants.dotSize
         let currentDotSize = Constants.indicatorSize
-        var finalPaths: [CAShapeLayer: UIBezierPath] = [:]
+        var finalFrames: [CALayer: CGRect] = [:]
 
         let oldRect: CGRect = CGRect(
-            origin: dots.first == oldDot ? .zero : CGPoint(x: oldBounds.maxX - dotSize.width, y: 0),
+            origin: dots.first == oldDot ? .zero : CGPoint(x: oldDot.frame.maxX - dotSize.width, y: 0),
             size: dotSize
         )
-
-        let oldPath = dotPath(from: oldRect)
-        finalPaths[oldDot] = oldPath
+        finalFrames[oldDot] = oldRect
 
         let newRect = CGRect(
-            origin: CGPoint(x: newBounds.maxX - (dots.last == newDot ? currentDotSize.width : Constants.space), y: 0),
+            origin: CGPoint(x: newDot.frame.maxX - (dots.last == newDot ? currentDotSize.width : Constants.space), y: 0),
             size: currentDotSize
         )
-
-        let newPath = dotPath(from: newRect)
-        finalPaths[newDot] = newPath
+        finalFrames[newDot] = newRect
 
         CATransaction.begin()
-        oldDot.add(createPathAnimation(from: oldDot.path, to: oldPath.cgPath), forKey: "path")
-        newDot.add(createPathAnimation(from: newDot.path, to: newPath.cgPath), forKey: "path")
+        oldDot.add(animation(from: oldDot.position, to: oldRect.origin), forKey: Constants.animationKey)
+        newDot.add(animation(from: newDot.position, to: newRect.origin), forKey: Constants.animationKey)
 
         if dots.last == newDot {
             dots.dropLast().dropFirst().forEach { dotLayer in
-                guard let dotBounds = dotLayer.path?.boundingBox else { return }
-
                 let dotRect = CGRect(
-                    origin: CGPoint(x: dotBounds.minX - currentDotSize.width + Constants.space, y: 0),
+                    origin: CGPoint(x: dotLayer.frame.minX - currentDotSize.width + Constants.space, y: 0),
                     size: dotSize
                 )
-                let dotPath = dotPath(from: dotRect)
-                dotLayer.add(createPathAnimation(from: dotLayer.path, to: dotPath.cgPath), forKey: "path")
-                finalPaths[dotLayer] = dotPath
+                dotLayer.add(animation(from: dotLayer.position, to: dotRect.origin), forKey: Constants.animationKey)
+                finalFrames[dotLayer] = dotRect
             }
         }
 
         CATransaction.setCompletionBlock {
-            oldDot.fillColor = self.nonActiveColor.cgColor
-            newDot.fillColor = self.activeColor.cgColor
-            finalPaths.forEach { $0.key.path = $0.value.cgPath }
+            oldDot.backgroundColor = self.nonActiveColor.cgColor
+            newDot.backgroundColor = self.activeColor.cgColor
+            finalFrames.forEach { $0.key.frame = $0.value }
         }
         CATransaction.commit()
     }
 
-    private func createPathAnimation(from oldPath: CGPath?, to newPath: CGPath?) -> CABasicAnimation {
-        let animation = CABasicAnimation(keyPath: "path")
-        animation.fromValue = oldPath
-        animation.toValue = newPath
+    private func animation(from oldPosition: CGPoint?, to newPosition: CGPoint?) -> CABasicAnimation {
+        let animation = CABasicAnimation(keyPath: Constants.animationKey)
+        animation.fromValue = oldPosition
+        animation.toValue = newPosition
         animation.duration = Constants.animationDuration
         return animation
-    }
-
-    private func dotPath(from rect: CGRect) -> UIBezierPath {
-        UIBezierPath(roundedRect: rect, cornerRadius: Constants.dotSize.width / 2)
     }
 }
 
@@ -194,5 +175,6 @@ private extension Slider {
         static let indicatorSize = CGSize(width: 32, height: 8)
         static let space: CGFloat = 8
         static let animationDuration = 0.3
+        static let animationKey = "position"
     }
 }
