@@ -15,13 +15,17 @@ public extension TextButton {
         case ghostLime
         case inverted
         case invertedRed
+        case outlineBlack
+        case outlineWhite
+        case outlineLime
+        case outlineRose
 
         var backgroundColor: UIColor {
             switch self {
             case .primary, .primaryWhite: return Asset.Colors.night.color
             case .second: return Asset.Colors.rain.color
             case .third: return Asset.Colors.lime.color
-            case .ghost, .ghostWhite, .ghostLime: return .clear
+            case .ghost, .ghostWhite, .ghostLime, .outlineBlack, .outlineWhite, .outlineLime, .outlineRose: return .clear
             case .inverted, .invertedRed: return Asset.Colors.snow.color
             }
         }
@@ -32,15 +36,25 @@ public extension TextButton {
 
         var foreground: UIColor {
             switch self {
-            case .primary, .ghostLime: return Asset.Colors.lime.color
-            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
-            case .second, .third, .ghost, .inverted: return Asset.Colors.night.color
-            case .invertedRed: return Asset.Colors.rose.color
+            case .primary, .ghostLime, .outlineLime: return Asset.Colors.lime.color
+            case .primaryWhite, .ghostWhite, .outlineWhite: return Asset.Colors.snow.color
+            case .second, .third, .ghost, .inverted, .outlineBlack: return Asset.Colors.night.color
+            case .invertedRed, .outlineRose: return Asset.Colors.rose.color
             }
         }
 
         var disabledForegroundColor: UIColor? {
             Asset.Colors.mountain.color
+        }
+
+        var borderColor: UIColor? {
+            switch self {
+            case .outlineBlack: return Asset.Colors.night.color
+            case .outlineWhite: return Asset.Colors.snow.color
+            case .outlineLime: return Asset.Colors.lime.color
+            case .outlineRose: return Asset.Colors.rose.color
+            default: return nil
+            }
         }
 
         func font(size: Size) -> UIFont {
@@ -66,10 +80,10 @@ public extension TextButton {
 
         var loadingForegroundColor: UIColor {
             switch self {
-            case .primary, .ghostLime: return Asset.Colors.lime.color
-            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
-            case .second, .third, .ghost, .inverted: return Asset.Colors.night.color
-            case .invertedRed: return Asset.Colors.rose.color
+            case .primary, .ghostLime, .outlineLime: return Asset.Colors.lime.color
+            case .primaryWhite, .ghostWhite, .outlineWhite: return Asset.Colors.snow.color
+            case .second, .third, .ghost, .inverted, .outlineBlack: return Asset.Colors.night.color
+            case .invertedRed, .outlineRose: return Asset.Colors.rose.color
             }
         }
     }
@@ -111,7 +125,8 @@ public extension TextButton {
             iconSpacing: 8,
             borderRadius: size.borderRadius,
             loadingBackgroundColor: style.loadingBackgroundColor,
-            loadingForegroundColor: style.loadingForegroundColor
+            loadingForegroundColor: style.loadingForegroundColor,
+            borderColor: style.borderColor
         )
         self.init(
             leadingImage: leading,

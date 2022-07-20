@@ -17,13 +17,17 @@ public extension IconButton {
         case ghostWhite
         case ghostLime
         case inverted
+        case outlineBlack
+        case outlineWhite
+        case outlineLime
+        case outlineRose
 
         var backgroundColor: UIColor {
             switch self {
             case .primary, .primaryWhite: return Asset.Colors.night.color
             case .second: return Asset.Colors.rain.color
             case .third: return Asset.Colors.lime.color
-            case .ghostBlack, .ghostWhite, .ghostLime: return .clear
+            case .ghostBlack, .ghostWhite, .ghostLime, .outlineBlack, .outlineWhite, .outlineLime, .outlineRose: return .clear
             case .inverted: return Asset.Colors.snow.color
             }
         }
@@ -34,17 +38,29 @@ public extension IconButton {
 
         var iconColor: UIColor {
             switch self {
-            case .primary, .ghostLime: return Asset.Colors.lime.color
-            case .primaryWhite, .ghostWhite: return Asset.Colors.snow.color
-            case .second, .third, .ghostBlack, .inverted: return Asset.Colors.night.color
+            case .primary, .ghostLime, .outlineLime: return Asset.Colors.lime.color
+            case .primaryWhite, .ghostWhite, .outlineWhite: return Asset.Colors.snow.color
+            case .second, .third, .ghostBlack, .inverted, .outlineBlack: return Asset.Colors.night.color
+            case .outlineRose: return Asset.Colors.rose.color
+            }
+        }
+
+        var borderColor: UIColor? {
+            switch self {
+            case .outlineBlack: return Asset.Colors.night.color
+            case .outlineWhite: return Asset.Colors.snow.color
+            case .outlineLime: return Asset.Colors.lime.color
+            case .outlineRose: return Asset.Colors.rose.color
+            default: return nil
             }
         }
 
         var titleColor: UIColor {
             switch self {
-            case .primary, .primaryWhite, .second, .third, .ghostBlack, .inverted: return Asset.Colors.night.color
-            case .ghostWhite: return Asset.Colors.snow.color
-            case .ghostLime: return Asset.Colors.lime.color
+            case .primary, .primaryWhite, .second, .third, .ghostBlack, .inverted, .outlineBlack: return Asset.Colors.night.color
+            case .ghostWhite, .outlineWhite: return Asset.Colors.snow.color
+            case .ghostLime, .outlineLime: return Asset.Colors.lime.color
+            case .outlineRose: return Asset.Colors.rose.color
             }
         }
 
@@ -110,7 +126,8 @@ public extension IconButton {
             font: style.font(size: size),
             iconSize: size.iconSize,
             titleSpacing: size.titleSpacing,
-            borderRadius: size.borderRadius
+            borderRadius: size.borderRadius,
+            borderColor: style.borderColor
         )
 
         self.init(
