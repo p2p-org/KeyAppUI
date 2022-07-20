@@ -39,6 +39,8 @@ class ViewController: UIViewController {
                         self?.performSegue(withIdentifier: "showTipExample", sender: nil)
                     }
 
+                SliderSection()
+                
                 CircularProgressIndicatorSection()
 
                 TableSection().onTap { [weak self] in

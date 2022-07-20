@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		289945B5287C44CE00CDE4AD /* TipSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289945B4287C44CE00CDE4AD /* TipSection.swift */; };
 		289945B7287D914200CDE4AD /* TipExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289945B6287D914200CDE4AD /* TipExampleViewController.swift */; };
+		28CB35BD2885878500A76C56 /* SliderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CB35BC2885878500A76C56 /* SliderSection.swift */; };
 		2C4E0AA928513D3D00933184 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4E0AA828513D3D00933184 /* AppDelegate.swift */; };
 		2C4E0AAB28513D3D00933184 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4E0AAA28513D3D00933184 /* SceneDelegate.swift */; };
 		2C4E0AAD28513D3D00933184 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4E0AAC28513D3D00933184 /* ViewController.swift */; };
@@ -27,13 +28,13 @@
 		86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB128523BE100664C9A /* KeyAppUI */; };
 		86F83DB82852421500664C9A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB72852421500664C9A /* Algorithms */; };
 		FA3C5989286D794F0022FFB7 /* TableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5988286D794F0022FFB7 /* TableSection.swift */; };
-		FAC9CB21288141BB00BA6BFD /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = FAC9CB20288141BB00BA6BFD /* SkeletonView */; };
 		FAC9CB232883201000BA6BFD /* SkeletonSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9CB222883201000BA6BFD /* SkeletonSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		289945B4287C44CE00CDE4AD /* TipSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipSection.swift; sourceTree = "<group>"; };
 		289945B6287D914200CDE4AD /* TipExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipExampleViewController.swift; sourceTree = "<group>"; };
+		28CB35BC2885878500A76C56 /* SliderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderSection.swift; sourceTree = "<group>"; };
 		2C4E0AA528513D3D00933184 /* KeyAppUIExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeyAppUIExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C4E0AA828513D3D00933184 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C4E0AAA28513D3D00933184 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 				8685681B285741A2000D24EF /* TextButtonSection.swift */,
 				289945B4287C44CE00CDE4AD /* TipSection.swift */,
 				FAC9CB222883201000BA6BFD /* SkeletonSection.swift */,
+				28CB35BC2885878500A76C56 /* SliderSection.swift */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -248,6 +250,7 @@
 				289945B7287D914200CDE4AD /* TipExampleViewController.swift in Sources */,
 				86CF719B285B5828003B00A9 /* SnackbarSection.swift in Sources */,
 				86CF719F285B59FF003B00A9 /* TypographySection.swift in Sources */,
+				28CB35BD2885878500A76C56 /* SliderSection.swift in Sources */,
 				8685681C285741A2000D24EF /* TextButtonSection.swift in Sources */,
 				863FD68A2875C7BA00C4595F /* CircularProgressIndicator.swift in Sources */,
 			);
