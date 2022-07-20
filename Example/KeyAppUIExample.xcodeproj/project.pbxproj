@@ -28,6 +28,7 @@
 		86F83DB228523BE100664C9A /* KeyAppUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB128523BE100664C9A /* KeyAppUI */; };
 		86F83DB82852421500664C9A /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 86F83DB72852421500664C9A /* Algorithms */; };
 		FA3C5989286D794F0022FFB7 /* TableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5988286D794F0022FFB7 /* TableSection.swift */; };
+		FAC9CB21288141BB00BA6BFD /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = FAC9CB20288141BB00BA6BFD /* SkeletonView */; };
 		FAC9CB232883201000BA6BFD /* SkeletonSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9CB222883201000BA6BFD /* SkeletonSection.swift */; };
 /* End PBXBuildFile section */
 
