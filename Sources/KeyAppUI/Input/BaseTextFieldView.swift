@@ -5,6 +5,8 @@ public class BaseTextFieldView: BECompositionView {
     
     // MARK: -
     
+    private(set) var isBig = false
+    
     var leftView: UIView? {
         didSet {
             inputFieldRef.view?.leftView = leftView
@@ -113,7 +115,7 @@ public class BaseTextFieldView: BECompositionView {
                 keyboardType: .default,
                 placeholder: "",
                 placeholderTextColor: Asset.Colors.night.color.withAlphaComponent(0.3)
-            ).bind(inputFieldRef).frame(height: 58).setup { input in
+            ).bind(inputFieldRef).frame(height: isBig ? 58 : 46).setup { input in
                 input.constantPlaceholder = constantPlaceholder
                 input.setContentHuggingPriority(.defaultLow, for: .horizontal)
                 input.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -126,7 +128,7 @@ public class BaseTextFieldView: BECompositionView {
     
     // MARK: -
     
-    public init(leftView: UIView? = nil, rightView: UIView? = nil) {
+    public init(leftView: UIView? = nil, rightView: UIView? = nil, isBig: Bool = false) {
         self.leftView = leftView
         self.inputFieldRef.view?.leftView = self.leftView
         self.rightView = rightView
