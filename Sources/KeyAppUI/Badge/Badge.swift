@@ -32,6 +32,12 @@ public class BadgeView: BECompositionView {
         .padding(padding)
         .box(cornerRadius: cornerRadius)
         .backgroundColor(color: backgroundColor())
+        .setup { view in
+            let constr = view.constraints.first(where: {
+                $0.firstAttribute == .trailing && $0.secondAttribute == .trailing
+            })
+            constr?.priority = .init(rawValue: 999)
+        }
     }
     
     // MARK: -
