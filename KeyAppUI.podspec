@@ -8,5 +8,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/p2p-org/KeyAppUI.git', :tag => s.version.to_s }
   s.ios.deployment_target = '13.0'
   s.swift_version = '5.0'
-  s.source_files = 'Sources/KeyAppUI/**/*'
+  s.resources = 'Sources/KeyAppUI/Resources/**/*'
+  s.source_files = 'Sources/KeyAppUI/**/*.swift'
+  s.dependency 'BEPureLayout'
+  s.dependency 'SkeletonView', '~> 1.7'
 end
