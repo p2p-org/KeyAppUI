@@ -28,6 +28,11 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
+                
+                TextFieldSection()
+                
+                SkeletonSection()
+                
                 SplashSection().onTap { [weak self] in
                     self?.presentSplash()
                 }
@@ -37,6 +42,8 @@ class ViewController: UIViewController {
                         self?.performSegue(withIdentifier: "showTipExample", sender: nil)
                     }
 
+                SliderSection()
+                
                 CircularProgressIndicatorSection()
 
                 TableSection().onTap { [weak self] in

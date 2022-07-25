@@ -31,6 +31,9 @@ public struct TextButtonAppearance {
     /// A background color for circular progress indicator
     let loadingForegroundColor: UIColor
 
+    /// A border color
+    let borderColor: UIColor?
+
     public init(
         backgroundColor: UIColor,
         foregroundColor: UIColor,
@@ -39,7 +42,8 @@ public struct TextButtonAppearance {
         iconSpacing: CGFloat,
         borderRadius: CGFloat,
         loadingBackgroundColor: UIColor,
-        loadingForegroundColor: UIColor
+        loadingForegroundColor: UIColor,
+        borderColor: UIColor?
     ) {
         self.backgroundColor = backgroundColor
         self.foregroundColor = foregroundColor
@@ -49,6 +53,7 @@ public struct TextButtonAppearance {
         self.borderRadius = borderRadius
         self.loadingBackgroundColor = loadingBackgroundColor
         self.loadingForegroundColor = loadingForegroundColor
+        self.borderColor = borderColor
     }
 
     public static func `default`() -> Self {
@@ -60,7 +65,8 @@ public struct TextButtonAppearance {
             iconSpacing: 12,
             borderRadius: 12,
             loadingBackgroundColor: Asset.Colors.night.color,
-            loadingForegroundColor: Asset.Colors.snow.color
+            loadingForegroundColor: Asset.Colors.snow.color,
+            borderColor: nil
         )
     }
 
@@ -77,7 +83,8 @@ public struct TextButtonAppearance {
             iconSpacing: iconSpacing,
             borderRadius: borderRadius,
             loadingBackgroundColor: loadingBackgroundColor,
-            loadingForegroundColor: loadingForegroundColor
+            loadingForegroundColor: loadingForegroundColor,
+            borderColor: borderColor
         )
     }
 }

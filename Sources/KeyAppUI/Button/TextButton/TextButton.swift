@@ -123,8 +123,15 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                     .frame(width: theme.contentPadding.right)
                     .bind(trailingSpacing)
             }
-            .centered(.horizontal)
             .centered(.vertical)
+            .setup { view in
+                let container = UIView(forAutoLayout: ())
+                container.addSubview(view)
+                container.tag = 1111
+                view.autoPinEdge(toSuperviewEdge: .leading, withInset: 12, relation: .greaterThanOrEqual).priority = .defaultLow
+                view.autoPinEdge(toSuperviewEdge: .trailing, withInset: 12, relation: .greaterThanOrEqual).priority = .defaultLow
+                view.autoAlignAxis(toSuperviewAxis: .horizontal)
+            }
         }
         .bind(container)
     }
@@ -139,6 +146,10 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
 
         titleView.font = theme.font
         layer.cornerRadius = theme.borderRadius
+        if let color = theme.borderColor {
+            layer.borderWidth = 2
+            layer.borderColor = color.cgColor
+        }
 
         leadingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing
         trailingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing

@@ -38,6 +38,29 @@ class IconButtonSection: BECompositionView {
                     UIView.spacer
                 }
             }
+            
+            for style in IconButton.Style.allCases {
+                BEHStack(spacing: 8, alignment: .center, distribution: .fill) {
+                    for size in IconButton.Size.allCases {
+                        IconButton(
+                            image: Asset.MaterialIcon.appleLogo.image,
+                            title: "\(style)",
+                            style: style,
+                            size: size
+                        )
+                        .onPressed { [weak self] _ in
+                            self?.shareCodeTemplate(style: style, size: size)
+                        }
+                    }
+                    UIView.spacer
+                }.setup { button in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        button.makeSkeletonable()
+                        button.showSkeleton()
+
+                    }
+                }
+            }
         }
     }
 

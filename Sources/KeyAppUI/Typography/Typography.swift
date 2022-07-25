@@ -22,6 +22,10 @@ public extension UIFont {
         UIFont.systemFont(ofSize: fontSize(of: style), weight: weight)
     }
     
+    static func monospaceFont(of style: Style, weight: Weight = .regular) -> UIFont {
+        UIFont.monospacedSystemFont(ofSize: fontSize(of: style), weight: weight)
+    }
+    
     /// Attributed string of selected style and weight
     static func text(_ text: String, of style: Style, weight: Weight = .regular) -> NSAttributedString {
         NSAttributedString.attributedString(with: text, of: style, weight: weight)
@@ -108,11 +112,11 @@ public extension UIFont {
 }
 
 extension NSAttributedString {
-    static func attributedString(with text: String, of style: UIFont.Style, weight: UIFont.Weight = .regular) -> NSAttributedString {
+    static func attributedString(with text: String, of style: UIFont.Style, weight: UIFont.Weight = .regular, monospace: Bool = false) -> NSAttributedString {
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = UIFont.lineHeight(for: style)
         let string = NSAttributedString(string: text, attributes: [
-            .font: UIFont.font(of: style, weight: weight),
+            .font: monospace ? UIFont.monospaceFont(of: style, weight: weight) : UIFont.font(of: style, weight: weight),
             .paragraphStyle: paragraph,
             .kern: UIFont.letterSpacing(for: style)
         ])

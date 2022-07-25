@@ -1,6 +1,8 @@
 import BEPureLayout
 import Foundation
 import KeyAppUI
+import SkeletonView
+import UIKit
 
 class TableSection: BECompositionView {
     
@@ -16,7 +18,7 @@ class TableSection: BECompositionView {
     }
 }
 
-class TableViewController: UICollectionViewController {
+class TableViewController: UICollectionViewController, SkeletonCollectionViewDataSource {
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -36,24 +38,31 @@ class TableViewController: UICollectionViewController {
         flowLayout.headerReferenceSize = .init(width: UIScreen.main.bounds.width, height: 45)
 
         let collection = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: flowLayout)
+        collection.isSkeletonable = true
         collection.delegate = self
         collection.dataSource = self
         collection.register(BaseCell.self, forCellWithReuseIdentifier: "cell")
+        collection.register(SkeletonCell.self, forCellWithReuseIdentifier: "cell1")
+        
         collection.register(SectionHeader.self,
                             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                             withReuseIdentifier: "SectionHeader")
 
         let view = UIView()
-
         self.view = view
-
         view.addSubview(collection)
         collection.autoPinEdgesToSuperviewEdges()
+
+        collection.showAnimatedSkeleton(usingColor: Asset.Colors.rain.color, transition: .crossDissolve(0.2))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            collection.hideSkeleton()
+        }
+        
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int { 2 }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { section == 0 ? 10 : 32 }
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { section == 0 ? 10 : 37 }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BaseCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! BaseCell? ?? BaseCell(frame: .zero)
@@ -62,7 +71,47 @@ class TableViewController: UICollectionViewController {
         } else {
             cell.configure(with: financialCellItem(forRow: indexPath.row)!)
         }
+        cell.contentView.isSkeletonable = true
         return cell
+    }
+    
+    // MARK: -
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "cell1"
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, skeletonCellForItemAt indexPath: IndexPath) -> UICollectionViewCell? {
+        skeletonView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath)
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, prepareCellForSkeleton cell: UICollectionViewCell, at indexPath: IndexPath) {
+        (cell as! SkeletonCell).configure(with: skeletonCellItem(forRow: 0)!)
+        cell.makeSkeletonable()
+    }
+    
+    // MARK: -
+    
+    func skeletonCellItem(forRow: Int) -> BaseCellItem? {
+        let rightItem = BaseCellRightViewItem(
+            text: " ",
+            subtext: nil,
+            image: nil,
+            isChevronVisible: false,
+            badge: nil,
+            yellowBadge: nil,
+            checkbox: nil,
+            switch: nil
+        )
+        
+        let item = BaseCellItem(
+            image: .init(image: Asset.Icons.send.image, statusImage: nil),
+            title: "Send",
+            subtitle: "23.8112 SOL",
+            subtitle2: nil,
+            rightView: rightItem
+        )
+        return item
     }
     
     func financialCellItem(forRow: Int) -> BaseCellItem? {
@@ -287,6 +336,35 @@ class TableViewController: UICollectionViewController {
         case 31:
             item.image = .init(image: UIImage(named: "heart")!, imageSize: .init(width: 24, height: 24))
             item.rightView?.image = UIImage(named: "info")!
+        case 32:
+            item.rightView?.image = UIImage(named: "info")!
+            item.title = "Send"
+            item.image = .init(image: UIImage(named: "heart")!, imageSize: .init(width: 24, height: 24))
+            item.subtitle = nil
+            item.subtitle2 = nil
+        case 33:
+            item.rightView?.yellowBadge = "+$3.75"
+            item.title = "Send"
+            item.subtitle = nil
+            item.subtitle2 = nil
+        case 34:
+            item.rightView?.image = UIImage(named: "info")!.withTintColor(Asset.Colors.night.color, renderingMode: .alwaysOriginal)
+            item.title = "Send"
+            item.rightView?.isChevronVisible = true
+            item.subtitle = nil
+            item.subtitle2 = nil
+            item.rightView?.text = "Text"
+        case 35:
+            item.rightView?.buttonTitle = "Button Title"
+            item.title = "Send"
+            item.subtitle = nil
+            item.subtitle2 = nil
+        case 36:
+            item.rightView?.buttonTitle = "Button Title"
+            item.title = "Send"
+            item.rightView?.text = "Text Example"
+            item.subtitle = nil
+            item.subtitle2 = nil
 
         default: break
         }
@@ -476,5 +554,16 @@ public class SeparatorCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
         
         return separatorAttributes
+    }
+}
+
+public class SkeletonCell: BaseCell {
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -24,7 +24,7 @@ public struct BaseCellItem {
     }
 }
 
-public class BaseCell: BECollectionCell {
+open class BaseCell: BECollectionCell {
     
     // MARK: - View References
     
@@ -40,7 +40,7 @@ public class BaseCell: BECollectionCell {
         super.init()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -62,7 +62,7 @@ public class BaseCell: BECollectionCell {
         .padding(.init(top: 12, left: 0, bottom: 12, right: 0))
     }
     
-    public func configure(with item: BaseCellItem) {
+    open func configure(with item: BaseCellItem) {
         let imageView = item.image != nil ? BaseCellImageView(item.image!) : nil
 
         self.left = .init(
@@ -81,7 +81,8 @@ public class BaseCell: BECollectionCell {
             yellowBadge: item.rightView?.yellowBadge,
             checkbox: item.rightView?.checkbox,
             switch: item.rightView?.`switch`,
-            isCheckmark: item.rightView?.isCheckmark ?? false
+            isCheckmark: item.rightView?.isCheckmark ?? false,
+            buttonTitle: item.rightView?.buttonTitle
         )
         
         self.right = .init(item: rightItem)
@@ -94,13 +95,13 @@ public class BaseCell: BECollectionCell {
         layoutIfNeeded()
     }
     
-    public override func prepareForReuse() {
+    open override func prepareForReuse() {
         // removing subviews so we can add them in `build` again
         contentView.subviews.forEach { $0.removeFromSuperview() }
         super.prepareForReuse()
     }
     
-    public override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+    open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         // Self-sizing is required in the vertical dimension.
         let size: CGSize = super.systemLayoutSizeFitting(
             layoutAttributes.size,

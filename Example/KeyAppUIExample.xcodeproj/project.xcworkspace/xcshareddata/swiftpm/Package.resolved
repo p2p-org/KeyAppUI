@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "BEPureLayout",
-        "repositoryURL": "https://github.com/bigearsenal/BEPureLayout.git",
+        "repositoryURL": "https://github.com/p2p-org/BEPureLayout.git",
         "state": {
           "branch": "master",
           "revision": "f00ffab3fc02a36774593ab222b77ee8cbdc872a",
@@ -17,6 +17,15 @@
           "branch": null,
           "revision": "3bcbfe370f85b81254de4d6b9df3dd4a70d4ca89",
           "version": "3.1.8"
+        }
+      },
+      {
+        "package": "SkeletonView",
+        "repositoryURL": "https://github.com/Juanpe/SkeletonView.git",
+        "state": {
+          "branch": "main",
+          "revision": "00394e0b9f1626680b817f3d24daba68adbe378d",
+          "version": null
         }
       },
       {
