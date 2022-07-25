@@ -20,7 +20,7 @@ let package = Package(
     targets: [
         .target(
             name: "KeyAppUI",
-            dependencies: [.product(name: "BEPureLayout", package: "BEPureLayout")]
+            dependencies: [.product(name: "BEPureLayout", package: "BEPureLayout"), "SkeletonView"]
         ),
         .testTarget(
             name: "KeyAppUITests",
