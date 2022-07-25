@@ -111,6 +111,7 @@ public enum Asset {
     public static let fullscreen = ImageAsset(name: "fullscreen")
     public static let fullscreenExit = ImageAsset(name: "fullscreen_exit")
     public static let gesture = ImageAsset(name: "gesture")
+    public static let helpOutline = ImageAsset(name: "help_outline")
     public static let howToReg = ImageAsset(name: "how_to_reg")
     public static let howToVote = ImageAsset(name: "how_to_vote")
     public static let inbox = ImageAsset(name: "inbox")
@@ -208,6 +209,7 @@ public enum Asset {
       fullscreen,
       fullscreenExit,
       gesture,
+      helpOutline,
       howToReg,
       howToVote,
       inbox,
