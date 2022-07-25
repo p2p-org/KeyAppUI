@@ -76,6 +76,10 @@ public class IconButton: ButtonControl<IconButtonAppearance> {
         imageView.view?.heightConstraint?.constant = theme.iconSize
 
         imageContainer.view?.layer.cornerRadius = theme.borderRadius
+        if let color = theme.borderColor {
+            imageContainer.view?.layer.borderWidth = 2
+            imageContainer.view?.layer.borderColor = color.cgColor
+        }
 
         titleSpacing.view?.heightConstraint?.constant = theme.titleSpacing
 

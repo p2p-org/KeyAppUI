@@ -30,6 +30,7 @@
 		FA3C5989286D794F0022FFB7 /* TableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3C5988286D794F0022FFB7 /* TableSection.swift */; };
 		FAC9CB21288141BB00BA6BFD /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = FAC9CB20288141BB00BA6BFD /* SkeletonView */; };
 		FAC9CB232883201000BA6BFD /* SkeletonSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC9CB222883201000BA6BFD /* SkeletonSection.swift */; };
+		FAE11F3F2888396900FA9D2A /* TextFieldSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE11F3E2888396900FA9D2A /* TextFieldSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		86CF719E285B59FF003B00A9 /* TypographySection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypographySection.swift; sourceTree = "<group>"; };
 		FA3C5988286D794F0022FFB7 /* TableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSection.swift; sourceTree = "<group>"; };
 		FAC9CB222883201000BA6BFD /* SkeletonSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonSection.swift; sourceTree = "<group>"; };
+		FAE11F3E2888396900FA9D2A /* TextFieldSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +140,7 @@
 				289945B4287C44CE00CDE4AD /* TipSection.swift */,
 				FAC9CB222883201000BA6BFD /* SkeletonSection.swift */,
 				28CB35BC2885878500A76C56 /* SliderSection.swift */,
+				FAE11F3E2888396900FA9D2A /* TextFieldSection.swift */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				86CF719F285B59FF003B00A9 /* TypographySection.swift in Sources */,
 				28CB35BD2885878500A76C56 /* SliderSection.swift in Sources */,
 				8685681C285741A2000D24EF /* TextButtonSection.swift in Sources */,
+				FAE11F3F2888396900FA9D2A /* TextFieldSection.swift in Sources */,
 				863FD68A2875C7BA00C4595F /* CircularProgressIndicator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

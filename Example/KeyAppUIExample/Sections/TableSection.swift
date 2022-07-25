@@ -62,7 +62,7 @@ class TableViewController: UICollectionViewController, SkeletonCollectionViewDat
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int { 2 }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { section == 0 ? 10 : 32 }
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { section == 0 ? 10 : 37 }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BaseCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! BaseCell? ?? BaseCell(frame: .zero)
@@ -336,6 +336,35 @@ class TableViewController: UICollectionViewController, SkeletonCollectionViewDat
         case 31:
             item.image = .init(image: UIImage(named: "heart")!, imageSize: .init(width: 24, height: 24))
             item.rightView?.image = UIImage(named: "info")!
+        case 32:
+            item.rightView?.image = UIImage(named: "info")!
+            item.title = "Send"
+            item.image = .init(image: UIImage(named: "heart")!, imageSize: .init(width: 24, height: 24))
+            item.subtitle = nil
+            item.subtitle2 = nil
+        case 33:
+            item.rightView?.yellowBadge = "+$3.75"
+            item.title = "Send"
+            item.subtitle = nil
+            item.subtitle2 = nil
+        case 34:
+            item.rightView?.image = UIImage(named: "info")!.withTintColor(Asset.Colors.night.color, renderingMode: .alwaysOriginal)
+            item.title = "Send"
+            item.rightView?.isChevronVisible = true
+            item.subtitle = nil
+            item.subtitle2 = nil
+            item.rightView?.text = "Text"
+        case 35:
+            item.rightView?.buttonTitle = "Button Title"
+            item.title = "Send"
+            item.subtitle = nil
+            item.subtitle2 = nil
+        case 36:
+            item.rightView?.buttonTitle = "Button Title"
+            item.title = "Send"
+            item.rightView?.text = "Text Example"
+            item.subtitle = nil
+            item.subtitle2 = nil
 
         default: break
         }

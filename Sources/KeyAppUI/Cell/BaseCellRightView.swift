@@ -4,6 +4,7 @@ import BEPureLayout
 public protocol BaseCellRightViewDelegate: AnyObject {
     func checkboxDidChange(value: Bool)
     func switchDidChange(value: Bool)
+    func buttonPressed()
 }
 
 public struct BaseCellRightViewItem {
@@ -15,6 +16,7 @@ public struct BaseCellRightViewItem {
     public var yellowBadge: String?
     public var checkbox: Bool?
     public var `switch`: Bool?
+    public var buttonTitle: String?
     public var isCheckmark: Bool = false
     
     public init(
@@ -26,7 +28,8 @@ public struct BaseCellRightViewItem {
         yellowBadge: String? = nil,
         checkbox: Bool? = nil,
         switch: Bool? = nil,
-        isCheckmark: Bool? = false
+        isCheckmark: Bool? = false,
+        buttonTitle: String? = nil
     ) {
         self.text = text
         self.subtext = subtext
@@ -37,6 +40,7 @@ public struct BaseCellRightViewItem {
         self.checkbox = checkbox
         self.`switch` = `switch`
         self.isCheckmark = isCheckmark ?? false
+        self.buttonTitle = buttonTitle
     }
 }
 
@@ -53,6 +57,7 @@ public class BaseCellRightView: BECompositionView {
         self.checkbox = item.checkbox
         self.switch = item.switch
         self.isCheckmark = item.isCheckmark
+        self.buttonTitle = item.buttonTitle
         
         super.init()
     }
@@ -66,6 +71,7 @@ public class BaseCellRightView: BECompositionView {
     var checkbox: Bool?
     var `switch`: Bool?
     var isCheckmark: Bool = false
+    var buttonTitle: String?
     
     weak var delegate: BaseCellRightViewDelegate?
     
@@ -76,10 +82,19 @@ public class BaseCellRightView: BECompositionView {
     
     public override func build() -> UIView {
         BEHStack(spacing: 0, alignment: .fill, distribution: .fill) {
-            textSubtextView()
+            if text != nil || yellowBadge != nil || subtext != nil {
+                textSubtextView()
+            }
 
             if let badge = badge {
                 BadgeView(text: badge, style: .basic).padding(.init(only: .left, inset: subtext != nil ? 9 : 0))
+            }
+
+            if let buttonTitle = buttonTitle {
+                TextButton(title: buttonTitle, style: .second, size: .small)
+                    .onTap { [weak delegate] in
+                        delegate?.buttonPressed()
+                    }
             }
 
             if let `switch` = `switch` {

@@ -29,6 +29,9 @@ public struct IconButtonAppearance {
     /// A border radius of icon.
     let borderRadius: CGFloat
 
+    /// A border color
+    let borderColor: UIColor?
+
     public init(
         iconColor: UIColor,
         titleColor: UIColor,
@@ -36,7 +39,8 @@ public struct IconButtonAppearance {
         font: UIFont,
         iconSize: CGFloat,
         titleSpacing: CGFloat,
-        borderRadius: CGFloat
+        borderRadius: CGFloat,
+        borderColor: UIColor?
     ) {
         self.iconColor = iconColor
         self.titleColor = titleColor
@@ -45,6 +49,7 @@ public struct IconButtonAppearance {
         self.iconSize = iconSize
         self.titleSpacing = titleSpacing
         self.borderRadius = borderRadius
+        self.borderColor = borderColor
     }
 
     /// Default appearance
@@ -56,7 +61,8 @@ public struct IconButtonAppearance {
             font: .systemFont(ofSize: 16, weight: .medium),
             iconSize: 40,
             titleSpacing: 8,
-            borderRadius: 20
+            borderRadius: 20,
+            borderColor: nil
         )
     }
 
@@ -72,7 +78,8 @@ public struct IconButtonAppearance {
             font: font,
             iconSize: iconSize,
             titleSpacing: titleSpacing,
-            borderRadius: borderRadius
+            borderRadius: borderRadius,
+            borderColor: borderColor
         )
     }
 }
