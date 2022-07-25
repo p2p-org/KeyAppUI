@@ -30,6 +30,7 @@ public enum Asset {
     public static let night = ColorAsset(name: "Night")
     public static let rain = ColorAsset(name: "Rain")
     public static let rose = ColorAsset(name: "Rose")
+    public static let searchBarBgColor = ColorAsset(name: "SearchBarBgColor")
     public static let sky = ColorAsset(name: "Sky")
     public static let smoke = ColorAsset(name: "Smoke")
     public static let snow = ColorAsset(name: "Snow")
@@ -44,6 +45,7 @@ public enum Asset {
       night,
       rain,
       rose,
+      searchBarBgColor,
       sky,
       smoke,
       snow,
@@ -116,6 +118,7 @@ public enum Asset {
     public static let link = ImageAsset(name: "link")
     public static let linkOff = ImageAsset(name: "link_off")
     public static let lowPriority = ImageAsset(name: "low_priority")
+    public static let magnifyingGlass = ImageAsset(name: "magnifyingGlass")
     public static let mail = ImageAsset(name: "mail")
     public static let markunread = ImageAsset(name: "markunread")
     public static let menu = ImageAsset(name: "menu")
@@ -212,6 +215,7 @@ public enum Asset {
       link,
       linkOff,
       lowPriority,
+      magnifyingGlass,
       mail,
       markunread,
       menu,
