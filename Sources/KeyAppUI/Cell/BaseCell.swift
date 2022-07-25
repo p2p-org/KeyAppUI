@@ -81,7 +81,8 @@ open class BaseCell: BECollectionCell {
             yellowBadge: item.rightView?.yellowBadge,
             checkbox: item.rightView?.checkbox,
             switch: item.rightView?.`switch`,
-            isCheckmark: item.rightView?.isCheckmark ?? false
+            isCheckmark: item.rightView?.isCheckmark ?? false,
+            buttonTitle: item.rightView?.buttonTitle
         )
         
         self.right = .init(item: rightItem)
