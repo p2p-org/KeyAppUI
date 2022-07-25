@@ -2,8 +2,8 @@ import UIKit
 import BEPureLayout
 
 class TextField: UITextField {
-    
-    let leftPadding: CGFloat = 16
+    // Default padding
+    let edgePadding: CGFloat = 16
     
     // MARK: - Ref
 
@@ -57,10 +57,10 @@ class TextField: UITextField {
         let endIndex = min(text.count, placeholder.count)
         let placeholderSubstring = placeholder[0..<endIndex]
         coverViewRef.view?.frame = CGRect(
-            x: leadingInset,
+            x: inputLeadingInset,
             y: 12,
             width: String(placeholderSubstring).widthOfString(usingFont: font),
-            height: self.layer.bounds.height
+            height: layer.bounds.height
         )
         placeholderRef.view?.frame = placeholderRect(forBounds: bounds)
     }
@@ -71,33 +71,35 @@ class TextField: UITextField {
     }
     
     // MARK: -
-
-    var leadingInset: CGFloat {
-        max(self.leftViewRect(forBounds: bounds).width, leftPadding)
+    
+    var inputLeadingInset: CGFloat {
+        let viewWidth = leftViewRect(forBounds: bounds).width
+        return viewWidth + edgePadding + (viewWidth > 0 ? edgePadding/2 : 0)
     }
     
-    var trailingInset: CGFloat {
-        max(self.rightViewRect(forBounds: bounds).width, leftPadding)
+    var inputTrailingInset: CGFloat {
+        let viewWidth = rightViewRect(forBounds: bounds).width
+        return viewWidth + edgePadding + (viewWidth > 0 ? edgePadding/2 : 0)
     }
     
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        CGRect(x: leadingInset, y: 0, width: bounds.width - leadingInset - trailingInset, height: bounds.height)
+        CGRect(x: inputLeadingInset, y: 0, width: bounds.width - inputLeadingInset - inputTrailingInset, height: bounds.height)
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        CGRect(x: leadingInset, y: 0, width: bounds.width - leadingInset - trailingInset, height: bounds.height)
+        CGRect(x: inputLeadingInset, y: 0, width: bounds.width - inputLeadingInset - inputTrailingInset, height: bounds.height)
     }
     
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        CGRect(x: leadingInset, y: 0, width: bounds.width - leadingInset - trailingInset, height: bounds.height)
+        CGRect(x: inputLeadingInset, y: 0, width: bounds.width - inputLeadingInset - inputTrailingInset, height: bounds.height)
     }
     
     override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         let rect = super.leftViewRect(forBounds: bounds)
         return CGRect(
-            x: rect.origin.x + leftPadding,
+            x: rect.origin.x + edgePadding,
             y: rect.origin.y,
-            width: rect.width + leftPadding + leftPadding/2,
+            width: rect.width,
             height: rect.height
         )
     }
@@ -105,9 +107,9 @@ class TextField: UITextField {
     override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         let rect = super.rightViewRect(forBounds: bounds)
         return CGRect(
-            x: rect.origin.x - leftPadding,
+            x: rect.origin.x - edgePadding,
             y: rect.origin.y,
-            width: rect.width + leftPadding + leftPadding/2,
+            width: (rightView?.bounds.width ?? 0) + edgePadding + edgePadding/2,
             height: rect.height
         )
     }
