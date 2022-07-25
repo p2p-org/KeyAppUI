@@ -146,6 +146,10 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
 
         titleView.font = theme.font
         layer.cornerRadius = theme.borderRadius
+        if let color = theme.borderColor {
+            layer.borderWidth = 2
+            layer.borderColor = color.cgColor
+        }
 
         leadingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing
         trailingIconSpacing.view?.widthConstraint?.constant = theme.iconSpacing
