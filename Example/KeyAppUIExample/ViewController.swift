@@ -28,6 +28,9 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
+                
+                TextFieldSection()
+                
                 SkeletonSection()
                 
                 SplashSection().onTap { [weak self] in
