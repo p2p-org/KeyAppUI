@@ -24,6 +24,7 @@ public enum Asset {
   public enum Colors {
     public static let cloud = ColorAsset(name: "Cloud")
     public static let lime = ColorAsset(name: "Lime")
+    public static let listSeparator = ColorAsset(name: "ListSeparator")
     public static let mint = ColorAsset(name: "Mint")
     public static let mountain = ColorAsset(name: "Mountain")
     public static let night = ColorAsset(name: "Night")
@@ -37,6 +38,7 @@ public enum Asset {
     public static let allColors: [ColorAsset] = [
       cloud,
       lime,
+      listSeparator,
       mint,
       mountain,
       night,
@@ -86,6 +88,7 @@ public enum Asset {
     public static let block = ImageAsset(name: "block")
     public static let cancel = ImageAsset(name: "cancel")
     public static let check = ImageAsset(name: "check")
+    public static let checkmark = ImageAsset(name: "checkmark")
     public static let chevronLeft = ImageAsset(name: "chevron_left")
     public static let chevronRight = ImageAsset(name: "chevron_right")
     public static let clear = ImageAsset(name: "clear")
@@ -181,6 +184,7 @@ public enum Asset {
       block,
       cancel,
       check,
+      checkmark,
       chevronLeft,
       chevronRight,
       clear,
