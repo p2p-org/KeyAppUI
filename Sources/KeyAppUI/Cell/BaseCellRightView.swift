@@ -91,10 +91,12 @@ public class BaseCellRightView: BECompositionView {
             }
 
             if let buttonTitle = buttonTitle {
+                UIView.spacer
+                    .withContentHuggingPriority(.defaultLow, for: .horizontal)
                 TextButton(title: buttonTitle, style: .second, size: .small)
                     .onTap { [weak delegate] in
                         delegate?.buttonPressed()
-                    }
+                    }.withContentHuggingPriority(.required, for: .horizontal)
             }
 
             if let `switch` = `switch` {

@@ -62,7 +62,7 @@ class TableViewController: UICollectionViewController, SkeletonCollectionViewDat
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int { 2 }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { section == 0 ? 10 : 37 }
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { section == 0 ? 10 : 36 }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BaseCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! BaseCell? ?? BaseCell(frame: .zero)
@@ -357,12 +357,6 @@ class TableViewController: UICollectionViewController, SkeletonCollectionViewDat
         case 35:
             item.rightView?.buttonTitle = "Button Title"
             item.title = "Send"
-            item.subtitle = nil
-            item.subtitle2 = nil
-        case 36:
-            item.rightView?.buttonTitle = "Button Title"
-            item.title = "Send"
-            item.rightView?.text = "Text Example"
             item.subtitle = nil
             item.subtitle2 = nil
 
