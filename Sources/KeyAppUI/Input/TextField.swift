@@ -109,7 +109,7 @@ class TextField: UITextField {
         return CGRect(
             x: rect.origin.x - edgePadding,
             y: rect.origin.y,
-            width: (rightView?.bounds.width ?? 0) + edgePadding + edgePadding/2,
+            width: rect.width,
             height: rect.height
         )
     }
