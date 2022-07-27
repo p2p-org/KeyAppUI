@@ -11,6 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/KeyAppUI/**/*.swift'
   s.dependency 'BEPureLayout'
   s.dependency 'SkeletonView', '~> 1.7'
-  s.source_files = 'Sources/KeyAppUI/**/*'
-  s.resources = 'Sources/Resources/**/*'
+  s.resources = 'Sources/KeyAppUI/Resources/**/*'
 end
