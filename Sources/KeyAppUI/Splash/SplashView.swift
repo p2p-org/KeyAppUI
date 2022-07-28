@@ -118,12 +118,13 @@ private extension SplashView {
         animation.toValue = endPath
         animation.duration = 0.3
         CATransaction.setCompletionBlock { [weak self] in
-            self?.lineLayer.path = endPath
-            if textPosition == .down {
-                self?.lineLayer.path = nil // remove dot after completion
-                self?.completionHandler?()
+            self?.lineLayer.path = textPosition == .down ? nil : endPath
+            if let handler = self?.completionHandler, textPosition == .down {
+                handler()
             }
-            self?.animateText(delay: 0.1, position: textPosition.toggle())
+            else {
+                self?.animateText(delay: 0.1, position: textPosition.toggle())
+            }
         }
         lineLayer.add(animation, forKey: "path")
         CATransaction.commit()
