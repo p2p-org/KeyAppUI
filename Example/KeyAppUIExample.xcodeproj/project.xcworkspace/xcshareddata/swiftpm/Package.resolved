@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/p2p-org/BEPureLayout.git",
         "state": {
           "branch": "master",
-          "revision": "f00ffab3fc02a36774593ab222b77ee8cbdc872a",
+          "revision": "f0e06d38ab5f4a4854ed9b674a518708951e53ef",
           "version": null
         }
       },
@@ -34,15 +34,6 @@
         "state": {
           "branch": null,
           "revision": "b14b7f4c528c942f121c8b860b9410b2bf57825e",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "SwiftDocCPlugin",
-        "repositoryURL": "https://github.com/apple/swift-docc-plugin",
-        "state": {
-          "branch": null,
-          "revision": "3303b164430d9a7055ba484c8ead67a52f7b74f6",
           "version": "1.0.0"
         }
       },

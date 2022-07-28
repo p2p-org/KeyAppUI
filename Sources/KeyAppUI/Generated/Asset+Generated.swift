@@ -56,11 +56,13 @@ public enum Asset {
     // swiftlint:enable trailing_comma
   }
   public enum Icons {
+    public static let remove = ImageAsset(name: "remove")
     public static let send = ImageAsset(name: "send")
     // swiftlint:disable trailing_comma
     public static let allColors: [ColorAsset] = [
     ]
     public static let allImages: [ImageAsset] = [
+      remove,
       send,
     ]
     // swiftlint:enable trailing_comma
@@ -111,6 +113,7 @@ public enum Asset {
     public static let fullscreen = ImageAsset(name: "fullscreen")
     public static let fullscreenExit = ImageAsset(name: "fullscreen_exit")
     public static let gesture = ImageAsset(name: "gesture")
+    public static let helpOutline = ImageAsset(name: "help_outline")
     public static let howToReg = ImageAsset(name: "how_to_reg")
     public static let howToVote = ImageAsset(name: "how_to_vote")
     public static let inbox = ImageAsset(name: "inbox")
@@ -208,6 +211,7 @@ public enum Asset {
       fullscreen,
       fullscreenExit,
       gesture,
+      helpOutline,
       howToReg,
       howToVote,
       inbox,

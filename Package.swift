@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/p2p-org/BEPureLayout.git", branch: "master"),
-        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
+        // .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
         .package(url: "https://github.com/Juanpe/SkeletonView.git", from: "1.7.0")
     ],
     targets: [

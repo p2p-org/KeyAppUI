@@ -72,7 +72,7 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
     }
 
     override func build() -> UIView {
-        BEContainer {
+        TextButtonContainer {
             BEHStack {
                 // Leading
                 BEContainer()
@@ -101,7 +101,10 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                 UILabel(text: title, font: theme.font)
                     .bind(titleView)
                     .withContentCompressionResistancePriority(.required, for: .horizontal)
-                    .setup { view in view.textColor = theme.foregroundColor; view.adjustsFontSizeToFitWidth = true }
+                    .setup { view in
+                        view.textColor = theme.foregroundColor
+                        view.adjustsFontSizeToFitWidth = true
+                    }
 
                 // Trailing
                 BEHStack {
@@ -122,15 +125,6 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                 BEContainer()
                     .frame(width: theme.contentPadding.right)
                     .bind(trailingSpacing)
-            }
-            .centered(.vertical)
-            .setup { view in
-                let container = UIView(forAutoLayout: ())
-                container.addSubview(view)
-                container.tag = 1111
-                view.autoPinEdge(toSuperviewEdge: .leading, withInset: 12, relation: .greaterThanOrEqual).priority = .defaultLow
-                view.autoPinEdge(toSuperviewEdge: .trailing, withInset: 12, relation: .greaterThanOrEqual).priority = .defaultLow
-                view.autoAlignAxis(toSuperviewAxis: .horizontal)
             }
         }
         .bind(container)
@@ -172,5 +166,26 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
         leading.isHidden = leadingImage == nil
         leadingImageView.isHidden = isLoading || leadingImage == nil
         leadingLoadingIndicator.isHidden = !isLoading
+    }
+}
+
+private final class TextButtonContainer: BEView {
+    let child: UIView
+
+    required init(@BEViewBuilder builder: Builder) {
+        child = builder().build()
+        super.init(frame: .zero)
+    }
+
+    final override func commonInit() {
+        super.commonInit()
+
+        super.addSubview(child)
+        child.autoPinEdge(toSuperviewEdge: .leading, withInset: 0, relation: .greaterThanOrEqual)
+        child.autoPinEdge(toSuperviewEdge: .trailing, withInset: 0, relation: .greaterThanOrEqual)
+        child.autoPinEdge(toSuperviewEdge: .top, withInset: 0, relation: .greaterThanOrEqual)
+        child.autoPinEdge(toSuperviewEdge: .bottom, withInset: 0, relation: .greaterThanOrEqual)
+        child.autoAlignAxis(toSuperviewAxis: .vertical)
+        child.autoAlignAxis(toSuperviewAxis: .horizontal)
     }
 }

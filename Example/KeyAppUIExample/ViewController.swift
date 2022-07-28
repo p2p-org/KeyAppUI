@@ -28,7 +28,11 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                
+                TextButton(title: "Show pincode view controller", style: .invertedRed, size: .large)
+                    .onPressed { [weak self] _ in
+                        self?.performSegue(withIdentifier: "showPincode", sender: nil)
+                    }
+    
                 TextFieldSection()
                 
                 SkeletonSection()
