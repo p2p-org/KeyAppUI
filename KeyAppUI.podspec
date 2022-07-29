@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'KeyAppUI'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'Custom UI components, colors, fonts.'
   s.homepage         = 'https://github.com/p2p-org/KeyAppUI'
   s.license          = { :type => 'MIT', :file => 'LICENSE.md' }

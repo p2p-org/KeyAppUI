@@ -133,9 +133,8 @@ open class BaseTextFieldView: BECompositionView {
         self.inputFieldRef.view?.leftView = self.leftView
         self.rightView = rightView
         self.inputFieldRef.view?.rightView = self.rightView
-        super.init(frame: .zero)
         self.isBig = isBig
-        
+        super.init(frame: .zero)
         updateView()
     }
     
