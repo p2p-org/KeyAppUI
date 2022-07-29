@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-extension NSAttributedString {
+public extension NSAttributedString {
     
     func withForegroundColor(_ color: UIColor) -> NSAttributedString {
         let string = NSMutableAttributedString(attributedString: self)

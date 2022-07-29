@@ -1,13 +1,13 @@
 import UIKit
 import BEPureLayout
 
-public class BaseTextFieldView: BECompositionView {
+open class BaseTextFieldView: BECompositionView {
     
     // MARK: -
     
     private(set) var isBig = false
     
-    var leftView: UIView? {
+    public var leftView: UIView? {
         didSet {
             inputFieldRef.view?.leftView = leftView
         }
@@ -19,7 +19,7 @@ public class BaseTextFieldView: BECompositionView {
         }
     }
     
-    var rightView: UIView? {
+    public var rightView: UIView? {
         didSet {
             inputFieldRef.view?.rightView = rightView
         }
@@ -134,11 +134,12 @@ public class BaseTextFieldView: BECompositionView {
         self.rightView = rightView
         self.inputFieldRef.view?.rightView = self.rightView
         super.init(frame: .zero)
+        self.isBig = isBig
         
         updateView()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -149,9 +150,8 @@ public class BaseTextFieldView: BECompositionView {
         container.view?.layer.borderWidth = 1
         container.view?.layer.borderColor = borderColor().cgColor
         container.view?.layer.masksToBounds = true
-        
-        self.inputFieldRef.view?.leftView = self.leftView
-        self.inputFieldRef.view?.rightView = self.rightView
+        inputFieldRef.view?.leftView = leftView
+        inputFieldRef.view?.rightView = rightView
     }
     
     private func bottomTipColor() -> UIColor {

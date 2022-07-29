@@ -56,7 +56,7 @@ public class SectionHeader: UICollectionReusableView {
             UIImageView(image: Asset.MaterialIcon.expandMore.image.withTintColor(self.color, renderingMode: .alwaysOriginal))
                 .frame(width: 16, height: 16)
                 .bind(expandImageView)
-                BESpacer(.horizontal)
+//                BESpacer(.horizontal)
         }.onTap {
             self.toggle(animated: true)
         }

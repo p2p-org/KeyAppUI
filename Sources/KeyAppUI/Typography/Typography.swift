@@ -111,10 +111,17 @@ public extension UIFont {
     }
 }
 
-extension NSAttributedString {
-    static func attributedString(with text: String, of style: UIFont.Style, weight: UIFont.Weight = .regular, monospace: Bool = false) -> NSAttributedString {
+public extension NSAttributedString {
+    static func attributedString(
+        with text: String,
+        of style: UIFont.Style,
+        weight: UIFont.Weight = .regular,
+        alignment: NSTextAlignment = .left,
+        monospace: Bool = false
+    ) -> NSAttributedString {
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = UIFont.lineHeight(for: style)
+        paragraph.alignment = alignment
         let string = NSAttributedString(string: text, attributes: [
             .font: monospace ? UIFont.monospaceFont(of: style, weight: weight) : UIFont.font(of: style, weight: weight),
             .paragraphStyle: paragraph,
