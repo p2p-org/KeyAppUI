@@ -37,12 +37,12 @@ public class SplashView: UIView, CAAnimationDelegate {
         }
     }
 
-    fileprivate var progressLayer: SplashLayer2 {
-        return layer as! SplashLayer2
+    fileprivate var progressLayer: SplashLayer {
+        return layer as! SplashLayer
     }
 
     override public class var layerClass: AnyClass {
-        return SplashLayer2.self
+        return SplashLayer.self
     }
 
     public override init(frame: CGRect) {
@@ -78,7 +78,7 @@ public class SplashView: UIView, CAAnimationDelegate {
 * https://stackoverflow.com/a/37470079
 */
 
-fileprivate class SplashLayer2: CALayer {
+fileprivate class SplashLayer: CALayer {
     @NSManaged var progress: CGFloat
     let startAngle: CGFloat = 1.5 * .pi
     let twoPi: CGFloat = 2 * .pi
