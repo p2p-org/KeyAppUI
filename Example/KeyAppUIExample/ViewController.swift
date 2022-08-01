@@ -37,7 +37,7 @@ class ViewController: UIViewController {
             BEVStack {
                 BEHStack {
                     UIView()
-                    SplashView2(height: 100)
+                    SplashView2(height: 15+22)
                         .bind(lineRef)
                         .padding(.init(x: 0, y: 10))
                     UIView()

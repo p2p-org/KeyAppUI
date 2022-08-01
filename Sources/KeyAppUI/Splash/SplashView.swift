@@ -202,6 +202,15 @@ public class SplashView2: UIView {
 * Concepts taken from:
 * https://stackoverflow.com/a/37470079
 */
+private extension SplashLayer2 {
+    enum Constants {
+        static let overlayOffset: CGFloat = 2
+        static let underlineHeight: CGFloat = 3
+        static let textOffset: CGFloat = 55
+        static let centerOffset: CGFloat = 22
+    }
+}
+
 fileprivate class SplashLayer2: CALayer {
     @NSManaged var progress: CGFloat
     let startAngle: CGFloat = 1.5 * .pi
@@ -219,7 +228,15 @@ fileprivate class SplashLayer2: CALayer {
     override func draw(in ctx: CGContext) {
         super.draw(in: ctx)
 
-        // frame
+        UIGraphicsPushContext(ctx)
+        
+        drawLetters()
+        drawLine()
+        
+        UIGraphicsPopContext()
+    }
+    
+    private func drawLine() {
         let x: CGFloat
         let width: CGFloat
         
@@ -236,33 +253,34 @@ fileprivate class SplashLayer2: CALayer {
             x = (progress - 0.75) * bounds.width / 0.25
             width = bounds.width - x
         }
-        
-        UIGraphicsPushContext(ctx)
 
-        //Light Grey
         Asset.Colors.night.color.set()
-        
-        let rect = CGRect(x: x, y: bounds.height - 2, width: width, height: 2)
-        let path = UIBezierPath(roundedRect: rect, cornerRadius: 1)
+        let rect = CGRect(x: x, y: bounds.height - Constants.underlineHeight, width: width, height: Constants.underlineHeight)
+        let path = UIBezierPath(roundedRect: rect, cornerRadius: Constants.underlineHeight/2)
         path.fill()
-
-//        let center = CGPoint(x: bounds.midX, y: bounds.midY)
-//        let strokeWidth: CGFloat = 4
-//        let radius = (bounds.size.width / 2) - strokeWidth
-//        let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: 0, endAngle: twoPi, clockwise: true)
-//        path.lineWidth = strokeWidth
-//        path.stroke()
-//
-//
-//        //Red
-//        UIColor.red.setStroke()
-//
-//        let endAngle = (twoPi * progress) - halfPi
-//        let pathProgress = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle , clockwise: true)
-//        pathProgress.lineWidth = strokeWidth
-//        pathProgress.lineCapStyle = .round
-//        pathProgress.stroke()
-
-        UIGraphicsPopContext()
+    }
+    
+    private func drawLetters() {
+        let assets: [(UIImage, CGSize, UIEdgeInsets)] = [
+            (Asset.MaterialIcon.k.image, CGSize(width: 12.9, height: 21.6), UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
+            (Asset.MaterialIcon.e.image, CGSize(width: 14.2, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
+            (Asset.MaterialIcon.y.image, CGSize(width: 14.4, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
+            (Asset.MaterialIcon.a.image, CGSize(width: 14.8, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
+            (Asset.MaterialIcon.p1.image, CGSize(width: 14.7, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
+            (Asset.MaterialIcon.p2.image, CGSize(width: 14.7, height: 21.6), .init(only: .top, inset: 7))
+        ]
+        
+        var x: CGFloat = 0
+        for (index, asset) in assets.enumerated() {
+            var y: CGFloat = asset.2.top
+            
+            if progress <= 0.25 {
+                y += ((0.25 - progress) / 0.25) * (bounds.maxY + CGFloat(10 * index))
+            }
+            
+            let rect = CGRect(x: x, y: y, width: asset.1.width, height: asset.1.height)
+            x += asset.1.width + asset.2.right
+            asset.0.draw(in: rect)
+        }
     }
 }
