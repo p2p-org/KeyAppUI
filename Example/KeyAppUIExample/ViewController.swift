@@ -12,7 +12,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var stackView: UIStackView!
-    let lineRef = BERef<SplashView2>()
+    let lineRef = BERef<SplashView>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                SplashView2()
+                SplashView()
                     .bind(lineRef)
                     .padding(.init(x: 0, y: 10))
                     .centered(.horizontal)
