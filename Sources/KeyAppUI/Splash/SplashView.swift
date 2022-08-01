@@ -9,17 +9,17 @@ enum SplashConstants {
     
     static let keyframes = [0, 0.2, 0.4, 0.6, 0.8, 1]
     
-    static let assets: [(UIImage, CGSize, UIEdgeInsets)] = [
-        (Asset.MaterialIcon.k.image, CGSize(width: 12.9, height: 21.6), UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
-        (Asset.MaterialIcon.e.image, CGSize(width: 14.2, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
-        (Asset.MaterialIcon.y.image, CGSize(width: 14.4, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
-        (Asset.MaterialIcon.a.image, CGSize(width: 14.8, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
-        (Asset.MaterialIcon.p1.image, CGSize(width: 14.7, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
-        (Asset.MaterialIcon.p2.image, CGSize(width: 14.7, height: 21.6), .init(only: .top, inset: 7))
+    static let assets: [(UIImage, UIEdgeInsets)] = [
+        (Asset.MaterialIcon.k.image, UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
+        (Asset.MaterialIcon.e.image, UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
+        (Asset.MaterialIcon.y.image, UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
+        (Asset.MaterialIcon.a.image, UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
+        (Asset.MaterialIcon.p1.image, UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
+        (Asset.MaterialIcon.p2.image, .init(only: .top, inset: 7))
     ]
     
     static var size: CGSize {
-        .init(width: assets.reduce(0, {$0 + $1.1.width + $1.2.right}), height: 37)
+        .init(width: assets.reduce(0, {$0 + $1.0.size.width + $1.1.right}), height: 37)
     }
 }
 
@@ -147,8 +147,8 @@ fileprivate class SplashLayer: CALayer {
                 y = bounds.maxY
             }
             
-            let rect = CGRect(x: x, y: y + asset.2.top, width: asset.1.width, height: asset.1.height)
-            x += asset.1.width + asset.2.right
+            let rect = CGRect(x: x, y: y + asset.1.top, width: asset.0.size.width, height: asset.0.size.height)
+            x += asset.0.size.width + asset.1.right
             asset.0.draw(in: rect)
         }
     }
