@@ -24,7 +24,7 @@ let package = Package(
                 .product(name: "BEPureLayout", package: "BEPureLayout"),
                 .product(name: "SkeletonView", package: "SkeletonView")
             ],
-            resources: [.process("Sources/Resources")]
+            resources: [.process("Resources")]
         ),
         .testTarget(
             name: "KeyAppUITests",
