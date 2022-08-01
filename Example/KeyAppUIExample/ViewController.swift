@@ -12,7 +12,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var stackView: UIStackView!
-    let lineRef = BERef<LineView>()
+    let lineRef = BERef<SplashView2>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,25 +28,20 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.lineRef.progress = 0.0
-//            self.lineRef.color = .red
-
-            UIView.animate(withDuration: 3) {
-              self.lineRef.progress = 1
-//              self.lineRef.color = .red
-            }
-        }
+        self.lineRef.view?.animate()
         
     }
 
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                LineView(height: 10, cornerRadius: 5)
-                    .bind(lineRef)
-                    .padding(.init(x: 0, y: 10))
+                BEHStack {
+                    UIView()
+                    SplashView2(height: 100)
+                        .bind(lineRef)
+                        .padding(.init(x: 0, y: 10))
+                    UIView()
+                }
                 
                 TextButton(title: "Show pincode view controller", style: .invertedRed, size: .large)
                     .onPressed { [weak self] _ in

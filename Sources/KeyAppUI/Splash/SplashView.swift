@@ -162,58 +162,63 @@ private extension SplashView {
 
 // MARK: - New implementation
 
-public class LineView: UIView {
-    
-    /// The progress bar which adjusts width based on progress.
-    private var progressBar: UIView!
-    
-    /// Progress on the track [0.0, 1.0]. Animatable.
-    @objc public dynamic var progress: CGFloat {
-        set { progressLayer.progress = newValue }
-        get { return progressLayer.progress }
-    }
-    
-    /// Display color of the progress bar. Animatable.
-    @objc public dynamic var color: UIColor {
-        set { progressLayer.color = newValue.cgColor }
-        get { return UIColor(cgColor: progressLayer.color) }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-    }
-    
-    private func commonInit() {
-        self.progress = 0.0
-        self.color = .black
-        
-        progressBar = UIView(frame: .zero)
-        progressBar.backgroundColor = color
-        addSubview(progressBar)
-    }
-    
-    public override class var layerClass: AnyClass {
-        return LineLayer.self
-    }
-    
-    private var progressLayer: LineLayer {
-        return layer as! LineLayer
-    }
-    
-    public override func display(_ layer: CALayer) {
-        guard let presentationLayer = layer.presentation() as? LineLayer else {
-            return
+public class SplashView2: UIView {
+
+    public dynamic var progress: CGFloat = 0 {
+        didSet {
+            progressLayer.progress = progress
         }
-        
-        // Use presentationLayer's interpolated property value(s) to update UI components.
-        let progress = max(0.0, min(1.0, presentationLayer.progress))
-        
+    }
+
+    fileprivate var progressLayer: SplashLayer2 {
+        return layer as! SplashLayer2
+    }
+
+    override public class var layerClass: AnyClass {
+        return SplashLayer2.self
+    }
+
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        backgroundColor = .clear
+    }
+    
+    public func animate() {
+        let animation = CABasicAnimation(keyPath: "progress")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = 3
+        animation.repeatCount = .greatestFiniteMagnitude
+        layer.add(animation, forKey: nil)
+    }
+}
+
+/*
+* Concepts taken from:
+* https://stackoverflow.com/a/37470079
+*/
+fileprivate class SplashLayer2: CALayer {
+    @NSManaged var progress: CGFloat
+    let startAngle: CGFloat = 1.5 * .pi
+    let twoPi: CGFloat = 2 * .pi
+    let halfPi: CGFloat = .pi / 2
+
+
+    override class func needsDisplay(forKey key: String) -> Bool {
+        if key == #keyPath(progress) {
+            return true
+        }
+        return super.needsDisplay(forKey: key)
+    }
+
+    override func draw(in ctx: CGContext) {
+        super.draw(in: ctx)
+
         // frame
         let x: CGFloat
         let width: CGFloat
@@ -223,77 +228,41 @@ public class LineView: UIView {
             width = 0
         } else if progress <= 0.5 {
             x = 0
-            width = (progress - 0.25) * layer.bounds.width / 0.25
+            width = (progress - 0.25) * bounds.width / 0.25
         } else if progress <= 0.75 {
             x = 0
-            width = layer.bounds.width
+            width = bounds.width
         } else {
-            x = (progress - 0.75) * layer.bounds.width / 0.25
-            width = layer.bounds.width - x
+            x = (progress - 0.75) * bounds.width / 0.25
+            width = bounds.width - x
         }
         
-        progressBar.frame = CGRect(x: x, y: 0, width: width, height: bounds.height)
-        progressBar.backgroundColor = UIColor(cgColor: presentationLayer.color)
-        progressBar.layer.cornerRadius = bounds.height / 2
-    }
-}
+        UIGraphicsPushContext(ctx)
 
-/// A backing layer for ProgressView which supports certain animatable values.
-fileprivate class LineLayer: CALayer {
-    @NSManaged var progress: CGFloat
-    @NSManaged var color: CGColor
-    
-    // Whenever a new presentation layer is created, this function is called and makes a COPY of the object.
-    override init(layer: Any) {
-        super.init(layer: layer)
-        if let layer = layer as? LineLayer {
-            progress = layer.progress
-            color = layer.color
-        }
-    }
-    
-    override init() {
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    override class func needsDisplay(forKey key: String) -> Bool {
-        if isAnimationKeySupported(key) {
-            return true
-        }
-        return super.needsDisplay(forKey: key)
-    }
-    
-    override func action(forKey event: String) -> CAAction? {
-        if LineLayer.isAnimationKeySupported(event) {
-            // Copy animation context and mutate as needed
-            guard let animation = currentAnimationContext(in: self)?.copy() as? CABasicAnimation else {
-                setNeedsDisplay()
-                return nil
-            }
-            
-            animation.keyPath = event
-            if let presentation = presentation() {
-                animation.fromValue = presentation.value(forKeyPath: event)
-            }
-            animation.toValue = nil
-            return animation
-        }
+        //Light Grey
+        Asset.Colors.night.color.set()
         
-        return super.action(forKey: event)
-    }
-    
-    private class func isAnimationKeySupported(_ key: String) -> Bool {
-        return key == #keyPath(progress) || key == #keyPath(color)
-    }
-    
-    private func currentAnimationContext(in layer: CALayer) -> CABasicAnimation? {
-        /// The UIView animation implementation is private, so to check if the view is animating and
-        /// get its property keys we can use the key "backgroundColor" since its been a property of
-        /// UIView which has been forever and returns a CABasicAnimation.
-        return action(forKey: #keyPath(backgroundColor)) as? CABasicAnimation
+        let rect = CGRect(x: x, y: bounds.height - 2, width: width, height: 2)
+        let path = UIBezierPath(roundedRect: rect, cornerRadius: 1)
+        path.fill()
+
+//        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+//        let strokeWidth: CGFloat = 4
+//        let radius = (bounds.size.width / 2) - strokeWidth
+//        let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: 0, endAngle: twoPi, clockwise: true)
+//        path.lineWidth = strokeWidth
+//        path.stroke()
+//
+//
+//        //Red
+//        UIColor.red.setStroke()
+//
+//        let endAngle = (twoPi * progress) - halfPi
+//        let pathProgress = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle , clockwise: true)
+//        pathProgress.lineWidth = strokeWidth
+//        pathProgress.lineCapStyle = .round
+//        pathProgress.stroke()
+
+        UIGraphicsPopContext()
     }
 }
