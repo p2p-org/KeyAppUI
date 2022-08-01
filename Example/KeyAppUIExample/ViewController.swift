@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                SplashView2(height: 15+22)
+                SplashView2()
                     .bind(lineRef)
                     .padding(.init(x: 0, y: 10))
                     .centered(.horizontal)

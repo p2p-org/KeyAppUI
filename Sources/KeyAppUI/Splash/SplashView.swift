@@ -168,7 +168,7 @@ enum SplashConstants {
     static let textOffset: CGFloat = 55
     static let centerOffset: CGFloat = 22
     
-    static let keyframes = [0, 0.25, 0.5, 0.75, 1]
+    static let keyframes = [0, 0.2, 0.4, 0.6, 0.8, 1]
     
     static let assets: [(UIImage, CGSize, UIEdgeInsets)] = [
         (Asset.MaterialIcon.k.image, CGSize(width: 12.9, height: 21.6), UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
@@ -267,8 +267,11 @@ fileprivate class SplashLayer2: CALayer {
         } else if progress <= SplashConstants.keyframes[3] {
             x = 0
             width = bounds.width
+        } else if progress <= SplashConstants.keyframes[4] {
+            x = 0
+            width = bounds.width
         } else {
-            x = (progress - SplashConstants.keyframes[3]) * bounds.width / (SplashConstants.keyframes[4] - SplashConstants.keyframes[3])
+            x = (progress - SplashConstants.keyframes[4]) * bounds.width / (SplashConstants.keyframes[5] - SplashConstants.keyframes[4])
             width = bounds.width - x
         }
 
@@ -288,7 +291,9 @@ fileprivate class SplashLayer2: CALayer {
             } else if progress <= SplashConstants.keyframes[2] {
                 y = 0
             } else if progress <= SplashConstants.keyframes[3] {
-                y = ((progress - SplashConstants.keyframes[2]) / (SplashConstants.keyframes[3] - SplashConstants.keyframes[2])) * (bounds.maxY + CGFloat(10 * (SplashConstants.keyframes.count - index)))
+                y = 0
+            } else if progress <= SplashConstants.keyframes[4] {
+                y = ((progress - SplashConstants.keyframes[3]) / (SplashConstants.keyframes[4] - SplashConstants.keyframes[3])) * (bounds.maxY + CGFloat(10 * (SplashConstants.keyframes.count - index)))
             } else {
                 y = bounds.maxY
             }
