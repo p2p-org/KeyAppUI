@@ -23,7 +23,7 @@ enum SplashConstants {
     }
 }
 
-public class SplashView: UIView {
+public class SplashView: UIView, CAAnimationDelegate {
     
     var completionHandler: (() -> Void)?
     
@@ -60,8 +60,16 @@ public class SplashView: UIView {
         animation.fromValue = 0
         animation.toValue = 1
         animation.duration = 2
-        animation.repeatCount = .greatestFiniteMagnitude
-        layer.add(animation, forKey: nil)
+        animation.delegate = self
+        layer.add(animation, forKey: "progress")
+    }
+    
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        if let completionHandler = completionHandler {
+            completionHandler()
+        } else {
+            animate()
+        }
     }
 }
 
