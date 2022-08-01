@@ -162,7 +162,33 @@ private extension SplashView {
 
 // MARK: - New implementation
 
+enum SplashConstants {
+    static let overlayOffset: CGFloat = 2
+    static let underlineHeight: CGFloat = 3
+    static let textOffset: CGFloat = 55
+    static let centerOffset: CGFloat = 22
+    
+    static let keyframes = [0, 0.25, 0.5, 0.75, 1]
+    
+    static let assets: [(UIImage, CGSize, UIEdgeInsets)] = [
+        (Asset.MaterialIcon.k.image, CGSize(width: 12.9, height: 21.6), UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
+        (Asset.MaterialIcon.e.image, CGSize(width: 14.2, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
+        (Asset.MaterialIcon.y.image, CGSize(width: 14.4, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
+        (Asset.MaterialIcon.a.image, CGSize(width: 14.8, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
+        (Asset.MaterialIcon.p1.image, CGSize(width: 14.7, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
+        (Asset.MaterialIcon.p2.image, CGSize(width: 14.7, height: 21.6), .init(only: .top, inset: 7))
+    ]
+    
+    static var size: CGSize {
+        .init(width: assets.reduce(0, {$0 + $1.1.width + $1.2.right}), height: 37)
+    }
+}
+
 public class SplashView2: UIView {
+    
+    public override var intrinsicContentSize: CGSize {
+        SplashConstants.size
+    }
 
     public dynamic var progress: CGFloat = 0 {
         didSet {
@@ -202,16 +228,6 @@ public class SplashView2: UIView {
 * Concepts taken from:
 * https://stackoverflow.com/a/37470079
 */
-private extension SplashLayer2 {
-    enum Constants {
-        static let overlayOffset: CGFloat = 2
-        static let underlineHeight: CGFloat = 3
-        static let textOffset: CGFloat = 55
-        static let centerOffset: CGFloat = 22
-        
-        static let keyframes = [0, 0.25, 0.5, 0.75, 1]
-    }
-}
 
 fileprivate class SplashLayer2: CALayer {
     @NSManaged var progress: CGFloat
@@ -242,46 +258,37 @@ fileprivate class SplashLayer2: CALayer {
         let x: CGFloat
         let width: CGFloat
         
-        if progress <= Constants.keyframes[1] {
+        if progress <= SplashConstants.keyframes[1] {
             x = 0
             width = 0
-        } else if progress <= Constants.keyframes[2] {
+        } else if progress <= SplashConstants.keyframes[2] {
             x = 0
-            width = (progress - Constants.keyframes[1]) * bounds.width / (Constants.keyframes[2] - Constants.keyframes[1])
-        } else if progress <= Constants.keyframes[3] {
+            width = (progress - SplashConstants.keyframes[1]) * bounds.width / (SplashConstants.keyframes[2] - SplashConstants.keyframes[1])
+        } else if progress <= SplashConstants.keyframes[3] {
             x = 0
             width = bounds.width
         } else {
-            x = (progress - Constants.keyframes[3]) * bounds.width / (Constants.keyframes[4] - Constants.keyframes[3])
+            x = (progress - SplashConstants.keyframes[3]) * bounds.width / (SplashConstants.keyframes[4] - SplashConstants.keyframes[3])
             width = bounds.width - x
         }
 
         Asset.Colors.night.color.set()
-        let rect = CGRect(x: x, y: bounds.height - Constants.underlineHeight, width: width, height: Constants.underlineHeight)
-        let path = UIBezierPath(roundedRect: rect, cornerRadius: Constants.underlineHeight/2)
+        let rect = CGRect(x: x, y: bounds.height - SplashConstants.underlineHeight, width: width, height: SplashConstants.underlineHeight)
+        let path = UIBezierPath(roundedRect: rect, cornerRadius: SplashConstants.underlineHeight/2)
         path.fill()
     }
     
     private func drawLetters() {
-        let assets: [(UIImage, CGSize, UIEdgeInsets)] = [
-            (Asset.MaterialIcon.k.image, CGSize(width: 12.9, height: 21.6), UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
-            (Asset.MaterialIcon.e.image, CGSize(width: 14.2, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
-            (Asset.MaterialIcon.y.image, CGSize(width: 14.4, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
-            (Asset.MaterialIcon.a.image, CGSize(width: 14.8, height: 14.6), UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
-            (Asset.MaterialIcon.p1.image, CGSize(width: 14.7, height: 21.6), UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
-            (Asset.MaterialIcon.p2.image, CGSize(width: 14.7, height: 21.6), .init(only: .top, inset: 7))
-        ]
-        
         var x: CGFloat = 0
-        for (index, asset) in assets.enumerated() {
+        for (index, asset) in SplashConstants.assets.enumerated() {
             let y: CGFloat
             
-            if progress <= Constants.keyframes[1] {
-                y = ((Constants.keyframes[1] - progress) / Constants.keyframes[1]) * (bounds.maxY + CGFloat(10 * index))
-            } else if progress <= Constants.keyframes[2] {
+            if progress <= SplashConstants.keyframes[1] {
+                y = ((SplashConstants.keyframes[1] - progress) / SplashConstants.keyframes[1]) * (bounds.maxY + CGFloat(10 * index))
+            } else if progress <= SplashConstants.keyframes[2] {
                 y = 0
-            } else if progress <= Constants.keyframes[3] {
-                y = ((progress - Constants.keyframes[2]) / (Constants.keyframes[3] - Constants.keyframes[2])) * (bounds.maxY + CGFloat(10 * (Constants.keyframes.count - index)))
+            } else if progress <= SplashConstants.keyframes[3] {
+                y = ((progress - SplashConstants.keyframes[2]) / (SplashConstants.keyframes[3] - SplashConstants.keyframes[2])) * (bounds.maxY + CGFloat(10 * (SplashConstants.keyframes.count - index)))
             } else {
                 y = bounds.maxY
             }

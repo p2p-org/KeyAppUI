@@ -35,13 +35,10 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
-                BEHStack {
-                    UIView()
-                    SplashView2(height: 15+22)
-                        .bind(lineRef)
-                        .padding(.init(x: 0, y: 10))
-                    UIView()
-                }
+                SplashView2(height: 15+22)
+                    .bind(lineRef)
+                    .padding(.init(x: 0, y: 10))
+                    .centered(.horizontal)
                 
                 TextButton(title: "Show pincode view controller", style: .invertedRed, size: .large)
                     .onPressed { [weak self] _ in
