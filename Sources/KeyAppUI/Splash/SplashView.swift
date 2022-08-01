@@ -192,7 +192,7 @@ public class SplashView2: UIView {
         let animation = CABasicAnimation(keyPath: "progress")
         animation.fromValue = 0
         animation.toValue = 1
-        animation.duration = 3
+        animation.duration = 2
         animation.repeatCount = .greatestFiniteMagnitude
         layer.add(animation, forKey: nil)
     }
@@ -208,6 +208,8 @@ private extension SplashLayer2 {
         static let underlineHeight: CGFloat = 3
         static let textOffset: CGFloat = 55
         static let centerOffset: CGFloat = 22
+        
+        static let keyframes = [0, 0.25, 0.5, 0.75, 1]
     }
 }
 
@@ -240,17 +242,17 @@ fileprivate class SplashLayer2: CALayer {
         let x: CGFloat
         let width: CGFloat
         
-        if progress <= 0.25 {
+        if progress <= Constants.keyframes[1] {
             x = 0
             width = 0
-        } else if progress <= 0.5 {
+        } else if progress <= Constants.keyframes[2] {
             x = 0
-            width = (progress - 0.25) * bounds.width / 0.25
-        } else if progress <= 0.75 {
+            width = (progress - Constants.keyframes[1]) * bounds.width / (Constants.keyframes[2] - Constants.keyframes[1])
+        } else if progress <= Constants.keyframes[3] {
             x = 0
             width = bounds.width
         } else {
-            x = (progress - 0.75) * bounds.width / 0.25
+            x = (progress - Constants.keyframes[3]) * bounds.width / (Constants.keyframes[4] - Constants.keyframes[3])
             width = bounds.width - x
         }
 
@@ -272,13 +274,19 @@ fileprivate class SplashLayer2: CALayer {
         
         var x: CGFloat = 0
         for (index, asset) in assets.enumerated() {
-            var y: CGFloat = asset.2.top
+            let y: CGFloat
             
-            if progress <= 0.25 {
-                y += ((0.25 - progress) / 0.25) * (bounds.maxY + CGFloat(10 * index))
+            if progress <= Constants.keyframes[1] {
+                y = ((Constants.keyframes[1] - progress) / Constants.keyframes[1]) * (bounds.maxY + CGFloat(10 * index))
+            } else if progress <= Constants.keyframes[2] {
+                y = 0
+            } else if progress <= Constants.keyframes[3] {
+                y = ((progress - Constants.keyframes[2]) / (Constants.keyframes[3] - Constants.keyframes[2])) * (bounds.maxY + CGFloat(10 * (Constants.keyframes.count - index)))
+            } else {
+                y = bounds.maxY
             }
             
-            let rect = CGRect(x: x, y: y, width: asset.1.width, height: asset.1.height)
+            let rect = CGRect(x: x, y: y + asset.2.top, width: asset.1.width, height: asset.1.height)
             x += asset.1.width + asset.2.right
             asset.0.draw(in: rect)
         }
