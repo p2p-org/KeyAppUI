@@ -1,33 +1,32 @@
-import UIKit
 import BEPureLayout
+import UIKit
 
 enum SplashConstants {
     static let overlayOffset: CGFloat = 2
     static let underlineHeight: CGFloat = 3
     static let textOffset: CGFloat = 55
     static let centerOffset: CGFloat = 22
-    
+
     static let keyframes = [0, 0.2, 0.4, 0.6, 0.8, 1]
-    
+
     static let assets: [(UIImage, UIEdgeInsets)] = [
         (Asset.MaterialIcon.k.image, UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
         (Asset.MaterialIcon.e.image, UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
         (Asset.MaterialIcon.y.image, UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
         (Asset.MaterialIcon.a.image, UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
         (Asset.MaterialIcon.p1.image, UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
-        (Asset.MaterialIcon.p2.image, .init(only: .top, inset: 7))
+        (Asset.MaterialIcon.p2.image, .init(only: .top, inset: 7)),
     ]
-    
+
     static var size: CGSize {
-        .init(width: assets.reduce(0, {$0 + $1.0.size.width + $1.1.right}), height: 37)
+        .init(width: assets.reduce(0) { $0 + $1.0.size.width + $1.1.right }, height: 37)
     }
 }
 
 public class SplashView: UIView, CAAnimationDelegate {
-    
     var completionHandler: (() -> Void)?
-    
-    public override var intrinsicContentSize: CGSize {
+
+    override public var intrinsicContentSize: CGSize {
         SplashConstants.size
     }
 
@@ -38,23 +37,25 @@ public class SplashView: UIView, CAAnimationDelegate {
     }
 
     fileprivate var progressLayer: SplashLayer {
-        return layer as! SplashLayer
+        layer as! SplashLayer
     }
 
     override public class var layerClass: AnyClass {
-        return SplashLayer.self
+        SplashLayer.self
     }
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        layer.contentsScale = UIScreen.main.scale
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         backgroundColor = .clear
+        layer.contentsScale = UIScreen.main.scale
     }
-    
+
     public func animate() {
         let animation = CABasicAnimation(keyPath: "progress")
         animation.fromValue = 0
@@ -63,8 +64,8 @@ public class SplashView: UIView, CAAnimationDelegate {
         animation.delegate = self
         layer.add(animation, forKey: "progress")
     }
-    
-    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+
+    public func animationDidStop(_: CAAnimation, finished _: Bool) {
         if let completionHandler = completionHandler {
             completionHandler()
         } else {
@@ -74,16 +75,15 @@ public class SplashView: UIView, CAAnimationDelegate {
 }
 
 /*
-* Concepts taken from:
-* https://stackoverflow.com/a/37470079
-*/
+ * Concepts taken from:
+ * https://stackoverflow.com/a/37470079
+ */
 
-fileprivate class SplashLayer: CALayer {
+private class SplashLayer: CALayer {
     @NSManaged var progress: CGFloat
     let startAngle: CGFloat = 1.5 * .pi
     let twoPi: CGFloat = 2 * .pi
     let halfPi: CGFloat = .pi / 2
-
 
     override class func needsDisplay(forKey key: String) -> Bool {
         if key == #keyPath(progress) {
@@ -91,22 +91,22 @@ fileprivate class SplashLayer: CALayer {
         }
         return super.needsDisplay(forKey: key)
     }
-
+    
     override func draw(in ctx: CGContext) {
         super.draw(in: ctx)
 
         UIGraphicsPushContext(ctx)
-        
+
         drawLetters()
         drawLine()
-        
+
         UIGraphicsPopContext()
     }
-    
+
     private func drawLine() {
         let x: CGFloat
         let width: CGFloat
-        
+
         if progress <= SplashConstants.keyframes[1] {
             x = 0
             width = 0
@@ -126,15 +126,15 @@ fileprivate class SplashLayer: CALayer {
 
         Asset.Colors.night.color.set()
         let rect = CGRect(x: x, y: bounds.height - SplashConstants.underlineHeight, width: width, height: SplashConstants.underlineHeight)
-        let path = UIBezierPath(roundedRect: rect, cornerRadius: SplashConstants.underlineHeight/2)
+        let path = UIBezierPath(roundedRect: rect, cornerRadius: SplashConstants.underlineHeight / 2)
         path.fill()
     }
-    
+
     private func drawLetters() {
         var x: CGFloat = 0
         for (index, asset) in SplashConstants.assets.enumerated() {
             let y: CGFloat
-            
+
             if progress <= SplashConstants.keyframes[1] {
                 y = ((SplashConstants.keyframes[1] - progress) / SplashConstants.keyframes[1]) * (bounds.maxY + CGFloat(10 * index))
             } else if progress <= SplashConstants.keyframes[2] {
