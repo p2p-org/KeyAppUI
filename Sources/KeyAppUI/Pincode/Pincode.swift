@@ -15,6 +15,12 @@ struct PincodeStateColor {
 public final class PinCode: BEView {
     // MARK: - Properties
 
+    public var stackViewSpacing: CGFloat = 68 {
+        didSet {
+            stackView.spacing = stackViewSpacing
+        }
+    }
+
     /// Correct pincode for comparision, if not defined, the validation will always returns true
     private let correctPincode: String?
 
@@ -31,12 +37,6 @@ public final class PinCode: BEView {
     }
 
     private var attemptsCount: Int = 0
-
-    var stackViewSpacing: CGFloat = 68 {
-        didSet {
-            stackView.spacing = stackViewSpacing
-        }
-    }
 
     private var isPresentingError = false
 
@@ -114,12 +114,12 @@ public final class PinCode: BEView {
 
     // MARK: - Public methods
 
-    func reset() {
+    public func reset() {
         attemptsCount = 0
         currentPincode = nil
     }
 
-    func setBlock(_ isBlocked: Bool) {
+    public func setBlock(_ isBlocked: Bool) {
         numpadView.isUserInteractionEnabled = !isBlocked
     }
 
