@@ -81,9 +81,6 @@ public class SplashView: UIView, CAAnimationDelegate {
 
 private class SplashLayer: CALayer {
     @NSManaged var progress: CGFloat
-    let startAngle: CGFloat = 1.5 * .pi
-    let twoPi: CGFloat = 2 * .pi
-    let halfPi: CGFloat = .pi / 2
 
     override class func needsDisplay(forKey key: String) -> Bool {
         if key == #keyPath(progress) {
