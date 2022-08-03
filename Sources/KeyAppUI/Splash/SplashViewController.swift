@@ -11,8 +11,13 @@ public final class SplashViewController: BEViewController {
     private let customView = SplashView()
 
     public override func setUp() {
-        self.view.addSubview(customView)
-        customView.autoPinEdgesToSuperviewEdges()
+        let wrapper = customView
+            .centered(.horizontal)
+            .centered(.vertical)
+            .backgroundColor(color: Asset.Colors.lime.color)
+
+        self.view.addSubview(wrapper)
+        wrapper.autoPinEdgesToSuperviewEdges()
     }
 
     public override func viewDidAppear(_ animated: Bool) {
