@@ -20,6 +20,11 @@ public final class SplashViewController: BEViewController {
         wrapper.autoPinEdgesToSuperviewEdges()
     }
 
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.run()
@@ -27,5 +32,10 @@ public final class SplashViewController: BEViewController {
 
     private func run() {
         customView.animate()
+    }
+
+    @objc private func appMovedToBackground() {
+        customView.stopAnimation()
+        completionHandler?()
     }
 }

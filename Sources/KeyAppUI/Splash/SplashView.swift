@@ -44,6 +44,8 @@ public class SplashView: UIView, CAAnimationDelegate {
         SplashLayer.self
     }
 
+    private var isEndless: Bool = true
+
     override public init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
@@ -65,10 +67,16 @@ public class SplashView: UIView, CAAnimationDelegate {
         layer.add(animation, forKey: "progress")
     }
 
+    public func stopAnimation() {
+        layer.removeAnimation(forKey: "progress")
+        progress = 0.5
+        isEndless = false
+    }
+
     public func animationDidStop(_: CAAnimation, finished _: Bool) {
         if let completionHandler = completionHandler {
             completionHandler()
-        } else {
+        } else if isEndless {
             animate()
         }
     }
