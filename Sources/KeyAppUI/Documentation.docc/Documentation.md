@@ -14,3 +14,4 @@ This package contains UI components for KeyApp application.
 - ``SplashViewController``
 - ``Tip``
 - ``Slider``
+- ``SliderButton``

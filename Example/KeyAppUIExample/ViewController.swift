@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet var stackView: UIStackView!
     let splashRef = BERef<SplashView>()
     let sliderRef = BERef<UISlider>()
+    let sliderButton = BERef<SliderButton>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,14 @@ class ViewController: UIViewController {
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
+                SliderButton(
+                    image: Asset.MaterialIcon.appleLogo.image,
+                    title: "Change Apple ID", style: .black
+                ).onChanged { [weak self] value in
+                    guard let self = self else { return }
+                    self.sliderButton.view?.title = "\(value)"
+                }.bind(sliderButton)
+
                 BEHStack(spacing: 10, alignment: .center) {
                     UISlider(width: 100)
                         .setup {slider in
