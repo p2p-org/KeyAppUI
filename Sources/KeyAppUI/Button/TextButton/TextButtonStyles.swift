@@ -20,7 +20,7 @@ public extension TextButton {
         case outlineLime
         case outlineRose
 
-        var backgroundColor: UIColor {
+        public var backgroundColor: UIColor {
             switch self {
             case .primary, .primaryWhite: return Asset.Colors.night.color
             case .second: return Asset.Colors.rain.color
@@ -30,11 +30,11 @@ public extension TextButton {
             }
         }
 
-        var disabledBackgroundColor: UIColor? {
+        public var disabledBackgroundColor: UIColor? {
             Asset.Colors.rain.color
         }
 
-        var foreground: UIColor {
+        public var foreground: UIColor {
             switch self {
             case .primary, .ghostLime, .outlineLime: return Asset.Colors.lime.color
             case .primaryWhite, .ghostWhite, .outlineWhite: return Asset.Colors.snow.color
@@ -43,11 +43,11 @@ public extension TextButton {
             }
         }
 
-        var disabledForegroundColor: UIColor? {
+        public var disabledForegroundColor: UIColor? {
             Asset.Colors.mountain.color
         }
 
-        var borderColor: UIColor? {
+        public var borderColor: UIColor? {
             switch self {
             case .outlineBlack: return Asset.Colors.night.color
             case .outlineWhite: return Asset.Colors.snow.color
@@ -57,20 +57,20 @@ public extension TextButton {
             }
         }
 
-        func font(size: Size) -> UIFont {
+        public func font(size: Size) -> UIFont {
             switch size {
             case .large, .medium: return UIFont.font(of: .text2, weight: .bold)
             case .small: return UIFont.font(of: .text4, weight: .bold)
             }
         }
 
-        var highlight: UIColor {
+        public var highlight: UIColor {
             switch self {
             default: return .gray
             }
         }
 
-        var loadingBackgroundColor: UIColor {
+        public var loadingBackgroundColor: UIColor {
             switch self {
             case .primary, .primaryWhite, .ghostWhite, .ghostLime: return Asset.Colors.snow.color.withAlphaComponent(0.6)
             case .invertedRed: return Asset.Colors.rain.color
@@ -78,7 +78,7 @@ public extension TextButton {
             }
         }
 
-        var loadingForegroundColor: UIColor {
+        public var loadingForegroundColor: UIColor {
             switch self {
             case .primary, .ghostLime, .outlineLime: return Asset.Colors.lime.color
             case .primaryWhite, .ghostWhite, .outlineWhite: return Asset.Colors.snow.color
@@ -93,7 +93,7 @@ public extension TextButton {
         case medium
         case small
 
-        var height: CGFloat {
+        public var height: CGFloat {
             switch self {
             case .small: return 32
             case .medium: return 48
@@ -101,7 +101,7 @@ public extension TextButton {
             }
         }
 
-        var borderRadius: CGFloat {
+        public var borderRadius: CGFloat {
             switch self {
             case .small: return 8
             case .medium: return 12
