@@ -1,7 +1,8 @@
 import UIKit
 
 public class SnackBarViewController: UIViewController {
-    let icon: UIImage
+    let leadingTitle: String?
+    let icon: UIImage?
     let text: String
     let buttonTitle: String?
     let buttonAction: (() -> Void)?
@@ -9,7 +10,8 @@ public class SnackBarViewController: UIViewController {
 
     var autodismiss = true
 
-    public init(icon: UIImage, text: String, buttonTitle: String? = nil, buttonAction: (() -> Void)? = nil) {
+    public init(title: String? = nil, icon: UIImage?, text: String, buttonTitle: String? = nil, buttonAction: (() -> Void)? = nil) {
+        self.leadingTitle = title
         self.icon = icon
         self.text = text
         self.buttonTitle = buttonTitle
@@ -25,11 +27,15 @@ public class SnackBarViewController: UIViewController {
     }
 
     override public func loadView() {
-        view = SnackBarView(
+        let button = buttonTitle != nil ? TextButton(title: buttonTitle ?? "", style: .primary, size: .small) : nil
+        let snackBar = SnackBarView(
+            title: leadingTitle,
             icon: icon,
             text: text,
-            trailing: TextButton(title: buttonTitle ?? "", style: .primary, size: .small)
+            trailing: button
         ).onTap(buttonAction ?? {})
+        snackBar.appearance.numberOnLines
+        view = snackBar
     }
 }
 

@@ -6,8 +6,8 @@ public class SnackBar {
     private var snackBarViewController: SnackBarViewController
 
     @discardableResult
-    public init(icon: UIImage, text: String, buttonTitle: String? = nil, buttonAction: (() -> Void)? = nil) {
-        snackBarViewController = SnackBarViewController(icon: icon, text: text, buttonTitle: buttonTitle, buttonAction: buttonAction)
+    public init(title: String? = nil, icon: UIImage? = nil, text: String, buttonTitle: String? = nil, buttonAction: (() -> Void)? = nil) {
+        snackBarViewController = SnackBarViewController(title: title, icon: icon, text: text, buttonTitle: buttonTitle, buttonAction: buttonAction)
     }
 
     /// Show snackbar on top of view controller.

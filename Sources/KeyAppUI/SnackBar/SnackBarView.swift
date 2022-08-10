@@ -7,17 +7,26 @@ public class SnackBarView: BECompositionView {
     // MARK: -
 
     public var text: String {
-        didSet { titleView.text = text }
+        didSet { textView.text = text }
     }
-    
-    public var icon: UIImage {
-        didSet { iconView.image = icon }
+
+    public var title: String? {
+        didSet {
+            (leadingView.view as? UILabel)?.text = title
+        }
+    }
+
+    public var icon: UIImage? {
+        didSet {
+            (leadingView.view as? UIImageView)?.image = icon
+        }
     }
 
     let container = BERef<UIView>()
     let leadingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
-    let iconView = BERef<UIImageView>()
+    let textView = BERef<UILabel>()
+    let leadingView = BERef<UIView>()
     let trailing: UIView?
 
     var appearance: Appearance = Appearance(
@@ -28,19 +37,20 @@ public class SnackBarView: BECompositionView {
     )
 
     public init(
-        icon: UIImage,
+        title: String? = nil,
+        icon: UIImage?,
         text: String,
         trailing: UIView? = nil
     ) {
+        self.title = title
         self.icon = icon
         self.text = text
         self.trailing = trailing
-        
         super.init()
     }
 
     // MARK: -
-    
+
     override public func build() -> UIView {
         BEContainer {
             BEHStack(spacing: 18, alignment: .center, distribution: .fill) {
@@ -49,34 +59,48 @@ public class SnackBarView: BECompositionView {
                     .frame(width: 0)
                     .bind(leadingSpacing)
 
-                UIImageView(
-                    width: 24,
-                    height: 24,
-                    image: icon,
-                    contentMode: .scaleAspectFit,
-                    tintColor: appearance.iconTintColor)
-                    .frame(width: 24, height: 24)
-                    .bind(iconView)
+                if icon != nil {
+                    UIImageView(
+                        width: 24,
+                        height: 24,
+                        image: icon,
+                        contentMode: .scaleAspectFit,
+                        tintColor: appearance.iconTintColor)
+                        .frame(width: 24, height: 24)
+                        .bind(leadingView)
+                }
+
+                if title != nil {
+                    UILabel(
+                        text: title,
+                        font: appearance.textFont,
+                        textColor: Asset.Colors.snow.color,
+                        numberOfLines: appearance.numberOnLines
+                    ).bind(leadingView)
+                    .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
+                    .setup { view in
+                        view.setContentHuggingPriority(.required, for: .horizontal)
+                        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                    }
+                }
 
                 UILabel(
                     text: text,
                     font: appearance.textFont,
                     textColor: Asset.Colors.snow.color,
                     numberOfLines: appearance.numberOnLines
-                ).bind(titleView)
+                ).bind(textView)
                 .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
                 .setup { view in
-                    view.setContentHuggingPriority(.required, for: .horizontal)
-                    view.setContentCompressionResistancePriority(.required, for: .horizontal)
+                    view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+                    view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 }
-                
-                BEContainer()
-                    .frame(width: 0)
-                    .bind(leadingSpacing)
-                
+
                 UIView.spacer
 
-                if let trailing = trailing { trailing }
+                if let trailing = trailing {
+                    trailing
+                }
             }
         }.backgroundColor(color: Asset.Colors.night.color)
         .box(cornerRadius: appearance.cornerRadius)
