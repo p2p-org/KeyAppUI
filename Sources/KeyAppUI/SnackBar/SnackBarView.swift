@@ -22,7 +22,6 @@ public class SnackBarView: BECompositionView {
         }
     }
 
-    let container = BERef<UIView>()
     let leadingSpacing = BERef<UIView>()
     let titleView = BERef<UILabel>()
     let textView = BERef<UILabel>()
@@ -79,8 +78,10 @@ public class SnackBarView: BECompositionView {
                     ).bind(leadingView)
                     .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
                     .setup { view in
-                        view.setContentHuggingPriority(.required, for: .horizontal)
-                        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                        view.layoutIfNeeded()
+                        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+                        view.frame(width: view.bounds.width)
                     }
                 }
 
@@ -92,10 +93,10 @@ public class SnackBarView: BECompositionView {
                 ).bind(textView)
                 .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
                 .setup { view in
-                    view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-                    view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                    view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                    view.setContentCompressionResistancePriority(.required, for: .horizontal)
                 }
-
+                
                 UIView.spacer
 
                 if let trailing = trailing {
@@ -105,14 +106,6 @@ public class SnackBarView: BECompositionView {
         }.backgroundColor(color: Asset.Colors.night.color)
         .box(cornerRadius: appearance.cornerRadius)
         .border(width: 1, color: appearance.borderColor)
-        .bind(container)
-        .setup { cont in
-            guard let content = cont.viewWithTag(1) else { return }
-            let constraint: NSLayoutConstraint = cont.autoMatch(.width, to: .width, of: content, withMultiplier: 1.0, relation: .greaterThanOrEqual)
-            let height = cont.heightAnchor.constraint(greaterThanOrEqualToConstant: 56)
-            height.isActive = true
-            constraint.priority = .defaultLow
-        }
     }
 
     @available(*, unavailable)
