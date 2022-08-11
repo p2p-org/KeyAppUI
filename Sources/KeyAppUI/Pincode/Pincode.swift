@@ -128,6 +128,7 @@ public final class PinCode: BEView {
     private func add(digit: Int) {
         guard digit >= 0, digit < 10 else { return }
 
+        vibrate()
         isPresentingError = false
 
         // calculate value
@@ -148,6 +149,8 @@ public final class PinCode: BEView {
             currentPincode = nil
             return
         }
+
+        vibrate()
         self.currentPincode = String(currentPincode.dropLast())
     }
 
@@ -205,6 +208,7 @@ public final class PinCode: BEView {
 
     private func pincodeSuccess() {
         dotsView.pincodeSuccess()
+        vibrate()
         onSuccess?(currentPincode)
         attemptsCount = 0
         if correctPincode != nil {
@@ -214,6 +218,7 @@ public final class PinCode: BEView {
 
     private func pincodeFailed(exceededMaxAttempts: Bool) {
         dotsView.pincodeFailed()
+        vibrate()
         // errorLabel.isHidden = false
         // if let maxAttemptsCount = maxAttemptsCount {
         //     errorLabel.text = L10n.incorrectPINTryAgainAttemptLeft(maxAttemptsCount - attemptsCount)
@@ -236,5 +241,9 @@ public final class PinCode: BEView {
             guard let self = self, self.isPresentingError else { return }
             self.currentPincode = nil
         }
+    }
+
+    private func vibrate() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
     }
 }
