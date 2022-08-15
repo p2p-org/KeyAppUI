@@ -107,7 +107,7 @@ class ViewController: UIViewController {
 
     private func addSplash() {
         let child = SplashViewController()
-        child.completionHandler = { [weak self, weak child] in
+        child.stop { [weak self, weak child] in
             guard let self = self, let child = child else { return }
             self.removeSplash(child)
         }
