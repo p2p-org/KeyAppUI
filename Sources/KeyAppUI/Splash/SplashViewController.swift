@@ -2,11 +2,6 @@ import UIKit
 import BEPureLayout
 
 public final class SplashViewController: BEViewController {
-    
-    public var completionHandler: (() -> Void)? {
-        get { customView.completionHandler }
-        set { customView.completionHandler = newValue }
-    }
 
     private let customView = SplashView()
 
@@ -30,12 +25,19 @@ public final class SplashViewController: BEViewController {
         self.run()
     }
 
+    public func stop(completionHandler: @escaping (() -> Void)) {
+        customView.completionHandler = completionHandler
+        if customView.isStopped {
+            completionHandler()
+        }
+    }
+
     private func run() {
         customView.animate()
     }
 
     @objc private func appMovedToBackground() {
         customView.stopAnimation()
-        completionHandler?()
+        customView.completionHandler?()
     }
 }
