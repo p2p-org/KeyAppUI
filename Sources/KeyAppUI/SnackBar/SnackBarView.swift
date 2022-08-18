@@ -81,7 +81,7 @@ public class SnackBarView: BECompositionView {
                         view.layoutIfNeeded()
                         view.setContentHuggingPriority(.defaultLow, for: .horizontal)
                         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-                        view.frame(width: view.bounds.width)
+//                        view.frame(width: view.bounds.width)
                     }
                 }
 
