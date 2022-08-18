@@ -29,6 +29,7 @@ public class SnackBarView: BECompositionView {
     let trailing: UIView?
 
     var appearance: Appearance = Appearance(
+        titleFontSize: 24.0,
         textFontSize: 15.0,
         textFontWeight: .regular,
         textFont: .systemFont(ofSize: 15.0),
@@ -52,7 +53,7 @@ public class SnackBarView: BECompositionView {
 
     override public func build() -> UIView {
         BEContainer {
-            BEHStack(spacing: 18, alignment: .center, distribution: .fill) {
+            BEHStack(spacing: 14, alignment: .center, distribution: .fill) {
                 // Leading
                 BEContainer()
                     .frame(width: 0)
@@ -72,17 +73,16 @@ public class SnackBarView: BECompositionView {
                 if title != nil {
                     UILabel(
                         text: title,
-                        font: appearance.textFont,
+                        textSize: appearance.titleFontSize,
                         textColor: Asset.Colors.snow.color,
                         numberOfLines: appearance.numberOnLines
                     ).bind(leadingView)
-                    .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
-                    .setup { view in
-                        view.layoutIfNeeded()
-                        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-                        view.setContentCompressionResistancePriority(.required, for: .horizontal)
-                        view.frame(width: view.bounds.width)
-                    }
+                        .margin(.init(only: .left, inset: 6))
+                        .setup { view in
+                            view.layoutIfNeeded()
+                            view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+                            view.setContentCompressionResistancePriority(.required, for: .horizontal)
+                        }
                 }
 
                 UILabel(
@@ -91,7 +91,7 @@ public class SnackBarView: BECompositionView {
                     textColor: Asset.Colors.snow.color,
                     numberOfLines: appearance.numberOnLines
                 ).bind(textView)
-                .margin(.init(top: 18, left: 0, bottom: 18, right: 0))
+                .margin(.init(top: 20, left: 0, bottom: 20, right: 0))
                 .setup { view in
                     view.setContentHuggingPriority(.defaultLow, for: .horizontal)
                     view.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -117,6 +117,7 @@ public class SnackBarView: BECompositionView {
 extension SnackBarView {
     /// Structure describing appearance
     struct Appearance {
+        var titleFontSize: CGFloat
         var textFontSize: CGFloat
         var textFontWeight: UIFont.Weight
         var textFont: UIFont

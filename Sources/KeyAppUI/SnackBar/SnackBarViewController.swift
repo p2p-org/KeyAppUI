@@ -34,7 +34,6 @@ public class SnackBarViewController: UIViewController {
             text: text,
             trailing: button
         ).onTap(buttonAction ?? {})
-        snackBar.appearance.numberOnLines
         snackBar.setNeedsLayout()
         snackBar.layoutIfNeeded()
         view = snackBar
