@@ -4,16 +4,17 @@ import PureLayout
 import UIKit
 
 public class SnackBarView: BECompositionView {
-    // MARK: -
 
-    public var text: String {
-        didSet { textView.text = text }
-    }
+    // MARK: -
 
     public var title: String? {
         didSet {
             (leadingView.view as? UILabel)?.text = title
         }
+    }
+
+    public var text: String {
+        didSet { textView.text = text }
     }
 
     public var icon: UIImage? {
