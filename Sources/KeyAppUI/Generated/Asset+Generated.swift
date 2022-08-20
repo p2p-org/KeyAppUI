@@ -129,6 +129,7 @@ public enum Asset {
     public static let moreHoriz = ImageAsset(name: "more_horiz")
     public static let moreVert = ImageAsset(name: "more_vert")
     public static let moveToInbox = ImageAsset(name: "move_to_inbox")
+    public static let newReleasesOutlined = ImageAsset(name: "new_releases_outlined")
     public static let nextWeek = ImageAsset(name: "next_week")
     public static let outlinedFlag = ImageAsset(name: "outlined_flag")
     public static let paste = ImageAsset(name: "paste")
@@ -228,6 +229,7 @@ public enum Asset {
       moreHoriz,
       moreVert,
       moveToInbox,
+      newReleasesOutlined,
       nextWeek,
       outlinedFlag,
       paste,
