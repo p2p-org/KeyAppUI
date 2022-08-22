@@ -15,9 +15,11 @@ public class SnackBar {
     /// - Parameters:
     ///   - presentingViewController: a target view controller
     ///   - autoDismiss: user can dismiss the snackbar
-    public func show(in presentingViewController: UIViewController, autoDismiss: Bool = true) {
+    ///   - dismissCompletion: completion called after dismiss
+    public func show(in presentingViewController: UIViewController, autoDismiss: Bool = true, dismissCompletion: (() -> Void)? = nil) {
         snackBarViewController.presenter = presentingViewController
         snackBarViewController.autodismiss = autoDismiss
+        snackBarViewController.dismissCompletion = dismissCompletion
         SnackBarManager.shared.present(snackBarViewController)
     }
 

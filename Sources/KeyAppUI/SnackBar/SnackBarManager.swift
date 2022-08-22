@@ -41,6 +41,7 @@ class SnackBarManager: SnackBarManagerDelegate {
         queue.remove(element: vc)
         vc.dismiss(animated: true) { [weak self] in
             self?.isPresenting = false
+            vc.dismissCompletion?()
             self?.present()
         }
     }
