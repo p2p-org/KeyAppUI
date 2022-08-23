@@ -31,7 +31,10 @@ public extension TextButton {
         }
 
         public var disabledBackgroundColor: UIColor? {
-            Asset.Colors.rain.color
+            switch self {
+            case .ghost, .ghostWhite, .ghostLime, .outlineBlack, .outlineWhite, .outlineLime, .outlineRose: return .clear
+            default: return Asset.Colors.rain.color
+            }
         }
 
         public var foreground: UIColor {
