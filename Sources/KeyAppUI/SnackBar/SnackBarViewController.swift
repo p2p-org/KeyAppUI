@@ -9,6 +9,7 @@ public class SnackBarViewController: UIViewController {
     weak var presenter: UIViewController?
 
     var autodismiss = true
+    var dismissCompletion: (() -> Void)?
 
     public init(title: String? = nil, icon: UIImage?, text: String, buttonTitle: String? = nil, buttonAction: (() -> Void)? = nil) {
         self.leadingTitle = title
