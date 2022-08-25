@@ -32,7 +32,7 @@ public class SnackBarManager: SnackBarManagerDelegate {
         
         if isPresenting && behavior == .dismissOldWhenAddingNew {
             // dismiss old snackbar silently
-            dismiss(vc: snackBarViewController, delayNext: 300)
+            dismiss(vc: snackBarViewController)
             return
         }
         
@@ -47,18 +47,12 @@ public class SnackBarManager: SnackBarManagerDelegate {
         }
     }
     
-    func dismiss(vc: SnackBarViewController, delayNext: Int? = nil) {
+    func dismiss(vc: SnackBarViewController) {
         queue.remove(element: vc)
         vc.dismiss(animated: true) { [weak self] in
             self?.isPresenting = false
             vc.dismissCompletion?()
-            if let delayNext = delayNext {
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(delayNext)) { [weak self] in
-                    self?.present()
-                }
-            } else {
-                self?.present()
-            }
+            self?.present()
         }
     }
     
