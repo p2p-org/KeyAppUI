@@ -24,11 +24,13 @@ public enum Asset {
   public enum Colors {
     public static let cloud = ColorAsset(name: "Cloud")
     public static let lime = ColorAsset(name: "Lime")
+    public static let listSeparator = ColorAsset(name: "ListSeparator")
     public static let mint = ColorAsset(name: "Mint")
     public static let mountain = ColorAsset(name: "Mountain")
     public static let night = ColorAsset(name: "Night")
     public static let rain = ColorAsset(name: "Rain")
     public static let rose = ColorAsset(name: "Rose")
+    public static let searchBarBgColor = ColorAsset(name: "SearchBarBgColor")
     public static let sky = ColorAsset(name: "Sky")
     public static let smoke = ColorAsset(name: "Smoke")
     public static let snow = ColorAsset(name: "Snow")
@@ -37,11 +39,13 @@ public enum Asset {
     public static let allColors: [ColorAsset] = [
       cloud,
       lime,
+      listSeparator,
       mint,
       mountain,
       night,
       rain,
       rose,
+      searchBarBgColor,
       sky,
       smoke,
       snow,
@@ -52,16 +56,19 @@ public enum Asset {
     // swiftlint:enable trailing_comma
   }
   public enum Icons {
+    public static let remove = ImageAsset(name: "remove")
     public static let send = ImageAsset(name: "send")
     // swiftlint:disable trailing_comma
     public static let allColors: [ColorAsset] = [
     ]
     public static let allImages: [ImageAsset] = [
+      remove,
       send,
     ]
     // swiftlint:enable trailing_comma
   }
   public enum MaterialIcon {
+    public static let accountBalanceWalletOutlined = ImageAsset(name: "account_balance_wallet_outlined")
     public static let add = ImageAsset(name: "add")
     public static let addBox = ImageAsset(name: "add_box")
     public static let addCircle = ImageAsset(name: "add_circle")
@@ -86,6 +93,7 @@ public enum Asset {
     public static let block = ImageAsset(name: "block")
     public static let cancel = ImageAsset(name: "cancel")
     public static let check = ImageAsset(name: "check")
+    public static let checkmark = ImageAsset(name: "checkmark")
     public static let chevronLeft = ImageAsset(name: "chevron_left")
     public static let chevronRight = ImageAsset(name: "chevron_right")
     public static let clear = ImageAsset(name: "clear")
@@ -106,6 +114,7 @@ public enum Asset {
     public static let fullscreen = ImageAsset(name: "fullscreen")
     public static let fullscreenExit = ImageAsset(name: "fullscreen_exit")
     public static let gesture = ImageAsset(name: "gesture")
+    public static let helpOutline = ImageAsset(name: "help_outline")
     public static let howToReg = ImageAsset(name: "how_to_reg")
     public static let howToVote = ImageAsset(name: "how_to_vote")
     public static let inbox = ImageAsset(name: "inbox")
@@ -113,12 +122,14 @@ public enum Asset {
     public static let link = ImageAsset(name: "link")
     public static let linkOff = ImageAsset(name: "link_off")
     public static let lowPriority = ImageAsset(name: "low_priority")
+    public static let magnifyingGlass = ImageAsset(name: "magnifyingGlass")
     public static let mail = ImageAsset(name: "mail")
     public static let markunread = ImageAsset(name: "markunread")
     public static let menu = ImageAsset(name: "menu")
     public static let moreHoriz = ImageAsset(name: "more_horiz")
     public static let moreVert = ImageAsset(name: "more_vert")
     public static let moveToInbox = ImageAsset(name: "move_to_inbox")
+    public static let newReleasesOutlined = ImageAsset(name: "new_releases_outlined")
     public static let nextWeek = ImageAsset(name: "next_week")
     public static let outlinedFlag = ImageAsset(name: "outlined_flag")
     public static let paste = ImageAsset(name: "paste")
@@ -157,6 +168,7 @@ public enum Asset {
     public static let allColors: [ColorAsset] = [
     ]
     public static let allImages: [ImageAsset] = [
+      accountBalanceWalletOutlined,
       add,
       addBox,
       addCircle,
@@ -181,6 +193,7 @@ public enum Asset {
       block,
       cancel,
       check,
+      checkmark,
       chevronLeft,
       chevronRight,
       clear,
@@ -201,6 +214,7 @@ public enum Asset {
       fullscreen,
       fullscreenExit,
       gesture,
+      helpOutline,
       howToReg,
       howToVote,
       inbox,
@@ -208,12 +222,14 @@ public enum Asset {
       link,
       linkOff,
       lowPriority,
+      magnifyingGlass,
       mail,
       markunread,
       menu,
       moreHoriz,
       moreVert,
       moveToInbox,
+      newReleasesOutlined,
       nextWeek,
       outlinedFlag,
       paste,

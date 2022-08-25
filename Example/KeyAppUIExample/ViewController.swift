@@ -12,6 +12,9 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var stackView: UIStackView!
+    let splashRef = BERef<SplashView>()
+    let sliderRef = BERef<UISlider>()
+    let sliderButton = BERef<SliderButton>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +26,45 @@ class ViewController: UIViewController {
         view.backgroundColor = UIColor(red: 0.91, green: 0.92, blue: 0.95, alpha: 1)
 
         addSplash()
+        sliderRef.view?.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
+        let progress = CGFloat.random(in: 0...1)
+        splashRef.progress = progress
+        sliderRef.view?.value = Float(progress)
     }
 
     func build() -> UIView {
         BEScrollView(contentInsets: .init(all: 16)) {
             BEVStack {
+                SliderButton(
+                    image: Asset.MaterialIcon.appleLogo.image,
+                    title: "Change Apple ID", style: .black
+                ).onChanged { [weak self] value in
+                    guard let self = self else { return }
+                    self.sliderButton.view?.title = "\(value)"
+                }.bind(sliderButton)
+
+                BEHStack(spacing: 10, alignment: .center) {
+                    UISlider(width: 100)
+                        .setup {slider in
+                            slider.minimumValue = 0
+                            slider.maximumValue = 1.0
+                        }
+                        .bind(sliderRef)
+                    
+                    SplashView()
+                        .bind(splashRef)
+                        .padding(.init(x: 0, y: 10))
+                        .centered(.horizontal)
+                    
+                    
+                }
                 
+                
+                TextButton(title: "Show pincode view controller", style: .invertedRed, size: .large)
+                    .onPressed { [weak self] _ in
+                        self?.performSegue(withIdentifier: "showPincode", sender: nil)
+                    }
+    
                 TextFieldSection()
                 
                 SkeletonSection()
@@ -71,7 +107,7 @@ class ViewController: UIViewController {
 
     private func addSplash() {
         let child = SplashViewController()
-        child.completionHandler = { [weak self, weak child] in
+        child.stop { [weak self, weak child] in
             guard let self = self, let child = child else { return }
             self.removeSplash(child)
         }
@@ -87,5 +123,10 @@ class ViewController: UIViewController {
         vc.willMove(toParent: nil)
         vc.view.removeFromSuperview()
         vc.removeFromParent()
+    }
+    
+    @objc func sliderValueDidChange(_ sender:UISlider!)
+    {
+        splashRef.progress = CGFloat(sender.value)
     }
 }

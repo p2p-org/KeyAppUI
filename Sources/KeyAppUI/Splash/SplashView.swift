@@ -1,160 +1,160 @@
-import UIKit
 import BEPureLayout
+import UIKit
 
-private extension SplashView {
-    enum Constants {
-        static let overlayOffset: CGFloat = 2
-        static let underlineHeight: CGFloat = 1.5
-        static let textOffset: CGFloat = 55
-        static let centerOffset: CGFloat = 22
-    }
+enum SplashConstants {
+    static let overlayOffset: CGFloat = 2
+    static let underlineHeight: CGFloat = 3
+    static let textOffset: CGFloat = 55
+    static let centerOffset: CGFloat = 22
 
-    enum TextPosition {
-        case up, down
+    static let keyframes = [0, 0.2, 0.4, 0.6, 0.8, 1]
 
-        func toggle() -> TextPosition {
-            self == .up ? .down : .up
-        }
+    static let assets: [(UIImage, UIEdgeInsets)] = [
+        (Asset.MaterialIcon.k.image, UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero)),
+        (Asset.MaterialIcon.e.image, UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6)),
+        (Asset.MaterialIcon.y.image, UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7)),
+        (Asset.MaterialIcon.a.image, UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7)),
+        (Asset.MaterialIcon.p1.image, UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2)),
+        (Asset.MaterialIcon.p2.image, .init(only: .top, inset: 7)),
+    ]
+
+    static var size: CGSize {
+        .init(width: assets.reduce(0) { $0 + $1.0.size.width + $1.1.right }, height: 37)
     }
 }
 
-final class SplashView: BECompositionView {
-
+public class SplashView: UIView, CAAnimationDelegate {
     var completionHandler: (() -> Void)?
 
-    private var hStack = BERef<BEHStack>()
-    private let lineLayer = CAShapeLayer()
+    override public var intrinsicContentSize: CGSize {
+        SplashConstants.size
+    }
 
-    override func build() -> UIView {
-        BEHStack(spacing: .zero) {
-            makeLetter(asset: Asset.MaterialIcon.k)
-                .frame(width: 12.9, height: 21.6)
-                .padding(UIEdgeInsets(top: .zero, left: .zero, bottom: 7, right: .zero))
-            makeLetter(asset: Asset.MaterialIcon.e)
-                .frame(width: 14.2, height: 14.6)
-                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 0.6))
-            makeLetter(asset: Asset.MaterialIcon.y)
-                .frame(width: 14.4, height: 21.6)
-                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 5.7))
-            makeLetter(asset: Asset.MaterialIcon.a)
-                .frame(width: 14.8, height: 14.6)
-                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: 7, right: 3.7))
-            makeLetter(asset: Asset.MaterialIcon.p1)
-                .frame(width: 14.7, height: 21.6)
-                .padding(UIEdgeInsets(top: 7, left: .zero, bottom: .zero, right: 2))
-            makeLetter(asset: Asset.MaterialIcon.p2)
-                .frame(width: 14.7, height: 21.6)
-                .padding(.init(only: .top, inset: 7))
+    public dynamic var progress: CGFloat = 0 {
+        didSet {
+            progressLayer.progress = progress
         }
-            .bind(hStack)
-            .padding(.init(only: .top, inset: Constants.centerOffset))
-            .centered(.horizontal)
-            .centered(.vertical)
-            .backgroundColor(color: Asset.Colors.lime.color)
     }
 
-    override func layout() {
-        let size = hStack.view!.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        let view = UIView(width: size.width + Constants.overlayOffset, height: size.height + Constants.overlayOffset, backgroundColor: Asset.Colors.lime.color)
-            .padding(.init(only: .top, inset: Constants.centerOffset))
-            .centered(.horizontal)
-            .centered(.vertical)
-        addSubview(view)
-
-        lineLayer.strokeColor = Asset.Colors.night.color.cgColor
-        lineLayer.lineCap = .round
-        lineLayer.lineWidth = Constants.underlineHeight
-        layer.addSublayer(lineLayer)
+    fileprivate var progressLayer: SplashLayer {
+        layer as! SplashLayer
     }
 
-    func animate() {
-        animateText(position: .up)
+    override public class var layerClass: AnyClass {
+        SplashLayer.self
+    }
+
+    private(set) var isStopped: Bool = false
+
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .clear
+        layer.contentsScale = UIScreen.main.scale
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        backgroundColor = .clear
+        layer.contentsScale = UIScreen.main.scale
+    }
+
+    public func animate() {
+        let animation = CABasicAnimation(keyPath: "progress")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = 2
+        animation.delegate = self
+        layer.add(animation, forKey: "progress")
+    }
+
+    public func stopAnimation() {
+        layer.removeAnimation(forKey: "progress")
+        progress = 0.5
+        isStopped = true
+    }
+
+    public func animationDidStop(_: CAAnimation, finished _: Bool) {
+        if let completionHandler = completionHandler {
+            completionHandler()
+        } else if !isStopped {
+            animate()
+        }
     }
 }
 
-private extension SplashView {
+/*
+ * Concepts taken from:
+ * https://stackoverflow.com/a/37470079
+ */
 
-    func makeLetter(asset: ImageAsset) -> UIImageView {
-        let view = UIImageView(image: asset.image)
-        view.contentMode = .scaleAspectFill
-        return view
-    }
+private class SplashLayer: CALayer {
+    @NSManaged var progress: CGFloat
 
-    private func animateText(delay: Double = .zero, position: TextPosition) {
-        var delay = delay
-
-        let letterViews = hStack.view!.arrangedSubviews
-        for i in 0..<letterViews.count {
-            let label = letterViews[i]
-
-            delay += 0.05
-            UIView.animate(
-                withDuration: 0.4,
-                delay: delay,
-                usingSpringWithDamping: 1,
-                initialSpringVelocity: 1,
-                options: [.curveEaseOut]) {
-                    let value = Constants.textOffset / 2 + Constants.overlayOffset + Constants.underlineHeight
-
-                    if position == .up {
-                        label.center.y -= value
-                    }
-                    else {
-                        label.center.y += value
-                    }
-                
-                } completion: { finished in
-                    guard finished && i == letterViews.count - 1 else { return }
-                    self.animateLine(textPosition: position)
-                }
+    override class func needsDisplay(forKey key: String) -> Bool {
+        if key == #keyPath(progress) {
+            return true
         }
+        return super.needsDisplay(forKey: key)
+    }
+    
+    override func draw(in ctx: CGContext) {
+        super.draw(in: ctx)
+
+        UIGraphicsPushContext(ctx)
+
+        drawLetters()
+        drawLine()
+
+        UIGraphicsPopContext()
     }
 
-    private func animateLine(textPosition: TextPosition) {
-        let endPath = endLinePath(for: textPosition)
-        CATransaction.begin()
-        let animation = CABasicAnimation(keyPath: "path")
-        animation.fromValue = startLinePath(for: textPosition)
-        animation.toValue = endPath
-        animation.duration = 0.3
-        CATransaction.setCompletionBlock { [weak self] in
-            self?.lineLayer.path = endPath
-            if textPosition == .down {
-                self?.lineLayer.path = nil // remove dot after completion
-                self?.completionHandler?()
-            }
-            self?.animateText(delay: 0.1, position: textPosition.toggle())
-        }
-        lineLayer.add(animation, forKey: "path")
-        CATransaction.commit()
-    }
-
-    private func startLinePath(for position: TextPosition) -> CGPath {
-        let frame = getFrameForLine()
-        return linePath(for: CGRect(x: frame.minX, y: frame.minY, width: position == .up ? .zero: frame.width, height: Constants.underlineHeight))
-    }
-
-    private func endLinePath(for position: TextPosition) -> CGPath {
-        let frame = getFrameForLine()
+    private func drawLine() {
         let x: CGFloat
         let width: CGFloat
-        if position == .up {
-            x = frame.minX
-            width = frame.width
+
+        if progress <= SplashConstants.keyframes[1] {
+            x = 0
+            width = 0
+        } else if progress <= SplashConstants.keyframes[2] {
+            x = 0
+            width = (progress - SplashConstants.keyframes[1]) * bounds.width / (SplashConstants.keyframes[2] - SplashConstants.keyframes[1])
+        } else if progress <= SplashConstants.keyframes[3] {
+            x = 0
+            width = bounds.width
+        } else if progress <= SplashConstants.keyframes[4] {
+            x = 0
+            width = bounds.width
+        } else {
+            x = (progress - SplashConstants.keyframes[4]) * bounds.width / (SplashConstants.keyframes[5] - SplashConstants.keyframes[4])
+            width = bounds.width - x
         }
-        else {
-            x = frame.maxX
-            width = .zero
-        }
-        return linePath(for: CGRect(x: x, y: frame.minY, width: width, height: Constants.underlineHeight))
+
+        Asset.Colors.night.color.set()
+        let rect = CGRect(x: x, y: bounds.height - SplashConstants.underlineHeight, width: width, height: SplashConstants.underlineHeight)
+        let path = UIBezierPath(roundedRect: rect, cornerRadius: SplashConstants.underlineHeight / 2)
+        path.fill()
     }
 
-    private func linePath(for rect: CGRect) -> CGPath {
-        return UIBezierPath(roundedRect: rect, cornerRadius: 2).cgPath
-    }
+    private func drawLetters() {
+        var x: CGFloat = 0
+        for (index, asset) in SplashConstants.assets.enumerated() {
+            let y: CGFloat
 
-    private func getFrameForLine() -> CGRect {
-        let frame = hStack.view!.superview!.convert(hStack.frame, to: self)
-        return .init(x: frame.minX, y: frame.minY+Constants.overlayOffset, width: frame.width, height: frame.height)
+            if progress <= SplashConstants.keyframes[1] {
+                y = ((SplashConstants.keyframes[1] - progress) / SplashConstants.keyframes[1]) * (bounds.maxY + CGFloat(10 * index))
+            } else if progress <= SplashConstants.keyframes[2] {
+                y = 0
+            } else if progress <= SplashConstants.keyframes[3] {
+                y = 0
+            } else if progress <= SplashConstants.keyframes[4] {
+                y = ((progress - SplashConstants.keyframes[3]) / (SplashConstants.keyframes[4] - SplashConstants.keyframes[3])) * (bounds.maxY + CGFloat(10 * (SplashConstants.keyframes.count - index)))
+            } else {
+                y = bounds.maxY
+            }
+            
+            let rect = CGRect(x: x, y: y + asset.1.top, width: asset.0.size.width, height: asset.0.size.height)
+            x += asset.0.size.width + asset.1.right
+            asset.0.draw(in: rect)
+        }
     }
 }

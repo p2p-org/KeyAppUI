@@ -2,17 +2,22 @@ import UIKit
 import BEPureLayout
 
 public final class SplashViewController: BEViewController {
-    
-    public var completionHandler: (() -> Void)? {
-        get { customView.completionHandler }
-        set { customView.completionHandler = newValue }
-    }
 
     private let customView = SplashView()
 
     public override func setUp() {
-        self.view.addSubview(customView)
-        customView.autoPinEdgesToSuperviewEdges()
+        let wrapper = customView
+            .centered(.horizontal)
+            .centered(.vertical)
+            .backgroundColor(color: Asset.Colors.lime.color)
+
+        self.view.addSubview(wrapper)
+        wrapper.autoPinEdgesToSuperviewEdges()
+    }
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     public override func viewDidAppear(_ animated: Bool) {
@@ -20,7 +25,19 @@ public final class SplashViewController: BEViewController {
         self.run()
     }
 
+    public func stop(completionHandler: @escaping (() -> Void)) {
+        customView.completionHandler = completionHandler
+        if customView.isStopped {
+            completionHandler()
+        }
+    }
+
     private func run() {
         customView.animate()
+    }
+
+    @objc private func appMovedToBackground() {
+        customView.stopAnimation()
+        customView.completionHandler?()
     }
 }

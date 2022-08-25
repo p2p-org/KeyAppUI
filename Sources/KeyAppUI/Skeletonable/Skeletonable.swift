@@ -66,8 +66,8 @@ extension IconButton: CustomSkeletonable {
     }
 }
 
-extension BESpacer: CustomSkeletonable {
-    public func makeCustomSkeletonable() {
-        isSkeletonable = false
-    }
-}
+//extension BESpacer: CustomSkeletonable {
+//    public func makeCustomSkeletonable() {
+//        isSkeletonable = false
+//    }
+//}

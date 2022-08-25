@@ -18,7 +18,7 @@ public class SynchronizedArray<T> {
     
     public func removeFirst() -> T? {
         var el: T?
-        accessQueue.async(qos: .default, flags: .barrier) {
+        accessQueue.sync {
             let index = 0
             guard self.array.count > index else { return }
             el = self.array[index]

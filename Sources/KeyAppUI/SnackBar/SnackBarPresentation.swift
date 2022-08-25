@@ -9,7 +9,7 @@ public class SnackBarPresentation: UIPresentationController {
         guard
             let containerView = containerView,
             let presentedView = presentedView else { return .zero }
-        let inset: CGFloat = 8
+        let inset: CGFloat = 4
 
         // Make sure to account for the safe area insets
         let safeAreaFrame = containerView.bounds
@@ -26,7 +26,7 @@ public class SnackBarPresentation: UIPresentationController {
 
         var frame = safeAreaFrame
         frame.origin.x += inset
-        frame.origin.y += inset
+        frame.origin.y += -5//inset
         frame.size.width = targetWidth
         frame.size.height = targetHeight
         return frame

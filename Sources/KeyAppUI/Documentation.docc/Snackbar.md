@@ -21,7 +21,7 @@ SnackBarView(
 )
 ```
 
-To show component on top of view controller, use ``show(in:autoDismiss:)`` method of instance.
+To show component on top of view controller, use ``show(in:autoDismiss:dismissCompletion:)`` method of instance.
 ```swift
 SnackBar(
     icon: .add, 
@@ -30,6 +30,7 @@ SnackBar(
     buttonAction: { SnackBar.hide() }
 ).show(
     in: viewController,
-    autoDismiss: true
+    autoDismiss: true,
+    dismissCompletion: { print("I am closed") }
 )
 ```

@@ -4,9 +4,9 @@ protocol SnackBarManagerDelegate {
     func snackBarDidDismiss()
 }
 
-class SnackBarManager: SnackBarManagerDelegate {
+public class SnackBarManager: SnackBarManagerDelegate {
     
-    static let shared = SnackBarManager()
+    static public let shared = SnackBarManager()
     
     private var queue = SynchronizedArray<SnackBarViewController>()
     
@@ -41,6 +41,7 @@ class SnackBarManager: SnackBarManagerDelegate {
         queue.remove(element: vc)
         vc.dismiss(animated: true) { [weak self] in
             self?.isPresenting = false
+            vc.dismissCompletion?()
             self?.present()
         }
     }
@@ -50,4 +51,11 @@ class SnackBarManager: SnackBarManagerDelegate {
         dismiss(vc: first)
     }
     
+    public func dismissAll() {
+        while let vc = queue.removeFirst() {
+            vc.dismiss(animated: false)
+            vc.dismissCompletion?()
+        }
+        self.isPresenting = false
+    }
 }
