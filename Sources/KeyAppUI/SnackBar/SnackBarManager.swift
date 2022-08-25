@@ -8,6 +8,8 @@ public class SnackBarManager: SnackBarManagerDelegate {
     
     static public let shared = SnackBarManager()
     
+    public var behavior: SnackBarBehavior = .dismissOldWhenAddingNew
+    
     private var queue = SynchronizedArray<SnackBarViewController>()
     
     private var isPresenting = false
@@ -26,7 +28,15 @@ public class SnackBarManager: SnackBarManagerDelegate {
     }
     
     func present() {
-        guard !isPresenting, let snackBarViewController = self.queue.first() else { return }
+        guard let snackBarViewController = self.queue.first() else { return }
+        
+        if isPresenting && behavior == .dismissOldWhenAddingNew {
+            // dismiss old snackbar silently
+            dismiss(vc: snackBarViewController)
+            return
+        }
+        
+        guard !isPresenting else { return }
         isPresenting = true
         snackBarViewController.presenter?.present(snackBarViewController, animated: true)
         if snackBarViewController.autodismiss {
