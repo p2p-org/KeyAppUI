@@ -6,11 +6,17 @@ protocol SnackBarManagerDelegate {
 
 public class SnackBarManager: SnackBarManagerDelegate {
     
+    /// Behavior on showing snackbar
+    public enum Behavior: Equatable {
+        case queued
+        case dismissOldWhenAddingNew
+    }
+    
     static public let shared = SnackBarManager()
     
-    public var behavior: SnackBarBehavior = .dismissOldWhenAddingNew
+    public var behavior: Behavior = .dismissOldWhenAddingNew
     
-    private var queue = SynchronizedArray<SnackBarViewController>()
+    private var queue = SynchronizedArray<SnackBar>()
     
     private var isPresenting = false
     
@@ -22,32 +28,32 @@ public class SnackBarManager: SnackBarManagerDelegate {
         isPresenting = false
     }
     
-    func present(_ vc: SnackBarViewController) {
+    func present(_ vc: SnackBar) {
         queue.append(vc)
         present()
     }
     
     func present() {
-        guard let snackBarViewController = self.queue.first() else { return }
+        guard let snackBarView = self.queue.first() else { return }
         
         if isPresenting && behavior == .dismissOldWhenAddingNew {
             // dismiss old snackbar silently
-            dismiss(vc: snackBarViewController)
+            dismiss(vc: snackBarView)
             return
         }
         
         guard !isPresenting else { return }
         isPresenting = true
-        snackBarViewController.presenter?.present(snackBarViewController, animated: true)
-        if snackBarViewController.autodismiss {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak snackBarViewController] in
+        snackBarView.presenter?.present(snackBarView, animated: true)
+        if snackBarView.autodismiss {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak snackBarView] in
                 guard let snackBarViewController = snackBarViewController else { return }
                 self.dismiss(vc: snackBarViewController)
             }
         }
     }
     
-    func dismiss(vc: SnackBarViewController) {
+    func dismiss(vc: SnackBar) {
         queue.remove(element: vc)
         vc.dismiss(animated: true) { [weak self] in
             self?.isPresenting = false
