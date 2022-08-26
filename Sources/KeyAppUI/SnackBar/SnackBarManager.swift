@@ -34,43 +34,65 @@ public class SnackBarManager: SnackBarManagerDelegate {
     }
     
     func present() {
-        guard let snackBarView = self.queue.first() else { return }
+        guard let snackBar = self.queue.first() else { return }
         
         if isPresenting && behavior == .dismissOldWhenAddingNew {
             // dismiss old snackbar silently
-            dismiss(vc: snackBarView)
+            dismiss(snackBar, animated: false)
             return
         }
         
         guard !isPresenting else { return }
         isPresenting = true
-        snackBarView.presenter?.present(snackBarView, animated: true)
-        if snackBarView.autodismiss {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak snackBarView] in
-                guard let snackBarViewController = snackBarViewController else { return }
-                self.dismiss(vc: snackBarViewController)
+        
+        let originalTransform = snackBar.transform
+        let translateTransform = originalTransform.translatedBy(x: 0.0, y: -100)
+        snackBar.transform = translateTransform
+        UIView.animate(withDuration: 0.2, animations: {
+            snackBar.transform = originalTransform
+        })
+        
+        if snackBar.autoHide {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak snackBar] in
+                guard let snackBar = snackBar else { return }
+                self.dismiss(snackBar)
             }
         }
     }
     
-    func dismiss(vc: SnackBar) {
-        queue.remove(element: vc)
-        vc.dismiss(animated: true) { [weak self] in
-            self?.isPresenting = false
-            vc.dismissCompletion?()
-            self?.present()
+    func dismiss(_ snackBar: SnackBar, animated: Bool = true) {
+        let completion = {[weak self, weak snackBar] in
+            guard let self = self, let snackBar = snackBar else {return}
+            snackBar.removeFromSuperview()
+            snackBar.hideCompletion?()
+            self.isPresenting = false
+            self.queue.remove(element: snackBar)
+            self.present()
+        }
+        
+        if animated {
+            let originalTransform = snackBar.transform
+            let translateTransform = originalTransform.translatedBy(x: 0, y: -250)
+            UIView.animate(withDuration: 0.2) {
+                snackBar.transform = translateTransform
+            } completion: { _ in
+                completion()
+            }
+
+        } else {
+            completion()
         }
     }
     
     func dismissCurrent() {
         guard isPresenting, let first = self.queue.first() else { return }
-        dismiss(vc: first)
+        dismiss(first)
     }
     
     public func dismissAll() {
         while let vc = queue.removeFirst() {
-            vc.dismiss(animated: false)
-            vc.dismissCompletion?()
+            vc.removeFromSuperview()
+            vc.hideCompletion?()
         }
         self.isPresenting = false
     }

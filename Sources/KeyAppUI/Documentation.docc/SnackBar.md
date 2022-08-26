@@ -9,7 +9,7 @@ A component for showing notifications.
 Creating component:
 
 ```swift
-SnackBarView(
+SnackBar(
     icon: Asset.MaterialIcon.arrowBack.image.withTintColor(Asset.Colors.cloud.color, renderingMode: .alwaysOriginal),
     text: "Text",
     trailing: TextButton
@@ -21,7 +21,7 @@ SnackBarView(
 )
 ```
 
-To show component on top of view controller, use ``show(in:autoDismiss:dismissCompletion:)`` method of instance.
+To show component on top of view controller, use ``show(in:autoHide:hideCompletion:)`` method of instance.
 ```swift
 SnackBar(
     icon: .add, 
@@ -29,8 +29,8 @@ SnackBar(
     buttonTitle: "Close",
     buttonAction: { SnackBar.hide() }
 ).show(
-    in: viewController,
-    autoDismiss: true,
-    dismissCompletion: { print("I am closed") }
+    in: view,
+    autoHide: true,
+    hideCompletion: { print("I am closed") }
 )
 ```

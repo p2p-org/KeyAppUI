@@ -5,7 +5,9 @@ import UIKit
 
 public class SnackBar: BECompositionView {
 
-    // MARK: -
+    // MARK: - Properties
+    var autoHide: Bool = true
+    var hideCompletion: (() -> Void)?
 
     public var title: String? {
         didSet {
@@ -127,6 +129,6 @@ extension SnackBar {
         var backgroundColor: UIColor = .init(red: 0.167, green: 0.167, blue: 0.167, alpha: 1)
         var borderColor: UIColor = .init(red: 1, green: 1, blue: 1, alpha: 0.2)
         var iconTintColor: UIColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
-        var numberOnLines = 2
+        var numberOnLines = 3
     }
 }
