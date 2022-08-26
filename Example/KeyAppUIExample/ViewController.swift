@@ -86,7 +86,7 @@ class ViewController: UIViewController {
                     self?.present(TableViewController(), animated: true)
                 }
 
-                SnackBarSection(viewController: self)
+                SnackBarSection()
 
                 IconSection()
 
