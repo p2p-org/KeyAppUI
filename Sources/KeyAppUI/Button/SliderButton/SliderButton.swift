@@ -5,8 +5,8 @@ import BEPureLayout
 public struct SliderButtonView: UIViewRepresentable {
     let title: String
     let image: UIImage
-    let onChange: ((Bool) -> Void)?
     let style: SliderButton.Style
+    let onChange: ((Bool) -> Void)?
     
     public func makeUIView(context: Context) -> SliderButton {
         SliderButton(image: image, title: title, style: style)
