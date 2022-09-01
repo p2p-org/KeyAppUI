@@ -8,6 +8,13 @@ public struct SliderButtonView: UIViewRepresentable {
     let style: SliderButton.Style
     let onChange: ((Bool) -> Void)?
     
+    public init(title: String, image: UIImage, style: SliderButton.Style, onChange: ((Bool) -> ())?) {
+        self.title = title
+        self.image = image
+        self.style = style
+        self.onChange = onChange
+    }
+    
     public func makeUIView(context: Context) -> SliderButton {
         SliderButton(image: image, title: title, style: style)
     }
