@@ -119,7 +119,7 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
                         .hidden(!isLoading)
                         .frame(width: 20, height: 20)
                 }
-                .hidden(trailingImage == nil)
+                .hidden(trailingImage == nil && (isLoading == false || leadingImage != nil))
                 .bind(trailing)
 
                 BEContainer()
@@ -157,7 +157,18 @@ public class TextButton: ButtonControl<TextButtonAppearance> {
     }
 
     func updateTrailing() {
-        trailing.isHidden = trailingImage == nil
+        if trailingImage != nil {
+            trailing.isHidden = false
+        }
+        else {
+            if isLoading && leadingImage == nil {
+                // If there are no trailing and leading images then loading indicator will be in the trailing
+                trailing.isHidden = false
+            }
+            else {
+                trailing.isHidden = true
+            }
+        }
         trailingImageView.isHidden = isLoading || trailingImage == nil
         trailingLoadingIndicator.isHidden = !isLoading
     }
