@@ -75,8 +75,8 @@ public extension TextButton {
 
         public var loadingBackgroundColor: UIColor {
             switch self {
-            case .primary, .primaryWhite, .ghostWhite, .ghostLime: return Asset.Colors.snow.color.withAlphaComponent(0.6)
-            case .invertedRed: return Asset.Colors.rain.color
+            case .primary, .primaryWhite, .ghostWhite, .ghostLime, .outlineWhite, .outlineLime: return Asset.Colors.snow.color.withAlphaComponent(0.6)
+            case .invertedRed, .outlineRose: return Asset.Colors.rain.color
             default: return Asset.Colors.night.color.withAlphaComponent(0.6)
             }
         }
