@@ -15,7 +15,7 @@ struct PincodeStateColor {
 public final class PinCode: BEView {
     // MARK: - Properties
 
-    public var stackViewSpacing: CGFloat = 68 {
+    public var stackViewSpacing: CGFloat = 24 {
         didSet {
             stackView.spacing = stackViewSpacing
         }
@@ -30,9 +30,6 @@ public final class PinCode: BEView {
     private var currentPincode: String? {
         didSet {
             validatePincode()
-            #if DEBUG
-                currentPincodeLabel.text = currentPincode
-            #endif
         }
     }
 
@@ -55,12 +52,6 @@ public final class PinCode: BEView {
         alignment: .center,
         distribution: .fill
     ) {
-        #if DEBUG
-            UILabel(text: correctPincode, textColor: .red, textAlignment: .center)
-            BEStackViewSpacing(10)
-            currentPincodeLabel
-            BEStackViewSpacing(10)
-        #endif
         dotsView
         numpadView
     }
@@ -75,10 +66,6 @@ public final class PinCode: BEView {
     )
     private lazy var numpadView = NumpadView(bottomLeftButton: bottomLeftButton)
     private let bottomLeftButton: UIView?
-
-    #if DEBUG
-        private lazy var currentPincodeLabel = UILabel(text: nil, textColor: .red)
-    #endif
 
     // MARK: - Initializer
 

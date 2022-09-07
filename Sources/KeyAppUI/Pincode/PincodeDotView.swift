@@ -39,7 +39,7 @@ class PinCodeDotsView: BEView {
         indicatorView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .trailing)
 
         // dots stack view
-        let stackView = UIStackView(axis: .horizontal, spacing: padding.left * 2, alignment: .fill, distribution: .fill)
+        let stackView = UIStackView(axis: .horizontal, spacing: padding.left, alignment: .fill, distribution: .fill)
         stackView.addArrangedSubviews(dots)
         addSubview(stackView)
         stackView.autoPinEdgesToSuperviewEdges(with: padding)
