@@ -46,7 +46,10 @@ class PincodeViewController: UIViewController {
             BEVStack {
                 UIView.spacer
                 UILabel(text: "Confirm your PIN code", font: .font(of: .title2, weight: .regular),textAlignment: .center)
-                PinCode()
+                PinCode(correctPincode: "123456")
+                    .setup { pincode in
+                        pincode.resetingDelayInSeconds = 2
+                    }
                 UIView(height: 70)
             }
         }

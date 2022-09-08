@@ -20,6 +20,9 @@ public final class PinCode: BEView {
             stackView.spacing = stackViewSpacing
         }
     }
+    
+    /// Put an delay after failure and reset, default is nil (no reset after failure)
+    public var resetingDelayInSeconds: Int?
 
     /// Correct pincode for comparision, if not defined, the validation will always returns true
     private let correctPincode: String?
@@ -218,13 +221,20 @@ public final class PinCode: BEView {
             onFailedAndExceededMaxAttemps?()
         } else {
             onFailed?()
+            clearErrorWithDelay()
         }
     }
 
-    private func clearErrorAfter3Seconds() {
+    private func clearErrorWithDelay() {
+        guard let resetingDelayInSeconds = resetingDelayInSeconds else {
+            return
+        }
+        
         // clear pincode after 3 seconds
         isPresentingError = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) { [weak self] in
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + .seconds(resetingDelayInSeconds)
+        ) { [weak self] in
             guard let self = self, self.isPresentingError else { return }
             self.currentPincode = nil
         }
