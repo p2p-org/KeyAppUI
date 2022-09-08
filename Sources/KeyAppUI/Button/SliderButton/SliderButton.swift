@@ -6,31 +6,31 @@ public struct SliderButtonView: UIViewRepresentable {
     let title: String
     let image: UIImage
     let style: SliderButton.Style
-    let onChange: ((Bool) -> Void)?
-    
-    public init(title: String, image: UIImage, style: SliderButton.Style, onChange: ((Bool) -> ())?) {
+    @Binding var isOn: Bool
+
+    public init(title: String, image: UIImage, style: SliderButton.Style, isOn: Binding<Bool>) {
         self.title = title
         self.image = image
         self.style = style
-        self.onChange = onChange
+        self._isOn = isOn
     }
-    
+
     public func makeUIView(context: Context) -> SliderButton {
         SliderButton(image: image, title: title, style: style)
+            .onChanged { self.isOn = $0 }
     }
 
     public func updateUIView(_ uiView: SliderButton, context: Context) {
         uiView.title = title
         uiView.image = image
-        uiView.onChanged = onChange
+        uiView.set(isOn: isOn)
     }
 }
-
 
 public final class SliderButton: BEView {
 
     // MARK: - Public variables
-
+    public var isOn: Bool = false
     public var onChanged: ((Bool) -> Void)?
 
     public var image: UIImage {
@@ -82,7 +82,12 @@ public final class SliderButton: BEView {
         setupImageControl()
     }
 
-    // MARK: - Overriden
+    // MARK: - Public
+
+    public func set(isOn: Bool) {
+        guard isOn != self.isOn else { return }
+        animateGradientAndControl(moveToLeft: !isOn)
+    }
 
     override public func layoutSubviews() {
         super.layoutSubviews()
@@ -167,22 +172,38 @@ public final class SliderButton: BEView {
     // MARK: - Pan Gesture
 
     @objc private func panned(_ sender: UIPanGestureRecognizer) {
-        guard let containerView = container.view else { return }
-
+        guard let rootView = container.view else { return }
         let translation = sender.translation(in: imageControl)
-        let imageControlCenterX = translation.x > 0 ? translation.x + Constants.imageControlSize.width / 2 :  translation.x - Constants.imageControlSize.width / 2
+        let controlX = translation.x
+        let controlCenterX = controlX > 0 ? controlX + Constants.imageControlSize.width/2 :  controlX - Constants.imageControlSize.width / 2
 
-        let moveToLeft = (translation.x > 0 && imageControlCenterX < containerView.center.x) || (translation.x < 0 && abs(imageControlCenterX) > containerView.center.x)
+        let moveToLeft = (controlX > 0 && controlCenterX < rootView.center.x) || (controlX < 0 && abs(controlCenterX) > rootView.center.x)
 
         switch sender.state {
         case .began:
             initialPoint = imageControl.frame.origin
 
         case .changed:
-            changeGradientAndControl(translation: translation)
+            if isOn && (controlX >= 0 || imageControl.frame.minX <= Constants.padding) {
+                return
+            }
+            else if !isOn && (controlX <= 0 || imageControl.frame.maxX >= rootView.frame.width - Constants.padding) {
+                return
+            }
+            else {
+                changeGradientAndControl(translation: translation)
+            }
 
         case .ended, .cancelled:
-            animateGradientAndControl(moveToLeft: moveToLeft)
+            if isOn && controlX >= 0 {
+                animateGradientAndControl(moveToLeft: false)
+            }
+            else if !isOn && controlX <= 0 {
+                animateGradientAndControl(moveToLeft: true)
+            }
+            else {
+                animateGradientAndControl(moveToLeft: moveToLeft)
+            }
 
         default:
             break
@@ -214,34 +235,35 @@ public final class SliderButton: BEView {
         let newImageControlPosition = moveToLeft ? Constants.position : CGPoint(x: containerView.frame.maxX - imageControl.frame.width - padding, y: padding)
 
         CATransaction.begin()
-        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut))
+        CATransaction.setCompletionBlock { self.updateIfNeeded() }
+        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeOut))
         CATransaction.setAnimationDuration(Constants.duration)
-
-        CATransaction.setCompletionBlock {
-            self.gradientLayer.bounds = bounds
-            self.imageControl.layer.position = newImageControlPosition
-            self.checkPosition()
-        }
 
         let gradientLayerAnimation = CABasicAnimation(keyPath: "bounds")
         gradientLayerAnimation.fromValue = gradientLayer.bounds
         gradientLayerAnimation.toValue = bounds
+        gradientLayer.bounds = bounds
         gradientLayer.add(gradientLayerAnimation, forKey: "bounds")
         gradientLayer.frame = CGRect(origin: Constants.position, size: bounds.size)
+        gradientLayerAnimation.isRemovedOnCompletion = false
 
         let imageControlAnimation = CABasicAnimation(keyPath: "position")
         imageControlAnimation.fromValue = imageControl.layer.position
         imageControlAnimation.toValue = newImageControlPosition
+        imageControl.layer.position = newImageControlPosition
         imageControl.layer.add(imageControlAnimation, forKey: "position")
+        imageControlAnimation.isRemovedOnCompletion = false
 
         CATransaction.commit()
     }
 
-    // Check if imageControl position was changed from left to right or right to left
-    private func checkPosition() {
-        guard initialPoint != imageControl.layer.position else { return }
+    // Update isOn value if control position was changed from left to right or right to left
+    private func updateIfNeeded() {
         let isLeft = imageControl.layer.position == Constants.position
+        guard isOn == isLeft else { return }
+        isOn = !isLeft
         onChanged?(!isLeft)
+        vibrate()
     }
 
     // MARK: - Gradient layer
@@ -266,6 +288,10 @@ public final class SliderButton: BEView {
         gradientLayer.cornerRadius = size.height / 2
 
     }
+
+    private func vibrate() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+    }
 }
 
 private enum Constants {
@@ -276,7 +302,7 @@ private enum Constants {
 }
 
 private class SliderContainer: BEView {
-    let child: UIView
+    private let child: UIView
 
     required public init(@BEViewBuilder builder: Builder) {
         child = builder().build()
@@ -287,9 +313,5 @@ private class SliderContainer: BEView {
         super.commonInit()
         super.addSubview(child)
         child.autoPinEdgesToSuperviewEdges()
-    }
-
-    open override func addSubview(_ view: UIView) {
-        super.addSubview(view)
     }
 }
