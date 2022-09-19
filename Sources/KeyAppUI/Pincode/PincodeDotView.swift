@@ -10,7 +10,7 @@ class PinCodeDotsView: BEView {
 
     private let dotSize: CGFloat = 12.adaptiveHeight
     private let cornerRadius: CGFloat = 12.adaptiveHeight
-    private let padding: UIEdgeInsets = .init(x: 12.adaptiveHeight, y: 8.adaptiveHeight)
+    private let padding: UIEdgeInsets = .init(x: 13.adaptiveHeight, y: 8.adaptiveHeight)
     
     /// Default color for dots
     private let defaultColor = Asset.Colors.night.color.withAlphaComponent(0.3)
