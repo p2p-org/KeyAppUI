@@ -15,12 +15,12 @@ struct PincodeStateColor {
 public final class PinCode: BEView {
     // MARK: - Properties
 
-    public var stackViewSpacing: CGFloat = 24 {
+    public var stackViewSpacing: CGFloat = 10 {
         didSet {
             stackView.spacing = stackViewSpacing
         }
     }
-    
+
     /// Put an delay after failure and reset, default is nil (no reset after failure)
     public var resetingDelayInSeconds: Int?
 
