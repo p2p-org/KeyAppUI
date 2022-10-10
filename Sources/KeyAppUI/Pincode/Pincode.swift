@@ -15,11 +15,14 @@ struct PincodeStateColor {
 public final class PinCode: BEView {
     // MARK: - Properties
 
-    public var stackViewSpacing: CGFloat = 68 {
+    public var stackViewSpacing: CGFloat = 10 {
         didSet {
             stackView.spacing = stackViewSpacing
         }
     }
+
+    /// Put an delay after failure and reset, default is nil (no reset after failure)
+    public var resetingDelayInSeconds: Int?
 
     /// Correct pincode for comparision, if not defined, the validation will always returns true
     private let correctPincode: String?
@@ -30,9 +33,6 @@ public final class PinCode: BEView {
     private var currentPincode: String? {
         didSet {
             validatePincode()
-            #if DEBUG
-                currentPincodeLabel.text = currentPincode
-            #endif
         }
     }
 
@@ -55,12 +55,6 @@ public final class PinCode: BEView {
         alignment: .center,
         distribution: .fill
     ) {
-        #if DEBUG
-            UILabel(text: correctPincode, textColor: .red, textAlignment: .center)
-            BEStackViewSpacing(10)
-            currentPincodeLabel
-            BEStackViewSpacing(10)
-        #endif
         dotsView
         numpadView
     }
@@ -75,10 +69,6 @@ public final class PinCode: BEView {
     )
     private lazy var numpadView = NumpadView(bottomLeftButton: bottomLeftButton)
     private let bottomLeftButton: UIView?
-
-    #if DEBUG
-        private lazy var currentPincodeLabel = UILabel(text: nil, textColor: .red)
-    #endif
 
     // MARK: - Initializer
 
@@ -231,13 +221,20 @@ public final class PinCode: BEView {
             onFailedAndExceededMaxAttemps?()
         } else {
             onFailed?()
+            clearErrorWithDelay()
         }
     }
 
-    private func clearErrorAfter3Seconds() {
+    private func clearErrorWithDelay() {
+        guard let resetingDelayInSeconds = resetingDelayInSeconds else {
+            return
+        }
+        
         // clear pincode after 3 seconds
         isPresentingError = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) { [weak self] in
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + .seconds(resetingDelayInSeconds)
+        ) { [weak self] in
             guard let self = self, self.isPresentingError else { return }
             self.currentPincode = nil
         }

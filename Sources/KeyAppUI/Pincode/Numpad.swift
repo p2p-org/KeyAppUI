@@ -9,7 +9,8 @@ public class NumpadView: BEView {
     // MARK: - Constants
 
     private let buttonSize: CGFloat = 68
-    private let spacing = 30.adaptiveHeight
+    private let spacing = 42.adaptiveHeight
+    private let vSpacing = 12.adaptiveHeight
     private let deleteButtonColor = PincodeStateColor(normal: Asset.Colors.night.color, tapped: Asset.Colors.night.color.withAlphaComponent(0.65))
 
     // MARK: - Callback
@@ -23,7 +24,7 @@ public class NumpadView: BEView {
     private lazy var numButtons: [NumpadButton] = {
         var views = [NumpadButton]()
         for index in 0 ..< 10 {
-            let view = NumpadButton(width: buttonSize, height: buttonSize, cornerRadius: 24)
+            let view = NumpadButton(width: buttonSize, height: buttonSize, cornerRadius: 20)
             view.label.text = "\(index)"
             view.tag = index
             view.onLongTap(self, action: #selector(numButtonDidTap(_:)), minimumPressDuration: 0)
@@ -51,7 +52,7 @@ public class NumpadView: BEView {
 
     override public func commonInit() {
         super.commonInit()
-        let stackView = UIStackView(axis: .vertical, spacing: spacing, alignment: .fill, distribution: .fillEqually)
+        let stackView = UIStackView(axis: .vertical, spacing: vSpacing, alignment: .fill, distribution: .equalSpacing)
 
         stackView.addArrangedSubview(buttons(from: 1, to: 3))
         stackView.addArrangedSubview(buttons(from: 4, to: 6))

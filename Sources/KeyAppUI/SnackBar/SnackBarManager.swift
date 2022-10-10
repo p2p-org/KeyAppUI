@@ -51,7 +51,11 @@ public class SnackBarManager: SnackBarManagerDelegate {
         UIView.animate(withDuration: 0.2, animations: {
             snackBar.transform = originalTransform
         })
-        
+
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipeHandler))
+        swipeGesture.direction = .up
+        snackBar.addGestureRecognizer(swipeGesture)
+
         if snackBar.autoHide {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak snackBar] in
                 guard let snackBar = snackBar else { return }
@@ -95,5 +99,12 @@ public class SnackBarManager: SnackBarManagerDelegate {
             vc.hideCompletion?()
         }
         self.isPresenting = false
+    }
+
+    @objc private func swipeHandler(_ gestureRecognizer : UISwipeGestureRecognizer) {
+        guard
+            let view = gestureRecognizer.view as? SnackBar,
+            gestureRecognizer.state == .ended else { return }
+        self.dismiss(view)
     }
 }

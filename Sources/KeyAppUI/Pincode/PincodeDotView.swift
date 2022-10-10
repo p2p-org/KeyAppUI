@@ -10,7 +10,16 @@ class PinCodeDotsView: BEView {
 
     private let dotSize: CGFloat = 12.adaptiveHeight
     private let cornerRadius: CGFloat = 12.adaptiveHeight
-    private let padding: UIEdgeInsets = .init(x: 12.adaptiveHeight, y: 8.adaptiveHeight)
+    private let padding: UIEdgeInsets = .init(x: 13.adaptiveHeight, y: 8.adaptiveHeight)
+    
+    /// Default color for dots
+    private let defaultColor = Asset.Colors.night.color.withAlphaComponent(0.3)
+    /// Color for highlight state
+    private let highlightColor = Asset.Colors.night.color
+    /// Color for error state
+    private let errorColor = Asset.Colors.rose.color
+    /// Color for success state
+    private let successColor = Asset.Colors.mint.color
 
     // MARK: - Properties
 
@@ -21,7 +30,7 @@ class PinCodeDotsView: BEView {
     private lazy var dots: [UIView] = {
         var views = [UIView]()
         for index in 0 ..< pincodeLength {
-            let dot = UIView(width: dotSize, height: dotSize, backgroundColor: Asset.Colors.night.color.withAlphaComponent(0.3), cornerRadius: dotSize / 2)
+            let dot = UIView(width: dotSize, height: dotSize, backgroundColor: defaultColor, cornerRadius: dotSize / 2)
             views.append(dot)
         }
         return views
@@ -39,7 +48,7 @@ class PinCodeDotsView: BEView {
         indicatorView.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .trailing)
 
         // dots stack view
-        let stackView = UIStackView(axis: .horizontal, spacing: padding.left * 2, alignment: .fill, distribution: .fill)
+        let stackView = UIStackView(axis: .horizontal, spacing: padding.left, alignment: .fill, distribution: .fill)
         stackView.addArrangedSubviews(dots)
         addSubview(stackView)
         stackView.autoPinEdgesToSuperviewEdges(with: padding)
@@ -53,9 +62,9 @@ class PinCodeDotsView: BEView {
         indicatorView.backgroundColor = .clear
         for i in 0 ..< dots.count {
             if i < numberOfDigits {
-                dots[i].backgroundColor = Asset.Colors.night.color
+                dots[i].backgroundColor = highlightColor
             } else {
-                dots[i].backgroundColor = Asset.Colors.night.color.withAlphaComponent(0.3)
+                dots[i].backgroundColor = defaultColor
             }
         }
         UIView.animate(withDuration: 0.1) {
@@ -65,11 +74,11 @@ class PinCodeDotsView: BEView {
 
     func pincodeFailed() {
         indicatorView.backgroundColor = .clear
-        dots.forEach { $0.backgroundColor = Asset.Colors.rose.color }
+        dots.forEach { $0.backgroundColor = errorColor }
     }
 
     func pincodeSuccess() {
         indicatorView.backgroundColor = .clear
-        dots.forEach { $0.backgroundColor = Asset.Colors.mint.color }
+        dots.forEach { $0.backgroundColor = successColor }
     }
 }

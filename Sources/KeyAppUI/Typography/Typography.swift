@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 
 public extension UIFont {
     
@@ -128,5 +129,13 @@ public extension NSAttributedString {
             .kern: UIFont.letterSpacing(for: style)
         ])
         return string
+    }
+}
+
+public extension Text {
+    func apply(style: UIFont.Style) -> some View {
+        self.kerning(UIFont.letterSpacing(for: style))
+            .font(Font(UIFont.font(of: style).withSize(UIFont.fontSize(of: style)) as CTFont))
+            .lineSpacing(UIFont.lineHeight(for: style))
     }
 }
