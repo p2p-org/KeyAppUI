@@ -15,14 +15,16 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/p2p-org/BEPureLayout.git", branch: "master"),
         // .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
-        .package(url: "https://github.com/Juanpe/SkeletonView.git", from: "1.7.0")
+        .package(url: "https://github.com/Juanpe/SkeletonView.git", from: "1.7.0"),
+        .package(url: "https://github.com/vlas-voloshin/SubviewAttachingTextView", .upToNextMajor(from: "1.5.1"))
     ],
     targets: [
         .target(
             name: "KeyAppUI",
             dependencies: [
                 .product(name: "BEPureLayout", package: "BEPureLayout"),
-                .product(name: "SkeletonView", package: "SkeletonView")
+                .product(name: "SkeletonView", package: "SkeletonView"),
+                .product(name: "SubviewAttachingTextView", package: "SubviewAttachingTextView")
             ],
             resources: [.process("Resources")]
         ),
