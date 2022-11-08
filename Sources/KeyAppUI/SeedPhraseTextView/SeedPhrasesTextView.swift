@@ -189,11 +189,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 }
                 
                 // if next location is an attachment
-                else if attributedText.length > range.location &&
-                    attributedText.containsAttachments(in: NSRange(location: range.location, length: 1))
-                {
-                    return false
-                }
+//                else if attributedText.length > range.location &&
+//                    attributedText.containsAttachments(in: NSRange(location: range.location, length: 1))
+//                {
+//                    return false
+//                }
             }
         }
 
@@ -205,7 +205,21 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             shouldRearrange = true
             return false
         }
-        return true
+        
+        // allow only lowercased letters
+        let allowedCharacters = CharacterSet.lowercaseLetters
+        let characterSet = CharacterSet(charactersIn: text.lowercased())
+        
+        if allowedCharacters.isSuperset(of: characterSet) {
+            // if text is not all lowercased
+            if text.lowercased() == text {
+                return true
+            } else {
+                textStorage.replaceCharacters(in: range, with: text.lowercased())
+                selectedRange = NSRange(location: range.location + text.count, length: 0)
+            }
+        }
+        return false
     }
 
     func wrapPhrase(addingPlaceholderAttachment: Bool = true) {
