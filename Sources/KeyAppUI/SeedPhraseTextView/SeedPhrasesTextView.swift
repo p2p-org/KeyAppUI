@@ -209,8 +209,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             
             // if selected all text
             if range == NSRange(location: 0, length: attributedText.length) {
-                textStorage.replaceCharacters(in: NSRange(location: 0, length: 1), with: placeholderAttachment(index: 0))
-                range = NSRange(location: 1, length: attributedText.length - 1)
+                textStorage.replaceCharacters(in: range, with: "")
+                addPlaceholderAttachment(at: 0)
+                range = NSRange(location: 1, length: 0)
             }
             
             textStorage.replaceCharacters(in: range, with: text.lowercased())
