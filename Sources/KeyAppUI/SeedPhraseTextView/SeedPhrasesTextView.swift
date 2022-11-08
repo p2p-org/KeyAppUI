@@ -90,16 +90,10 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     // MARK: - Methods
     
     /// Get current entered phrases
-//    public func getPhrases() -> [String] {
-//        var phrases = [String]()
-//        attributedText
-//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, _, _ in
-//                if let att = att as? PhraseAttachment, let phrase = att.phrase {
-//                    phrases.append(phrase)
-//                }
-//            }
-//        return phrases
-//    }
+    public func getPhrases() -> [String] {
+        let text = attributedText.string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        return text.components(separatedBy: " ")
+    }
     
     /// Clear text view
     public func clear() {
