@@ -64,7 +64,6 @@ extension SeedPhrasesTextView {
                     count += 1
                 }
             }
-        print("count", count)
         return count
     }
 

@@ -147,6 +147,13 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
 
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // pasting
+        if isPasting {
+            // TODO: - Paste
+            isPasting = false
+            return false
+        }
+        
         // disable
         shouldWrapPhrases = false
         shouldRearrange = false
@@ -168,23 +175,26 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             return true
         }
 
-        // prevent dupplicated spaces
+        // prevent dupplicated attachments
         if text.trimmingCharacters(in: .whitespaces).isEmpty {
             // prevent space at the begining
             if range.location == 0 { return false }
-            // prevent 2 spaces next to each other
-            else if textView.attributedText.attributedSubstring(from: NSRange(location: range.location - 1, length: 1))
-                .string == " "
-            {
-                return false
+            
+            // prevent 2 attachment next to each other
+            else {
+                // if prev location is an attachment
+                if attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1))
+                {
+                    return false
+                }
+                
+                // if next location is an attachment
+                else if attributedText.length > range.location &&
+                    attributedText.containsAttachments(in: NSRange(location: range.location, length: 1))
+                {
+                    return false
+                }
             }
-        }
-        
-        // pasting
-        if isPasting {
-            // TODO: - Paste
-            isPasting = false
-            return false
         }
 
         // wrap phrase when found a space
