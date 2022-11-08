@@ -37,8 +37,8 @@ extension SeedPhrasesTextView {
     // MARK: - Methods
 
     func placeholderAttachment(index: Int) -> NSMutableAttributedString {
-        let label = UILabel(text: "\(index + 1) ", weight: .semibold, textColor: .lightGray)
-            .padding(.init(top: 12, left: 12, bottom: 12, right: 0))
+        let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
+            .padding(.init(top: 12, left: index == 0 ? 0: 16, bottom: 12, right: 2))
         label.translatesAutoresizingMaskIntoConstraints = true
         label.isUserInteractionEnabled = true
 
