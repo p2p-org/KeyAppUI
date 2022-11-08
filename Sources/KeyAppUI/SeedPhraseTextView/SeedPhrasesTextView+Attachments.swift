@@ -30,65 +30,13 @@ extension SeedPhrasesTextView {
         }
     }
 
-    class PhraseAttachment: Attachment {
-        var phrase: String?
-    }
-
     class PlaceholderAttachment: Attachment {}
 }
 
 extension SeedPhrasesTextView {
     // MARK: - Methods
 
-    func attachment(phrase: String, index: Int? = nil) -> NSAttributedString? {
-        // ignore invalid characters
-        let invalidCharactersSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz").inverted
-
-        let phrase = phrase.lowercased().components(separatedBy: invalidCharactersSet).joined(separator: " ")
-            .trimmingCharacters(in: .whitespaces)
-
-        if phrase.isEmpty {
-            return nil
-        }
-
-        // replace phrase's range by attachment that is a uilabel
-        let label = { () -> UILabel in
-            let label = UILabel(textColor: .black)
-            let attributedString = NSMutableAttributedString()
-            attributedString.append(
-                NSAttributedString(
-                    string: "\(index != nil ? "\(index!)" : "") ",
-                    attributes: [
-                        .font: UIFont.systemFont(ofSize: 15, weight: .semibold),
-                        .foregroundColor: UIColor.gray
-                    ]
-                )
-            )
-            attributedString.append(
-                NSAttributedString(
-                    string: "\(phrase)",
-                    attributes: [
-                        .font: UIFont.systemFont(ofSize: 15, weight: .semibold),
-                        .foregroundColor: UIColor.black
-                    ]
-                )
-            )
-            return label
-        }()
-            .padding(.init(x: 12, y: 12), backgroundColor: .red, cornerRadius: 5)
-        label.border(width: 1, color: .lightGray)
-        label.translatesAutoresizingMaskIntoConstraints = true
-        label.isUserInteractionEnabled = true
-
-        // replace text by attachment
-        let attachment = PhraseAttachment(view: label)
-        attachment.phrase = phrase
-        let attrString = NSMutableAttributedString(attachment: attachment)
-        attrString.addAttributes(typingAttributes, range: NSRange(location: 0, length: attrString.length))
-        return attrString
-    }
-
-    func placeholderAttachment(at index: Int) -> NSMutableAttributedString {
+    func placeholderAttachment(index: Int) -> NSMutableAttributedString {
         let label = UILabel(text: "\(index + 1) ", weight: .semibold, textColor: .lightGray)
             .padding(.init(top: 12, left: 12, bottom: 12, right: 0))
         label.translatesAutoresizingMaskIntoConstraints = true
@@ -104,7 +52,7 @@ extension SeedPhrasesTextView {
     // MARK: - Helpers
 
     func addPlaceholderAttachment(at index: Int) {
-        textStorage.replaceCharacters(in: selectedRange, with: placeholderAttachment(at: phraseIndex(at: index)))
+        textStorage.replaceCharacters(in: selectedRange, with: placeholderAttachment(index: phraseIndex(at: index)))
     }
 
     func phraseIndex(at location: Int) -> Int {
@@ -112,10 +60,11 @@ extension SeedPhrasesTextView {
         attributedText
             .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
                 if range.location > location { return }
-                if att is PhraseAttachment {
+                if att is PlaceholderAttachment {
                     count += 1
                 }
             }
+        print("count", count)
         return count
     }
 

@@ -22,6 +22,9 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     /// Prevent dupplicating rearranging
     private var shouldRearrange = false
     
+    /// Mark as pasting
+    private var isPasting = false
+    
     /// Replacement for default delegate
     public weak var forwardedDelegate: SeedPhraseTextViewDelegate?
     
@@ -77,6 +80,7 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
 
     public override func paste(_ sender: Any?) {
         super.paste(sender)
+        isPasting = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             // place cursor at the end
             self?.selectedRange.location = self?.attributedText.length ?? 0
@@ -86,16 +90,16 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     // MARK: - Methods
     
     /// Get current entered phrases
-    public func getPhrases() -> [String] {
-        var phrases = [String]()
-        attributedText
-            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, _, _ in
-                if let att = att as? PhraseAttachment, let phrase = att.phrase {
-                    phrases.append(phrase)
-                }
-            }
-        return phrases
-    }
+//    public func getPhrases() -> [String] {
+//        var phrases = [String]()
+//        attributedText
+//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, _, _ in
+//                if let att = att as? PhraseAttachment, let phrase = att.phrase {
+//                    phrases.append(phrase)
+//                }
+//            }
+//        return phrases
+//    }
     
     /// Clear text view
     public func clear() {
@@ -175,46 +179,28 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 return false
             }
         }
+        
+        // pasting
+        if isPasting {
+            // TODO: - Paste
+            isPasting = false
+            return false
+        }
 
         // wrap phrase when found a space
         if text.contains(" ") {
-            removeAllPlaceholderAttachment()
+            wrapPhrase()
+            rearrangeAttachments()
             shouldWrapPhrases = true
             shouldRearrange = true
+            return false
         }
         return true
     }
 
     func wrapPhrase(addingPlaceholderAttachment: Bool = true) {
         // get all phrases
-        let phrases = text
-            .replacingOccurrences(of: "\n", with: " ")
-            .components(separatedBy: " ")
-
-        // get length's difference after replacing text with attachment
-        var lengthDiff = 0
-        var selectedLocation = selectedRange.location
-
-        for phrase in phrases.map({ $0.replacingOccurrences(of: "\u{fffc}", with: "") }).filter({ !$0.isEmpty }) {
-            let text = self.text as NSString
-            let range = text.range(of: phrase)
-
-            // add attachment
-            let aStr = NSMutableAttributedString()
-            if let att = attachment(phrase: phrase) {
-                aStr.append(att)
-            } else {
-                aStr.append(NSAttributedString(string: " "))
-            }
-            textStorage.replaceCharacters(in: range, with: aStr)
-
-            // diff of length, length become 1 when inserting attachment
-            lengthDiff = aStr.length - phrase.count
-
-            if selectedLocation > range.location {
-                selectedLocation += lengthDiff
-            }
-        }
+        let selectedLocation = selectedRange.location
 
         shouldWrapPhrases = false
 
@@ -229,16 +215,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         var count = 0
         attributedText
             .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-                if let att = att as? PhraseAttachment, let phrase = att.phrase {
-                    count += 1
-                    if let att = attachment(phrase: phrase, index: count) {
-                        textStorage.replaceCharacters(in: range, with: att)
-                    } else {
-                        textStorage.replaceCharacters(in: range, with: " ")
-                    }
-                }
-
                 if att is PlaceholderAttachment {
+                    let att = placeholderAttachment(index: count)
+                    textStorage.replaceCharacters(in: range, with: att)
                     count += 1
                 }
             }
