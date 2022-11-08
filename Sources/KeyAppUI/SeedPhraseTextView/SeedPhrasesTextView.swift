@@ -205,13 +205,16 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         let characterSet = CharacterSet(charactersIn: text.lowercased())
         
         if allowedCharacters.isSuperset(of: characterSet) {
-            // if text is not all lowercased
-            if text.lowercased() == text {
-                return true
-            } else {
-                textStorage.replaceCharacters(in: range, with: text.lowercased())
-                selectedRange = NSRange(location: range.location + text.count, length: 0)
+            var range = range
+            
+            // if selected all text
+            if range == NSRange(location: 0, length: attributedText.length) {
+                textStorage.replaceCharacters(in: NSRange(location: 0, length: 1), with: placeholderAttachment(index: 0))
+                range = NSRange(location: 1, length: attributedText.length - 1)
             }
+            
+            textStorage.replaceCharacters(in: range, with: text.lowercased())
+            selectedRange = NSRange(location: range.location + text.count, length: 0)
         }
         return false
     }
