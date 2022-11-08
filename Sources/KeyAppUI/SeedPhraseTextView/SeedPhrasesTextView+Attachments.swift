@@ -25,7 +25,7 @@ extension SeedPhrasesTextView {
                 glyphPosition: position,
                 characterIndex: charIndex
             )
-            bounds.origin.y -= 15
+            bounds.origin.y -= 3.5
             return bounds
         }
     }
@@ -38,7 +38,7 @@ extension SeedPhrasesTextView {
 
     func placeholderAttachment(index: Int) -> NSMutableAttributedString {
         let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
-            .padding(.init(top: 12, left: index == 0 ? 0: 16, bottom: 12, right: 2))
+            .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
         label.translatesAutoresizingMaskIntoConstraints = true
         label.isUserInteractionEnabled = true
 
