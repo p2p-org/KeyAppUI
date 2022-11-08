@@ -91,6 +91,13 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     
     /// Get current entered phrases
     public func getPhrases() -> [String] {
+        let attributedText = NSMutableAttributedString(attributedString: attributedText)
+        self.attributedText
+            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
+                if att is PlaceholderAttachment {
+                    attributedText.replaceCharacters(in: range, with: " ")
+                }
+            }
         let text = attributedText.string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         return text.components(separatedBy: " ")
     }
