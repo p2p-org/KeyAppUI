@@ -11,6 +11,9 @@ class TextFieldSection: BECompositionView {
             
             for i in [true, false] {
                 SeedPhrasesTextView()
+                    .setup { tv in
+                        tv.forwardedDelegate = self
+                    }
                 
                 let leftView: UIView = {
                     BEHStack {
@@ -89,5 +92,11 @@ class TextFieldSection: BECompositionView {
                 }
             }
         }
+    }
+}
+
+extension TextFieldSection: SeedPhraseTextViewDelegate {
+    func seedPhrasesTextView(_ textView: SeedPhrasesTextView, didEnterPhrases phrases: String) {
+        print(phrases)
     }
 }
