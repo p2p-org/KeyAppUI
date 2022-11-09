@@ -131,7 +131,10 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // pasting
         if isPasting {
-            let text = text.trimmingCharacters(in: .whitespacesAndNewlines).removeExtraSpaces()
+            let text = text.lettersAndSpaces
+                .lowercased()
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .removeExtraSpaces()
             
             // find all indexes of spaces
             var indexes = [Int]()
@@ -210,7 +213,14 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
         // wrap phrase when found a space
         if text.contains(" ") {
-            wrapPhrase()
+            // get all phrases
+            let selectedLocation = selectedRange.location
+
+            // recalculate selected range
+            let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
+            textStorage.replaceCharacters(in: selectedRange, with: attachment)
+            selectedRange = NSRange(location: selectedLocation + 1, length: 0)
+            
             rearrangeAttachments()
             return false
         }
@@ -236,18 +246,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         return false
     }
 
-    func wrapPhrase(addingPlaceholderAttachment: Bool = true) {
-        // get all phrases
-        let selectedLocation = selectedRange.location
-
-        // recalculate selected range
-        if addingPlaceholderAttachment {
-            let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
-            textStorage.replaceCharacters(in: selectedRange, with: attachment)
-            selectedRange = NSRange(location: selectedLocation + 1, length: 0)
-        }
-    }
-
     fileprivate func rearrangeAttachments() {
         var count = 0
         attributedText
@@ -270,5 +268,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 private extension String {
     func removeExtraSpaces() -> String {
         return self.replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
+    }
+    var lettersAndSpaces: String {
+        return String(unicodeScalars.filter({ scalar in
+            CharacterSet.letters.contains(scalar) ||
+            CharacterSet(charactersIn: " ").contains(scalar)
+        }))
     }
 }
