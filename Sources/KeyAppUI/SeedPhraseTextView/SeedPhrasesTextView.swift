@@ -16,12 +16,6 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     /// Default font for texts
     private let defaultFont = UIFont.systemFont(ofSize: 15)
     
-    /// Prevent dupplicating wraping phrases
-    private var shouldWrapPhrases = false
-    
-    /// Prevent dupplicating rearranging
-    private var shouldRearrange = false
-    
     /// Mark as pasting
     private var isPasting = false
     
@@ -131,14 +125,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
 
     public func textViewDidChange(_: UITextView) {
-        if shouldWrapPhrases {
-            wrapPhrase()
-        }
-
-        if shouldRearrange {
-            rearrangeAttachments()
-        }
-
         forwardedDelegate?.seedPhrasesTextViewDidChange(self)
     }
 
@@ -194,8 +180,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             }
 
             // remove others
-            shouldWrapPhrases = false
-            shouldRearrange = true
+            DispatchQueue.main.async { [weak self] in
+                self?.rearrangeAttachments()
+            }
             return true
         }
 
@@ -253,8 +240,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         // get all phrases
         let selectedLocation = selectedRange.location
 
-        shouldWrapPhrases = false
-
         // recalculate selected range
         if addingPlaceholderAttachment {
             let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
@@ -273,7 +258,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                     count += 1
                 }
             }
-        shouldRearrange = false
     }
     
     fileprivate func addFirstPlaceholderAttachment() {
