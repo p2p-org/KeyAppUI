@@ -129,7 +129,8 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
         // if deleting
         if text.isEmpty {
-            return handleDeleting(range: range)
+            handleDeleting(range: range)
+            return false
         }
 
         // add index when found a space
@@ -185,21 +186,23 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         isPasting = false
     }
     
-    private func handleDeleting(range: NSRange) -> Bool {
+    private func handleDeleting(range: NSRange) {
         // check if remove all character
         let newText = NSMutableAttributedString(attributedString: attributedText)
         newText.replaceCharacters(in: range, with: "")
+        
+        // remove
+        textStorage.replaceCharacters(in: range, with: "")
+        
         if newText.length == 0 {
-            textStorage.replaceCharacters(in: range, with: "")
+            // remove all
             addFirstPlaceholderAttachment()
-            return false
+        } else {
+            
+            // remove others
+            rearrangeAttachments()
+            selectedRange = .init(location: range.location, length: 0)
         }
-
-        // remove others
-        DispatchQueue.main.async { [weak self] in
-            self?.rearrangeAttachments()
-        }
-        return true
     }
     
     private func addIndex() {
