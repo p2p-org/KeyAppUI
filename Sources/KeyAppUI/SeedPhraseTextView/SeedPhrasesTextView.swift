@@ -53,9 +53,6 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
             .font: defaultFont,
             .paragraphStyle: paragraphStyle,
         ]
-
-        heightAnchor.constraint(greaterThanOrEqualToConstant: 70)
-            .isActive = true
 //        placeholder = L10n.enterSeedPhrasesInACorrectOrderToRecoverYourWallet
         delegate = self
         autocapitalizationType = .none
