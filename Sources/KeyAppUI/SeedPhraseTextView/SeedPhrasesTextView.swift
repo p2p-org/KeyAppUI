@@ -97,13 +97,8 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
 //        addPlaceholderAttachment(at: 0)
 //        selectedRange = NSRange(location: 1, length: 0)
     }
-
-    public override func closestPosition(to _: CGPoint) -> UITextPosition? {
-        let beginning = beginningOfDocument
-        let end = position(from: beginning, offset: attributedText.length)
-        return end
-    }
-
+    
+    /// Rect for cursor
     public override func caretRect(for position: UITextPosition) -> CGRect {
         var original = super.caretRect(for: position)
         let height: CGFloat = 20
@@ -140,28 +135,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             return handleDeleting(range: range)
         }
 
-        // prevent dupplicated attachments
-        if text.trimmingCharacters(in: .whitespaces).isEmpty {
-            // prevent space at the begining
-            if range.location == 0 { return false }
-            
-            // prevent 2 attachment next to each other
-            else {
-                // if prev location is an attachment
-                if attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1))
-                {
-                    return false
-                }
-                
-                // if next location is an attachment
-//                else if attributedText.length > range.location &&
-//                    attributedText.containsAttachments(in: NSRange(location: range.location, length: 1))
-//                {
-//                    return false
-//                }
-            }
-        }
-
         // add index when found a space
         if text.contains(" ") {
             addIndex()
@@ -169,23 +142,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         }
         
         // allow only lowercased letters
-        let allowedCharacters = CharacterSet.lowercaseLetters
-        let characterSet = CharacterSet(charactersIn: text.lowercased())
-        
-        if allowedCharacters.isSuperset(of: characterSet) {
-            var range = range
-            
-            // if selected all text
-            if range == NSRange(location: 0, length: attributedText.length) {
-                textStorage.replaceCharacters(in: range, with: "")
-                let attachment = placeholderAttachment(index: 0)
-                textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
-                range = NSRange(location: 1, length: 0)
-            }
-            
-            textStorage.replaceCharacters(in: range, with: text.lowercased())
-            selectedRange = NSRange(location: range.location + text.count, length: 0)
-        }
+        insertOnlyLetters(range: range, text: text)
         return false
     }
     
@@ -251,6 +208,12 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     private func addIndex() {
         // get all phrases
         let selectedLocation = selectedRange.location
+        
+        if selectedLocation > 0,
+           attributedText.containsAttachments(in: NSRange(location: selectedLocation - 1, length: 1))
+        {
+            return
+        }
 
         // recalculate selected range
         let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
@@ -259,8 +222,28 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         
         rearrangeAttachments()
     }
+    
+    private func insertOnlyLetters(range: NSRange, text: String) {
+        let allowedCharacters = CharacterSet.lowercaseLetters
+        let characterSet = CharacterSet(charactersIn: text.lowercased())
+        
+        if allowedCharacters.isSuperset(of: characterSet) {
+            var range = range
+            
+            // if selected all text
+            if range == NSRange(location: 0, length: attributedText.length) {
+                textStorage.replaceCharacters(in: range, with: "")
+                let attachment = placeholderAttachment(index: 0)
+                textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
+                range = NSRange(location: 1, length: 0)
+            }
+            
+            textStorage.replaceCharacters(in: range, with: text.lowercased())
+            selectedRange = NSRange(location: range.location + text.count, length: 0)
+        }
+    }
 
-    fileprivate func rearrangeAttachments() {
+    private func rearrangeAttachments() {
         var count = 0
         attributedText
             .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
@@ -272,7 +255,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             }
     }
     
-    fileprivate func addFirstPlaceholderAttachment() {
+    private func addFirstPlaceholderAttachment() {
         let attachment = placeholderAttachment(index: 0)
         textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
         selectedRange = NSRange(location: 1, length: 0)
