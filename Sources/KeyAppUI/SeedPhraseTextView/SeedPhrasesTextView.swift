@@ -68,8 +68,7 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
         autocorrectionType = .no
 
         // add first placeholder
-        addPlaceholderAttachment(at: 0)
-        selectedRange = NSRange(location: 1, length: 0)
+        addFirstPlaceholderAttachment()
     }
 
     /// Disable initializing with storyboard
@@ -182,10 +181,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             isPasting = false
             return false
         }
-        
-        // disable
-        shouldWrapPhrases = false
-        shouldRearrange = false
 
         // if deleting
         if text.isEmpty {
@@ -194,12 +189,12 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             newText.replaceCharacters(in: range, with: text)
             if newText.length == 0 {
                 textStorage.replaceCharacters(in: range, with: text)
-                addPlaceholderAttachment(at: 0)
-                selectedRange = NSRange(location: 1, length: 0)
+                addFirstPlaceholderAttachment()
                 return false
             }
 
             // remove others
+            shouldWrapPhrases = false
             shouldRearrange = true
             return true
         }
@@ -230,8 +225,6 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         if text.contains(" ") {
             wrapPhrase()
             rearrangeAttachments()
-            shouldWrapPhrases = true
-            shouldRearrange = true
             return false
         }
         
@@ -245,7 +238,8 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             // if selected all text
             if range == NSRange(location: 0, length: attributedText.length) {
                 textStorage.replaceCharacters(in: range, with: "")
-                addPlaceholderAttachment(at: 0)
+                let attachment = placeholderAttachment(index: 0)
+                textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
                 range = NSRange(location: 1, length: 0)
             }
             
@@ -263,7 +257,8 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
         // recalculate selected range
         if addingPlaceholderAttachment {
-            addPlaceholderAttachment(at: selectedLocation)
+            let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
+            textStorage.replaceCharacters(in: selectedRange, with: attachment)
             selectedRange = NSRange(location: selectedLocation + 1, length: 0)
         }
     }
@@ -279,6 +274,12 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 }
             }
         shouldRearrange = false
+    }
+    
+    fileprivate func addFirstPlaceholderAttachment() {
+        let attachment = placeholderAttachment(index: 0)
+        textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
+        selectedRange = NSRange(location: 1, length: 0)
     }
 }
 

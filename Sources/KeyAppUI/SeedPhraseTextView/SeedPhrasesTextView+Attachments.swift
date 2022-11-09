@@ -40,7 +40,6 @@ extension SeedPhrasesTextView {
         let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
             .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
         label.translatesAutoresizingMaskIntoConstraints = true
-        label.isUserInteractionEnabled = true
 
         // replace text by attachment
         let attachment = PlaceholderAttachment(view: label)
@@ -50,11 +49,6 @@ extension SeedPhrasesTextView {
     }
 
     // MARK: - Helpers
-
-    func addPlaceholderAttachment(at index: Int) {
-        textStorage.replaceCharacters(in: selectedRange, with: placeholderAttachment(index: phraseIndex(at: index)))
-    }
-
     func phraseIndex(at location: Int) -> Int {
         var count = 0
         attributedText
@@ -65,18 +59,5 @@ extension SeedPhrasesTextView {
                 }
             }
         return count
-    }
-
-    func removeAllPlaceholderAttachment() {
-        var lengthDiff = 0
-        textStorage
-            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-                if att is PlaceholderAttachment {
-                    var range = range
-                    range.location += lengthDiff
-                    textStorage.replaceCharacters(in: range, with: "")
-                    lengthDiff -= 1
-                }
-            }
     }
 }
