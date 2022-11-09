@@ -162,17 +162,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             }
         }
 
-        // wrap phrase when found a space
+        // add index when found a space
         if text.contains(" ") {
-            // get all phrases
-            let selectedLocation = selectedRange.location
-
-            // recalculate selected range
-            let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
-            textStorage.replaceCharacters(in: selectedRange, with: attachment)
-            selectedRange = NSRange(location: selectedLocation + 1, length: 0)
-            
-            rearrangeAttachments()
+            addIndex()
             return false
         }
         
@@ -254,6 +246,18 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             self?.rearrangeAttachments()
         }
         return true
+    }
+    
+    private func addIndex() {
+        // get all phrases
+        let selectedLocation = selectedRange.location
+
+        // recalculate selected range
+        let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
+        textStorage.replaceCharacters(in: selectedRange, with: attachment)
+        selectedRange = NSRange(location: selectedLocation + 1, length: 0)
+        
+        rearrangeAttachments()
     }
 
     fileprivate func rearrangeAttachments() {
