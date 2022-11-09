@@ -81,10 +81,6 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     public override func paste(_ sender: Any?) {
         super.paste(sender)
         isPasting = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            // place cursor at the end
-            self?.selectedRange.location = self?.attributedText.length ?? 0
-        }
     }
 
     // MARK: - Methods
@@ -150,7 +146,41 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // pasting
         if isPasting {
-            // TODO: - Paste
+            let text = text.trimmingCharacters(in: .whitespacesAndNewlines).removeExtraSpaces()
+            
+            // find all indexes of spaces
+            var indexes = [Int]()
+            for (index, char) in text.enumerated() where char == " " {
+                indexes.append(index)
+            }
+            
+            // replace all spaces with attachments
+            var addingAttributedString = NSMutableAttributedString(string: text, attributes: typingAttributes)
+            for index in indexes {
+                let spaceRange = NSRange(location: index, length: 1)
+                addingAttributedString.replaceCharacters(in: spaceRange, with: placeholderAttachment(index: index))
+            }
+            
+            // if stand at the begining, or prev character is not a placeholder, add attachment
+            var atTheBegining = false
+            if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
+                let attachment = placeholderAttachment(index: 0)
+                attachment.append(addingAttributedString)
+                addingAttributedString = attachment
+                atTheBegining = true
+            }
+            
+            // paste to range
+            textStorage.replaceCharacters(in: range, with: addingAttributedString)
+            
+            // rearrange
+            rearrangeAttachments()
+            
+            // move cursor
+            DispatchQueue.main.async { [weak self] in
+                self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
+            }
+            
             isPasting = false
             return false
         }
@@ -251,5 +281,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 }
             }
         shouldRearrange = false
+    }
+}
+
+private extension String {
+    func removeExtraSpaces() -> String {
+        return self.replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
     }
 }
