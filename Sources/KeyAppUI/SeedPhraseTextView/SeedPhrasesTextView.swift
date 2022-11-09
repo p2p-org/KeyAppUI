@@ -34,7 +34,7 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
             }
 
             if !(delegate is Self) {
-                fatalError("Use phrases text view delegate instead")
+                fatalError("Use forwardedDelegate instead")
             }
         }
     }
