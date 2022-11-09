@@ -3,10 +3,11 @@ import Foundation
 import SubviewAttachingTextView
 
 /// Delegate for seed phrase text view
-public protocol SeedPhraseTextViewDelegate: AnyObject {
-    func seedPhrasesTextViewDidBeginEditing(_ textView: SeedPhrasesTextView)
-    func seedPhrasesTextViewDidEndEditing(_ textView: SeedPhrasesTextView)
-    func seedPhrasesTextViewDidChange(_ textView: SeedPhrasesTextView)
+@objc public protocol SeedPhraseTextViewDelegate: AnyObject {
+    @objc optional func seedPhrasesTextViewDidBeginEditing(_ textView: SeedPhrasesTextView)
+    @objc optional func seedPhrasesTextViewDidEndEditing(_ textView: SeedPhrasesTextView)
+    @objc optional func seedPhrasesTextViewDidChange(_ textView: SeedPhrasesTextView)
+    func seedPhrasesTextView(_ textView: SeedPhrasesTextView, didEnterPhrases phrases: String)
 }
 
 /// TextView that can handle seed phrase with indexes
@@ -18,6 +19,9 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     
     /// Mark as pasting
     private var isPasting = false
+    
+    /// Cache for phrase
+    private var phrasesCached = ""
     
     /// Replacement for default delegate
     public weak var forwardedDelegate: SeedPhraseTextViewDelegate?
@@ -109,38 +113,42 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
 
 extension SeedPhrasesTextView: UITextViewDelegate {
     public func textViewDidBeginEditing(_: UITextView) {
-        forwardedDelegate?.seedPhrasesTextViewDidBeginEditing(self)
+        forwardedDelegate?.seedPhrasesTextViewDidBeginEditing?(self)
     }
 
     public func textViewDidEndEditing(_: UITextView) {
-        forwardedDelegate?.seedPhrasesTextViewDidEndEditing(self)
+        forwardedDelegate?.seedPhrasesTextViewDidEndEditing?(self)
     }
 
     public func textViewDidChange(_: UITextView) {
-        forwardedDelegate?.seedPhrasesTextViewDidChange(self)
+        forwardedDelegate?.seedPhrasesTextViewDidChange?(self)
     }
 
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // pasting
         if isPasting {
             handlePasting(range: range, text: text)
+            markAsChanged()
             return false
         }
 
         // if deleting
         if text.isEmpty {
             handleDeleting(range: range)
+            markAsChanged()
             return false
         }
 
         // add index when found a space
         if text.contains(" ") {
             addIndex()
+            markAsChanged()
             return false
         }
         
         // allow only lowercased letters
         insertOnlyLetters(range: range, text: text)
+        markAsChanged()
         return false
     }
     
@@ -259,6 +267,15 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         let attachment = placeholderAttachment(index: 0)
         textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
         selectedRange = NSRange(location: 1, length: 0)
+    }
+    
+    private func markAsChanged() {
+        forwardedDelegate?.seedPhrasesTextViewDidChange?(self)
+        let newPhrases = getPhrases().joined(separator: " ")
+        if newPhrases != phrasesCached {
+            forwardedDelegate?.seedPhrasesTextView(self, didEnterPhrases: newPhrases)
+            phrasesCached = newPhrases
+        }
     }
 }
 
