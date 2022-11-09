@@ -131,62 +131,13 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // pasting
         if isPasting {
-            let text = text.lettersAndSpaces
-                .lowercased()
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                .removeExtraSpaces()
-            
-            // find all indexes of spaces
-            var indexes = [Int]()
-            for (index, char) in text.enumerated() where char == " " {
-                indexes.append(index)
-            }
-            
-            // replace all spaces with attachments
-            var addingAttributedString = NSMutableAttributedString(string: text, attributes: typingAttributes)
-            for index in indexes {
-                let spaceRange = NSRange(location: index, length: 1)
-                addingAttributedString.replaceCharacters(in: spaceRange, with: placeholderAttachment(index: index))
-            }
-            
-            // if stand at the begining, or prev character is not a placeholder, add attachment
-            if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
-                let attachment = placeholderAttachment(index: 0)
-                attachment.append(addingAttributedString)
-                addingAttributedString = attachment
-            }
-            
-            // paste to range
-            textStorage.replaceCharacters(in: range, with: addingAttributedString)
-            
-            // rearrange
-            rearrangeAttachments()
-            
-            // move cursor
-            DispatchQueue.main.async { [weak self] in
-                self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
-            }
-            
-            isPasting = false
+            handlePasting(range: range, text: text)
             return false
         }
 
         // if deleting
         if text.isEmpty {
-            // check if remove all character
-            let newText = NSMutableAttributedString(attributedString: attributedText)
-            newText.replaceCharacters(in: range, with: text)
-            if newText.length == 0 {
-                textStorage.replaceCharacters(in: range, with: text)
-                addFirstPlaceholderAttachment()
-                return false
-            }
-
-            // remove others
-            DispatchQueue.main.async { [weak self] in
-                self?.rearrangeAttachments()
-            }
-            return true
+            return handleDeleting(range: range)
         }
 
         // prevent dupplicated attachments
@@ -244,6 +195,65 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             selectedRange = NSRange(location: range.location + text.count, length: 0)
         }
         return false
+    }
+    
+    // MARK: - Helpers
+    
+    private func handlePasting(range: NSRange, text: String) {
+        let text = text.lettersAndSpaces
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .removeExtraSpaces()
+        
+        // find all indexes of spaces
+        var indexes = [Int]()
+        for (index, char) in text.enumerated() where char == " " {
+            indexes.append(index)
+        }
+        
+        // replace all spaces with attachments
+        var addingAttributedString = NSMutableAttributedString(string: text, attributes: typingAttributes)
+        for index in indexes {
+            let spaceRange = NSRange(location: index, length: 1)
+            addingAttributedString.replaceCharacters(in: spaceRange, with: placeholderAttachment(index: index))
+        }
+        
+        // if stand at the begining, or prev character is not a placeholder, add attachment
+        if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
+            let attachment = placeholderAttachment(index: 0)
+            attachment.append(addingAttributedString)
+            addingAttributedString = attachment
+        }
+        
+        // paste to range
+        textStorage.replaceCharacters(in: range, with: addingAttributedString)
+        
+        // rearrange
+        rearrangeAttachments()
+        
+        // move cursor
+        DispatchQueue.main.async { [weak self] in
+            self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
+        }
+        
+        isPasting = false
+    }
+    
+    private func handleDeleting(range: NSRange) -> Bool {
+        // check if remove all character
+        let newText = NSMutableAttributedString(attributedString: attributedText)
+        newText.replaceCharacters(in: range, with: "")
+        if newText.length == 0 {
+            textStorage.replaceCharacters(in: range, with: "")
+            addFirstPlaceholderAttachment()
+            return false
+        }
+
+        // remove others
+        DispatchQueue.main.async { [weak self] in
+            self?.rearrangeAttachments()
+        }
+        return true
     }
 
     fileprivate func rearrangeAttachments() {
