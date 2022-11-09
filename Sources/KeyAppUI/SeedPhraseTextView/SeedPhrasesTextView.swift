@@ -162,12 +162,10 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             }
             
             // if stand at the begining, or prev character is not a placeholder, add attachment
-            var atTheBegining = false
             if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
                 let attachment = placeholderAttachment(index: 0)
                 attachment.append(addingAttributedString)
                 addingAttributedString = attachment
-                atTheBegining = true
             }
             
             // paste to range
