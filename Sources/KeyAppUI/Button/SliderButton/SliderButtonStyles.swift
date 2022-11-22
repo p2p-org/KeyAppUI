@@ -4,32 +4,40 @@ public extension SliderButton {
     enum Style: CaseIterable {
         case white
         case black
+        case solidBlack
 
         var backgroundColor: UIColor {
             switch self {
             case .white: return Asset.Colors.snow.color
-            case .black: return Asset.Colors.night.color
+            case .black, .solidBlack: return Asset.Colors.night.color
             }
         }
 
         var iconColor: UIColor {
             switch self {
             case .white: return Asset.Colors.lime.color
-            case .black: return Asset.Colors.night.color
+            case .black, .solidBlack: return Asset.Colors.night.color
             }
         }
 
         var iconBackgroundColor: UIColor {
             switch self {
             case .white: return Asset.Colors.night.color
-            case .black: return Asset.Colors.lime.color
+            case .black, .solidBlack: return Asset.Colors.lime.color
             }
         }
 
         var titleColor: UIColor {
             switch self {
             case .white: return Asset.Colors.night.color
-            case .black: return Asset.Colors.snow.color
+            case .black, .solidBlack: return Asset.Colors.snow.color
+            }
+        }
+
+        var progressColor: UIColor? {
+            switch self {
+            case .white, .black: return nil
+            case .solidBlack: return Asset.Colors.night.color
             }
         }
 
@@ -44,7 +52,9 @@ public extension SliderButton {
             titleColor: style.titleColor,
             font: style.font(),
             iconColor: style.iconColor,
-            iconBackgroundColor: style.iconBackgroundColor
+            iconBackgroundColor: style.iconBackgroundColor,
+            isGradient: style != .solidBlack,
+            progressColor: style.progressColor
         )
 
         self.init(
