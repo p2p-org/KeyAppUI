@@ -36,9 +36,9 @@ extension SeedPhrasesTextView {
 extension SeedPhrasesTextView {
     // MARK: - Methods
 
-    func placeholderAttachment(index: Int) -> NSMutableAttributedString {
+    func placeholderAttachment(index: Int, leftPadding: CGFloat = 16) -> NSMutableAttributedString {
         let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
-            .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
+            .padding(.init(top: 0, left: index == 0 ? 0: leftPadding, bottom: 0, right: 2))
         label.translatesAutoresizingMaskIntoConstraints = true
 
         // replace text by attachment
