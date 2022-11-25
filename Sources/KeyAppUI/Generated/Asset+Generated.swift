@@ -58,6 +58,8 @@ public enum Asset {
   public enum Icons {
     public static let copyFilled = ImageAsset(name: "copy-filled")
     public static let key = ImageAsset(name: "key")
+    public static let past = ImageAsset(name: "past")
+    public static let qr = ImageAsset(name: "qr")
     public static let remove = ImageAsset(name: "remove")
     public static let send = ImageAsset(name: "send")
     // swiftlint:disable trailing_comma
@@ -66,6 +68,8 @@ public enum Asset {
     public static let allImages: [ImageAsset] = [
       copyFilled,
       key,
+      past,
+      qr,
       remove,
       send,
     ]
