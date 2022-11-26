@@ -62,6 +62,7 @@ public enum Asset {
     public static let qr = ImageAsset(name: "qr")
     public static let remove = ImageAsset(name: "remove")
     public static let send = ImageAsset(name: "send")
+    public static let warning = ImageAsset(name: "warning")
     // swiftlint:disable trailing_comma
     public static let allColors: [ColorAsset] = [
     ]
@@ -72,6 +73,7 @@ public enum Asset {
       qr,
       remove,
       send,
+      warning,
     ]
     // swiftlint:enable trailing_comma
   }
