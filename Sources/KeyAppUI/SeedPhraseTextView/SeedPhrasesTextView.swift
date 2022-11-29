@@ -216,7 +216,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func handleSpace() {
+        // TODO: - won't allow space between two other spaces
+        
+        
         // if cursor is in the middle of the text
+        let hasIndexAfterCurrentSelectedLocation = hasIndexAfterCurrentSelectedLocation()
         if selectedRange.location > 0 {
             // if there is already an index before current cursor, ignore it
             if hasIndexBeforeCurrentSelectedLocation() {
@@ -224,7 +228,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             }
             // if there is no index before current cursor,
             // add separator
-            else {
+            else if !hasIndexAfterCurrentSelectedLocation {
                 insertSeparatorAtSelectedRangeAndMoveCursor()
             }
         }
@@ -232,11 +236,20 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         // insert index at current selected location
         insertIndexAtSelectedRangeAndMoveCursor()
         
+        if hasIndexAfterCurrentSelectedLocation {
+            // add separator
+            insertSeparatorAtSelectedRangeAndMoveCursor()
+            // move back cursor
+            selectedRange = .init(location: selectedRange.location - phraseSeparator.count, length: 0)
+        }
+        
         // rearrange indexes
         rearrangeIndexes()
     }
     
     private func insertOnlyLetters(range: NSRange, text: String) {
+        // TODO: - won't allow ANY character between two spaces
+        
         let allowedCharacters = CharacterSet.lowercaseLetters
         let characterSet = CharacterSet(charactersIn: text.lowercased())
         
@@ -301,14 +314,30 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location >= 3 else { return false}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"[1..9]+. "#)
-        guard let result = regex.matches(in: text, range: NSRange( location: 0, length: text.count)).last
+        let regex = try! NSRegularExpression(pattern: #"[1..9]+.? ?"#)
+        guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
         else {
             return false
         }
         
         // if find result exactly before the location
         return result.range.location + result.range.length == location
+    }
+    
+    private func hasIndexAfterCurrentSelectedLocation() -> Bool {
+        let location = selectedRange.location
+        // index max "24. ", min "1. " (min 3 character)
+        guard location + 3 <= text.count else { return false}
+        
+        // check index by using regex
+        let regex = try! NSRegularExpression(pattern: #"[1..9]+.? ?"#)
+        guard let result = regex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).last
+        else {
+            return false
+        }
+        
+        // if find result exactly before the location
+        return result.range.location == location
     }
 
     private func indexAttributedString(index: Int) -> NSMutableAttributedString {
