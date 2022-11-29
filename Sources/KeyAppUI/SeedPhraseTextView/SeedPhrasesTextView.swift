@@ -291,18 +291,16 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         let characterSet = CharacterSet(charactersIn: text.lowercased())
         
         if allowedCharacters.isSuperset(of: characterSet) {
-            var range = range
-            
+
             // if selected all text
             if range == NSRange(location: 0, length: attributedText.length) {
                 textStorage.replaceCharacters(in: range, with: "")
-                let attachment = indexAttributedString(index: 1)
-                textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
-                range = NSRange(location: attachment.length, length: 0)
+                
+                insertIndexAtSelectedRangeAndMoveCursor()
             }
             
-            textStorage.replaceCharacters(in: range, with: NSAttributedString(string: text.lowercased(), attributes: defaultTypingAttributes))
-            selectedRange = NSRange(location: range.location + text.count, length: 0)
+            textStorage.replaceCharacters(in: selectedRange, with: NSAttributedString(string: text.lowercased(), attributes: defaultTypingAttributes))
+            selectedRange = NSRange(location: selectedRange.location + text.count, length: 0)
         }
     }
 
@@ -455,7 +453,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 //                }
 //            }
 //        return count
-        return 1
+        return 2
     }
 }
 
