@@ -246,7 +246,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             // if selected all text
             if range == NSRange(location: 0, length: attributedText.length) {
                 textStorage.replaceCharacters(in: range, with: "")
-                let attachment = placeholderAttachment(index: 0)
+                let attachment = indexAttributedString(index: 0)
                 textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
                 range = NSRange(location: 1, length: 0)
             }
@@ -285,7 +285,8 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func insertIndexAtSelectedRangeAndMoveCursor() {
-        let indexAttributedString = placeholderAttachment(index: phraseIndex(at: selectedRange.location))
+        let phraseIndex = phraseIndex(at: selectedRange.location)
+        let indexAttributedString = indexAttributedString(index: phraseIndex)
         insertAttributedStringAtSelectedRangeAndMoveCursor(indexAttributedString)
     }
     
@@ -310,7 +311,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         return result.range.location + result.range.length == location
     }
 
-    private func placeholderAttachment(index: Int) -> NSMutableAttributedString {
+    private func indexAttributedString(index: Int) -> NSMutableAttributedString {
         .init(string: "\(index). ", attributes: typingAttributes)
 //        let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
 //            .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
