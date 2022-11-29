@@ -110,6 +110,12 @@ public class SeedPhrasesTextView: UITextView {
 //        original.size.height = height
 //        return original
 //    }
+    
+    public override func closestPosition(to point: CGPoint) -> UITextPosition? {
+        let beginning = self.beginningOfDocument
+        let end = self.position(from: beginning, offset: self.text?.count ?? 0)
+        return end
+    }
 }
 
 // MARK: - Forward delegate
@@ -125,6 +131,13 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
     public func textViewDidChange(_: UITextView) {
         forwardedDelegate?.seedPhrasesTextViewDidChange?(self)
+    }
+    
+    public func textViewDidChangeSelection(_ textView: UITextView) {
+        // ignore selecting in the middle
+        if selectedRange.location + selectedRange.length < text.count {
+            selectedRange = .init(location: text.count, length: 0)
+        }
     }
 
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -199,16 +212,26 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     
     private func handleDeleting(range: NSRange) {
         // remove
-        textStorage.replaceCharacters(in: range, with: "")
+        let firstRemovedCharacter = text[range.location]
         
-        // remove extra index before
-        if let range = rangeOfIndexBeforeCurrentSelectedLocation() {
-            textStorage.replaceCharacters(in: range, with: "")
+        if range.length > 0 {
+            textStorage.replaceCharacters(in: .init(location: range.location + 1, length: range.length - 1), with: "")
         }
         
-        // remove extra phrase separator
-        if let range = rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() {
-            textStorage.replaceCharacters(in: range, with: "")
+        if firstRemovedCharacter != " " {
+            textStorage.replaceCharacters(in: .init(location: range.location, length: 1), with: "")
+        }
+        
+        else {
+            // remove extra index before
+            if let indexRange = rangeOfIndexBeforeCurrentSelectedLocation() {
+                textStorage.replaceCharacters(in: indexRange, with: "")
+            }
+            
+            // remove extra phrase separator
+            if let phraseSeparatorRange = rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() {
+                textStorage.replaceCharacters(in: phraseSeparatorRange, with: "")
+            }
         }
         
         // CASE 1: Entire text was removed
