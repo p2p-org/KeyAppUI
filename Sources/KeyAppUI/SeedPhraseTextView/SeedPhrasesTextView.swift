@@ -198,31 +198,28 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func handleDeleting(range: NSRange) {
-        // check if remove all character
-        let newText = NSMutableAttributedString(attributedString: attributedText)
-        newText.replaceCharacters(in: range, with: "")
-
         // remove
         textStorage.replaceCharacters(in: range, with: "")
-
-        if newText.length == 0 {
-            // remove all
-            insertIndexAtSelectedRangeAndMoveCursor()
-        } else {
-            // remove extra index before
-            if let range = rangeOfIndexBeforeCurrentSelectedLocation() {
-                textStorage.replaceCharacters(in: range, with: "")
-            }
-            
-            // remove extra phrase separator
-            if let range = rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() {
-                textStorage.replaceCharacters(in: range, with: "")
-            }
-            
-            // remove others
-            rearrangeIndexes()
-            selectedRange = .init(location: range.location, length: 0)
+        
+        // remove extra index before
+        if let range = rangeOfIndexBeforeCurrentSelectedLocation() {
+            textStorage.replaceCharacters(in: range, with: "")
         }
+        
+        // remove extra phrase separator
+        if let range = rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() {
+            textStorage.replaceCharacters(in: range, with: "")
+        }
+        
+        // CASE 1: Entire text was removed
+        if text.isEmpty {
+            insertIndexAtSelectedRangeAndMoveCursor()
+            return
+        }
+        
+        // CASE 2: part of text was removed
+        rearrangeIndexes()
+        selectedRange = .init(location: range.location, length: 0)
     }
     
     private func handleSpace() {
@@ -330,7 +327,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location >= 3 else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"[1..9]+.? ?"#)
+        let regex = try! NSRegularExpression(pattern: #"[1..9]+. ?"#)
         guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
         else {
             return nil
@@ -433,7 +430,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 }
 
 private extension String {
-    func removeExtraSpaces() -> String {
+    func removingExtraSpaces() -> String {
         return self.replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
     }
     var lettersAndSpaces: String {
