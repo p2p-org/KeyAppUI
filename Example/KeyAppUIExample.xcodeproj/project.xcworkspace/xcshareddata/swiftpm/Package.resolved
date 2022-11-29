@@ -29,15 +29,6 @@
         }
       },
       {
-        "package": "SubviewAttachingTextView",
-        "repositoryURL": "https://github.com/vlas-voloshin/SubviewAttachingTextView.git",
-        "state": {
-          "branch": null,
-          "revision": "6025828b6c05fbf5529616a70c702f7425899fe5",
-          "version": "1.5.1"
-        }
-      },
-      {
         "package": "swift-algorithms",
         "repositoryURL": "https://github.com/apple/swift-algorithms.git",
         "state": {

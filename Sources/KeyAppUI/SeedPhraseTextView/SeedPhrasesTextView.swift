@@ -1,6 +1,5 @@
 import UIKit
 import Foundation
-import SubviewAttachingTextView
 
 /// Delegate for seed phrase text view
 @objc public protocol SeedPhraseTextViewDelegate: AnyObject {
@@ -11,11 +10,14 @@ import SubviewAttachingTextView
 }
 
 /// TextView that can handle seed phrase with indexes
-public class SeedPhrasesTextView: SubviewAttachingTextView {
+public class SeedPhrasesTextView: UITextView {
     // MARK: - Properties
     
     /// Default font for texts
     private let defaultFont = UIFont.systemFont(ofSize: 15)
+    
+    /// Separator between phrases
+    private let phraseSeparator = "   " // 3 spaces
     
     /// Mark as pasting
     private var isPasting = false
@@ -63,7 +65,7 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
         autocorrectionType = .no
 
         // add first placeholder
-        addFirstPlaceholderAttachment()
+        insertIndexAtSelectedRangeAndMoveCursor()
     }
 
     /// Disable initializing with storyboard
@@ -81,14 +83,14 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     
     /// Get current entered phrases
     public func getPhrases() -> [String] {
-        let attributedText = NSMutableAttributedString(attributedString: attributedText)
-        self.attributedText
-            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-                if att is PlaceholderAttachment {
-                    attributedText.replaceCharacters(in: range, with: " ")
-                }
-            }
-        let text = attributedText.string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+//        let attributedText = NSMutableAttributedString(attributedString: attributedText)
+//        self.attributedText
+//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
+//                if att is PlaceholderAttachment {
+//                    attributedText.replaceCharacters(in: range, with: " ")
+//                }
+//            }
+//        let text = attributedText.string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         return text.components(separatedBy: " ")
     }
     
@@ -100,13 +102,13 @@ public class SeedPhrasesTextView: SubviewAttachingTextView {
     }
     
     /// Rect for cursor
-    public override func caretRect(for position: UITextPosition) -> CGRect {
-        var original = super.caretRect(for: position)
-        let height: CGFloat = 20
-        original.origin.y += (original.size.height - 20) / 2
-        original.size.height = height
-        return original
-    }
+//    public override func caretRect(for position: UITextPosition) -> CGRect {
+//        var original = super.caretRect(for: position)
+//        let height: CGFloat = 20
+//        original.origin.y += (original.size.height - 20) / 2
+//        original.size.height = height
+//        return original
+//    }
 }
 
 // MARK: - Forward delegate
@@ -141,7 +143,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
         // add index when found a space
         if text.contains(" ") {
-            addIndex()
+            handleSpace()
             markAsChanged()
             return false
         }
@@ -152,83 +154,86 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         return false
     }
     
-    // MARK: - Helpers
+    // MARK: - Handlers
     
     private func handlePasting(range: NSRange, text: String) {
-        let text = text.lettersAndSpaces
-            .lowercased()
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .removeExtraSpaces()
-        
-        // find all indexes of spaces
-        var indexes = [Int]()
-        for (index, char) in text.enumerated() where char == " " {
-            indexes.append(index)
-        }
-        
-        // replace all spaces with attachments
-        var addingAttributedString = NSMutableAttributedString(string: text, attributes: typingAttributes)
-        for index in indexes {
-            let spaceRange = NSRange(location: index, length: 1)
-            addingAttributedString.replaceCharacters(in: spaceRange, with: placeholderAttachment(index: index))
-        }
-        
-        // if stand at the begining, or prev character is not a placeholder, add attachment
-        if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
-            let attachment = placeholderAttachment(index: 0)
-            attachment.append(addingAttributedString)
-            addingAttributedString = attachment
-        }
-        
-        // paste to range
-        textStorage.replaceCharacters(in: range, with: addingAttributedString)
-        
-        // rearrange
-        rearrangeAttachments()
-        
-        // move cursor
-        DispatchQueue.main.async { [weak self] in
-            self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
-        }
+//        let text = text.lettersAndSpaces
+//            .lowercased()
+//            .trimmingCharacters(in: .whitespacesAndNewlines)
+//            .removeExtraSpaces()
+//
+//        // find all indexes of spaces
+//        var indexes = [Int]()
+//        for (index, char) in text.enumerated() where char == " " {
+//            indexes.append(index)
+//        }
+//
+//        // replace all spaces with attachments
+//        var addingAttributedString = NSMutableAttributedString(string: text, attributes: typingAttributes)
+//        for index in indexes {
+//            let spaceRange = NSRange(location: index, length: 1)
+//            addingAttributedString.replaceCharacters(in: spaceRange, with: placeholderAttachment(index: index))
+//        }
+//
+//        // if stand at the begining, or prev character is not a placeholder, add attachment
+//        if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
+//            let attachment = placeholderAttachment(index: 0)
+//            attachment.append(addingAttributedString)
+//            addingAttributedString = attachment
+//        }
+//
+//        // paste to range
+//        textStorage.replaceCharacters(in: range, with: addingAttributedString)
+//
+//        // rearrange
+//        rearrangeAttachments()
+//
+//        // move cursor
+//        DispatchQueue.main.async { [weak self] in
+//            self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
+//        }
         
         isPasting = false
     }
     
     private func handleDeleting(range: NSRange) {
-        // check if remove all character
-        let newText = NSMutableAttributedString(attributedString: attributedText)
-        newText.replaceCharacters(in: range, with: "")
-        
-        // remove
-        textStorage.replaceCharacters(in: range, with: "")
-        
-        if newText.length == 0 {
-            // remove all
-            addFirstPlaceholderAttachment()
-        } else {
-            
-            // remove others
-            rearrangeAttachments()
-            selectedRange = .init(location: range.location, length: 0)
-        }
+//        // check if remove all character
+//        let newText = NSMutableAttributedString(attributedString: attributedText)
+//        newText.replaceCharacters(in: range, with: "")
+//
+//        // remove
+//        textStorage.replaceCharacters(in: range, with: "")
+//
+//        if newText.length == 0 {
+//            // remove all
+//            addFirstPlaceholderAttachment()
+//        } else {
+//
+//            // remove others
+//            rearrangeAttachments()
+//            selectedRange = .init(location: range.location, length: 0)
+//        }
     }
     
-    private func addIndex() {
-        // get all phrases
-        let selectedLocation = selectedRange.location
-        
-        if selectedLocation > 0,
-           attributedText.containsAttachments(in: NSRange(location: selectedLocation - 1, length: 1))
-        {
-            return
+    private func handleSpace() {
+        // if cursor is in the middle of the text
+        if selectedRange.location > 0 {
+            // if there is already an index before current cursor, ignore it
+            if hasIndexBeforeCurrentSelectedLocation() {
+                return
+            }
+            // if there is no index before current cursor,
+            // add separator
+            else {
+                insertSeparatorAtSelectedRangeAndMoveCursor()
+            }
         }
 
-        // recalculate selected range
-        let attachment = placeholderAttachment(index: phraseIndex(at: selectedLocation))
-        textStorage.replaceCharacters(in: selectedRange, with: attachment)
-        selectedRange = NSRange(location: selectedLocation + 1, length: 0)
+        // insert index at current selected location
+        insertIndexAtSelectedRangeAndMoveCursor()
         
-        rearrangeAttachments()
+        // rearrange indexes
+        rearrangeIndexes()
     }
     
     private func insertOnlyLetters(range: NSRange, text: String) {
@@ -251,22 +256,16 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         }
     }
 
-    private func rearrangeAttachments() {
-        var count = 0
-        attributedText
-            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-                if att is PlaceholderAttachment {
-                    let att = placeholderAttachment(index: count)
-                    textStorage.replaceCharacters(in: range, with: att)
-                    count += 1
-                }
-            }
-    }
-    
-    private func addFirstPlaceholderAttachment() {
-        let attachment = placeholderAttachment(index: 0)
-        textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
-        selectedRange = NSRange(location: 1, length: 0)
+    private func rearrangeIndexes() {
+//        var count = 0
+//        attributedText
+//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
+//                if att is PlaceholderAttachment {
+//                    let att = placeholderAttachment(index: count)
+//                    textStorage.replaceCharacters(in: range, with: att)
+//                    count += 1
+//                }
+//            }
     }
     
     private func markAsChanged() {
@@ -276,6 +275,65 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             forwardedDelegate?.seedPhrasesTextView(self, didEnterPhrases: newPhrases)
             phrasesCached = newPhrases
         }
+    }
+    
+    // MARK: - Helpers
+
+    private func insertSeparatorAtSelectedRangeAndMoveCursor() {
+        let separatorAttributedString = NSAttributedString(string: phraseSeparator, attributes: typingAttributes)
+        insertAttributedStringAtSelectedRangeAndMoveCursor(separatorAttributedString)
+    }
+    
+    private func insertIndexAtSelectedRangeAndMoveCursor() {
+        let indexAttributedString = placeholderAttachment(index: phraseIndex(at: selectedRange.location))
+        insertAttributedStringAtSelectedRangeAndMoveCursor(indexAttributedString)
+    }
+    
+    private func insertAttributedStringAtSelectedRangeAndMoveCursor(_ attributedString: NSAttributedString) {
+        textStorage.replaceCharacters(in: selectedRange, with: attributedString)
+        selectedRange = NSRange(location: selectedRange.location + attributedString.length, length: 0)
+    }
+    
+    private func hasIndexBeforeCurrentSelectedLocation() -> Bool {
+        let location = selectedRange.location
+        // index max "24. ", min "1. " (min 3 character)
+        guard location >= 3 else { return false}
+        
+        // check index by using regex
+        let regex = try! NSRegularExpression(pattern: #"[1..9]+. "#)
+        guard let result = regex.matches(in: text, range: NSRange( location: 0, length: text.count)).last
+        else {
+            return false
+        }
+        
+        // if find result exactly before the location
+        return result.range.location + result.range.length == location
+    }
+
+    private func placeholderAttachment(index: Int) -> NSMutableAttributedString {
+        .init(string: "\(index). ", attributes: typingAttributes)
+//        let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
+//            .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
+//        label.translatesAutoresizingMaskIntoConstraints = true
+//
+//        // replace text by attachment
+//        let attachment = PlaceholderAttachment(view: label)
+//        let attrString = NSMutableAttributedString(attachment: attachment)
+//        attrString.addAttributes(typingAttributes, range: NSRange(location: 0, length: attrString.length))
+//        return attrString
+    }
+
+    private func phraseIndex(at location: Int) -> Int {
+//        var count = 0
+//        attributedText
+//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
+//                if range.location > location { return }
+//                if att is PlaceholderAttachment {
+//                    count += 1
+//                }
+//            }
+//        return count
+        return 1
     }
 }
 
