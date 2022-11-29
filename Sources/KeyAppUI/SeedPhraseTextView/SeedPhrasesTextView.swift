@@ -198,22 +198,31 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func handleDeleting(range: NSRange) {
-//        // check if remove all character
-//        let newText = NSMutableAttributedString(attributedString: attributedText)
-//        newText.replaceCharacters(in: range, with: "")
-//
-//        // remove
-//        textStorage.replaceCharacters(in: range, with: "")
-//
-//        if newText.length == 0 {
-//            // remove all
-//            addFirstPlaceholderAttachment()
-//        } else {
-//
-//            // remove others
-//            rearrangeAttachments()
-//            selectedRange = .init(location: range.location, length: 0)
-//        }
+        // check if remove all character
+        let newText = NSMutableAttributedString(attributedString: attributedText)
+        newText.replaceCharacters(in: range, with: "")
+
+        // remove
+        textStorage.replaceCharacters(in: range, with: "")
+
+        if newText.length == 0 {
+            // remove all
+            insertIndexAtSelectedRangeAndMoveCursor()
+        } else {
+            // remove extra index before
+            if let range = rangeOfIndexBeforeCurrentSelectedLocation() {
+                textStorage.replaceCharacters(in: range, with: "")
+            }
+            
+            // remove extra phrase separator
+            if let range = rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() {
+                textStorage.replaceCharacters(in: range, with: "")
+            }
+            
+            // remove others
+            rearrangeIndexes()
+            selectedRange = .init(location: range.location, length: 0)
+        }
     }
     
     private func handleSpace() {
@@ -312,35 +321,72 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     // MARK: - Checking
 
     private func hasIndexBeforeCurrentSelectedLocation() -> Bool {
+        rangeOfIndexBeforeCurrentSelectedLocation() != nil
+    }
+    
+    private func rangeOfIndexBeforeCurrentSelectedLocation() -> NSRange? {
         let location = selectedRange.location
         // index max "24. ", min "1. " (min 3 character)
-        guard location >= 3 else { return false}
+        guard location >= 3 else { return nil}
         
         // check index by using regex
         let regex = try! NSRegularExpression(pattern: #"[1..9]+.? ?"#)
         guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
         else {
-            return false
+            return nil
         }
         
-        // if find result exactly before the location
-        return result.range.location + result.range.length == location
+        let range = result.range
+        
+        if range.location + range.length == selectedRange.location {
+            return range
+        }
+        return nil
     }
     
     private func hasIndexAfterCurrentSelectedLocation() -> Bool {
+        rangeOfIndexAfterCurrentSelectedLocation() != nil
+    }
+    
+    private func rangeOfIndexAfterCurrentSelectedLocation() -> NSRange? {
         let location = selectedRange.location
         // index max "24. ", min "1. " (min 3 character)
-        guard location + 3 <= text.count else { return false}
+        guard location + 3 <= text.count else { return nil}
         
         // check index by using regex
         let regex = try! NSRegularExpression(pattern: #"[1..9]+.? ?"#)
-        guard let result = regex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).last
+        guard let result = regex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).first
         else {
-            return false
+            return nil
         }
         
-        // if find result exactly before the location
-        return result.range.location == location
+        let range = result.range
+        
+        if range.location == selectedRange.location {
+            return range
+        }
+        
+        return nil
+    }
+    
+    private func rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() -> NSRange? {
+        let location = selectedRange.location
+        // index max "24. ", min "1. " (min 3 character)
+        guard location >= 3 else { return nil}
+        
+        // check index by using regex
+        let regex = try! NSRegularExpression(pattern: #" {3}"#)
+        guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
+        else {
+            return nil
+        }
+        
+        let range = result.range
+        
+        if range.location + range.length == selectedRange.location {
+            return range
+        }
+        return nil
     }
     
     private func hasSpaceBefore() -> Bool {
