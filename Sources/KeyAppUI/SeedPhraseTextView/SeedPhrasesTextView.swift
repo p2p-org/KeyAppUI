@@ -249,6 +249,13 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         // won't allow space after a space
         guard !hasSpaceBefore() else { return }
         
+        // if user choose all test and press space
+        if selectedRange == NSRange(location: 0, length: attributedText.length) {
+            textStorage.replaceCharacters(in: selectedRange, with: "")
+            insertIndexAtSelectedRangeAndMoveCursor()
+            return
+        }
+        
         // if cursor is in the middle of the text
         let hasIndexAfterCurrentSelectedLocation = hasIndexAfterCurrentSelectedLocation()
         if selectedRange.location > 0 {
@@ -289,9 +296,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             // if selected all text
             if range == NSRange(location: 0, length: attributedText.length) {
                 textStorage.replaceCharacters(in: range, with: "")
-                let attachment = indexAttributedString(index: 0)
+                let attachment = indexAttributedString(index: 1)
                 textStorage.replaceCharacters(in: NSRange(location: 0, length: 0), with: attachment)
-                range = NSRange(location: 1, length: 0)
+                range = NSRange(location: attachment.length, length: 0)
             }
             
             textStorage.replaceCharacters(in: range, with: NSAttributedString(string: text.lowercased(), attributes: defaultTypingAttributes))
