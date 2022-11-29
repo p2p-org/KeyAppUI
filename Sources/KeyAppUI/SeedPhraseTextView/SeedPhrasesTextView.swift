@@ -13,8 +13,15 @@ import Foundation
 public class SeedPhrasesTextView: UITextView {
     // MARK: - Properties
     
-    /// Default font for texts
-    private let defaultFont = UIFont.systemFont(ofSize: 15)
+    /// Default typing attributes for text
+    private let defaultTypingAttributes: [NSAttributedString.Key: Any] = {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 10
+        return [
+            .font: UIFont.systemFont(ofSize: 15),
+            .paragraphStyle: paragraphStyle
+        ]
+    }()
     
     /// Separator between phrases
     private let phraseSeparator = "   " // 3 spaces
@@ -52,13 +59,7 @@ public class SeedPhrasesTextView: UITextView {
         backgroundColor = .clear
         tintColor = .black
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 10
-
-        typingAttributes = [
-            .font: defaultFont,
-            .paragraphStyle: paragraphStyle,
-        ]
+        typingAttributes = defaultTypingAttributes
 //        placeholder = L10n.enterSeedPhrasesInACorrectOrderToRecoverYourWallet
         delegate = self
         autocapitalizationType = .none
@@ -216,8 +217,8 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func handleSpace() {
-        // TODO: - won't allow space between two other spaces
-        
+        // won't allow space after a space
+        guard !hasSpaceBefore() else { return }
         
         // if cursor is in the middle of the text
         let hasIndexAfterCurrentSelectedLocation = hasIndexAfterCurrentSelectedLocation()
@@ -248,7 +249,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func insertOnlyLetters(range: NSRange, text: String) {
-        // TODO: - won't allow ANY character between two spaces
+        // won't allow ANY character between two spaces
         
         let allowedCharacters = CharacterSet.lowercaseLetters
         let characterSet = CharacterSet(charactersIn: text.lowercased())
@@ -264,7 +265,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 range = NSRange(location: 1, length: 0)
             }
             
-            textStorage.replaceCharacters(in: range, with: text.lowercased())
+            textStorage.replaceCharacters(in: range, with: NSAttributedString(string: text.lowercased(), attributes: defaultTypingAttributes))
             selectedRange = NSRange(location: range.location + text.count, length: 0)
         }
     }
@@ -308,6 +309,8 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         selectedRange = NSRange(location: selectedRange.location + attributedString.length, length: 0)
     }
     
+    // MARK: - Checking
+
     private func hasIndexBeforeCurrentSelectedLocation() -> Bool {
         let location = selectedRange.location
         // index max "24. ", min "1. " (min 3 character)
@@ -339,9 +342,25 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         // if find result exactly before the location
         return result.range.location == location
     }
+    
+    private func hasSpaceBefore() -> Bool {
+        let location = selectedRange.location
+        guard location > 0 else {return false}
+        return text[location - 1] == " "
+    }
+    
+    private func hasSpaceAfter() -> Bool {
+        let location = selectedRange.location
+        guard text.count > location else { return false }
+        return text[location - 1] == " "
+    }
+
+    // MARK: - AttributedString builders
 
     private func indexAttributedString(index: Int) -> NSMutableAttributedString {
-        .init(string: "\(index). ", attributes: typingAttributes)
+        var attributes = typingAttributes
+        attributes[.foregroundColor] = UIColor.lightGray
+        return .init(string: "\(index). ", attributes: attributes)
 //        let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
 //            .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
 //        label.translatesAutoresizingMaskIntoConstraints = true
