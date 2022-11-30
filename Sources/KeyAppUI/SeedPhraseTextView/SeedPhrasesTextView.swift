@@ -184,9 +184,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
         // replace all spaces with phrase separator + index
         var addingAttributedString = NSMutableAttributedString(string: text, attributes: defaultTypingAttributes)
-        var indexDiff = 0
+        var lengthDiff = 0
         for index in indexes {
-            let spaceRange = NSRange(location: index + indexDiff, length: 1)
+            let spaceRange = NSRange(location: index + lengthDiff, length: 1)
             
             // phrase separator
             let replacementAttributedString = NSMutableAttributedString(
@@ -203,7 +203,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 in: spaceRange,
                 with: replacementAttributedString
             )
-            indexDiff = indexDiff - 1 + replacementAttributedString.length
+            lengthDiff = lengthDiff - 1 + replacementAttributedString.length
         }
 
         // if stand at the begining add index
