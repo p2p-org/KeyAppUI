@@ -60,6 +60,7 @@ public final class SliderButton: BEView {
 
     private let imageView = UIImageView(forAutoLayout: ())
     private let titleView = BERef<UILabel>()
+    private var progressTitleView: UILabel?
     private let container = BERef<UIView>()
     private let imageControl: UIView = UIView()
 
@@ -94,6 +95,7 @@ public final class SliderButton: BEView {
         addImageControl()
         addMaskLayer()
         addShimmerLayer()
+        addProgressLabelIfNeeded()
     }
 
     // MARK: - Private
@@ -169,6 +171,18 @@ public final class SliderButton: BEView {
         shimmerLayer.add(group, forKey: "shimmer")
     }
 
+    // This label is needed if the filled color is not gradient
+    private func addProgressLabelIfNeeded() {
+        guard !theme.isGradient && progressTitleView?.superview == nil else { return }
+        let label = UILabel(frame: .zero)
+        label.lineBreakMode = .byClipping
+        label.text = title
+        label.font = theme.font
+        label.textColor = theme.progressColor
+        container.view?.addSubview(label)
+        progressTitleView = label
+    }
+
     // MARK: - Pan Gesture
 
     @objc private func panned(_ sender: UIPanGestureRecognizer) {
@@ -219,8 +233,30 @@ public final class SliderButton: BEView {
             origin: Constants.position,
             size: CGSize(width: imageControl.frame.maxX - Constants.padding * 2, height: Constants.imageControlSize.height)
         )
+        fillProgressLabelIfNeeded(translation: translation)
         CATransaction.commit()
         drawGradientLayerIfNeeded()
+    }
+
+    // Animate progressLabel in solid themes
+    private func fillProgressLabelIfNeeded(translation: CGPoint) {
+        guard let progressTitleView = progressTitleView, let titleView = titleView.view else { return }
+
+        if translation.x >= titleView.frame.minX {
+            var newWidth = translation.x - titleView.frame.minX
+            newWidth = newWidth >= titleView.frame.width ? titleView.frame.width : newWidth
+
+            let newSize = CGSize(width: newWidth, height: titleView.frame.height)
+            progressTitleView.bounds = CGRect(origin: .zero, size: newSize)
+            progressTitleView.frame = CGRect(origin: titleView.frame.origin, size: newSize)
+        } else if translation.x < 0 && abs(translation.x) + Constants.imageControlSize.width > (container.frame.maxX - titleView.frame.maxX) {
+            var newWidth = titleView.frame.maxX + translation.x - Constants.imageControlSize.width
+            newWidth = newWidth < 0 ? 0 : newWidth
+
+            let newSize = CGSize(width: newWidth, height: titleView.frame.height)
+            progressTitleView.bounds = CGRect(origin: .zero, size: newSize)
+            progressTitleView.frame = CGRect(origin: titleView.frame.origin, size: newSize)
+        }
     }
 
     // Animate control move after pan gesture is ended or cancelled
@@ -254,7 +290,29 @@ public final class SliderButton: BEView {
         imageControl.layer.add(imageControlAnimation, forKey: "position")
         imageControlAnimation.isRemovedOnCompletion = false
 
+        animateProgressLabelIfNeeded(moveToLeft: moveToLeft)
+
         CATransaction.commit()
+    }
+
+    private func animateProgressLabelIfNeeded(moveToLeft: Bool) {
+        guard let progressTitleView = progressTitleView, let titleView = titleView.view else { return }
+
+        let isLeftMoveNotEnded = moveToLeft && progressTitleView.frame.width > 0
+        let isRightMoveNotEnded = !moveToLeft && progressTitleView.frame.width < titleView.frame.width
+
+        guard isLeftMoveNotEnded || isRightMoveNotEnded else { return }
+
+        let newLabelBounds = CGRect(origin: .zero, size: CGSize(width: moveToLeft ? 0 : titleView.frame.width, height: titleView.frame.height))
+
+        let labelAnimation = CABasicAnimation(keyPath: "bounds")
+        labelAnimation.fromValue = progressTitleView.bounds
+        labelAnimation.toValue = newLabelBounds
+        progressTitleView.bounds = newLabelBounds
+        progressTitleView.layer.add(labelAnimation, forKey: "bounds")
+        progressTitleView.frame = CGRect(origin: titleView.frame.origin, size: newLabelBounds.size)
+
+        labelAnimation.isRemovedOnCompletion = false
     }
 
     // Update isOn value if control position was changed from left to right or right to left
@@ -281,10 +339,14 @@ public final class SliderButton: BEView {
         gradientLayer.frame = CGRect(origin: Constants.position, size: size)
         gradientLayer.anchorPoint = .zero
         gradientLayer.masksToBounds = true
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 1.0)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
-        gradientLayer.locations = [0.0, 1.0]
-        gradientLayer.colors = [Asset.Colors.lime.color.cgColor, Asset.Colors.lime.color.withAlphaComponent(0).cgColor]
+        if theme.isGradient {
+            gradientLayer.startPoint = CGPoint(x: 0.0, y: 1.0)
+            gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+            gradientLayer.locations = [0.0, 1.0]
+            gradientLayer.colors = [Asset.Colors.lime.color.cgColor, Asset.Colors.lime.color.withAlphaComponent(0).cgColor]
+        } else {
+            gradientLayer.backgroundColor = Asset.Colors.lime.color.cgColor
+        }
         gradientLayer.cornerRadius = size.height / 2
 
     }
@@ -312,6 +374,6 @@ private class SliderContainer: BEView {
     final public override func commonInit() {
         super.commonInit()
         super.addSubview(child)
-        child.autoPinEdgesToSuperviewEdges()
+        child.autoCenterInSuperview()
     }
 }
