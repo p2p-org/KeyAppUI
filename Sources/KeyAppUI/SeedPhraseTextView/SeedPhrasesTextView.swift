@@ -352,7 +352,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location >= 3 else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"[1..9]+. ?"#)
+        let regex = try! NSRegularExpression(pattern: #"[0-9]+\.\s"#)
         guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
         else {
             return nil
@@ -376,7 +376,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location + 3 <= text.count else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"[1..9]+.? ?"#)
+        let regex = try! NSRegularExpression(pattern: #"[0-9]+\.\s"#)
         guard let result = regex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).first
         else {
             return nil
@@ -397,7 +397,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location >= 3 else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #" {3}"#)
+        let regex = try! NSRegularExpression(pattern: #"\s{3}"#)
         guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
         else {
             return nil
