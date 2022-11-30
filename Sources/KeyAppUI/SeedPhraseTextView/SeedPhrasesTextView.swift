@@ -22,19 +22,21 @@ public class SeedPhrasesTextView: UITextView {
     /// Default typing attributes for text
     private static let defaultTypingAttributes: [NSAttributedString.Key: Any] = {
         [
-            .font: UIFont.systemFont(ofSize: 15),
+            .font: UIFont.font(of: .text3),
+            .foregroundColor: Asset.Colors.night.color,
             .paragraphStyle: defaultParagraphStyle
         ]
     }()
     
     private static let defaultIndexAttributes: [NSAttributedString.Key: Any] = {
         var attributes = defaultTypingAttributes
-        attributes[.foregroundColor] = UIColor.lightGray
+        attributes[.foregroundColor] = Asset.Colors.mountain.color
+        attributes[.font] = UIFont.font(of: .text4)
         return attributes
     }()
     
     /// Regex for Index
-    private let indexRegex = try! NSRegularExpression(pattern: #"[0-9]+\.\s"#)
+    private let indexRegex = try! NSRegularExpression(pattern: #"[0-9]+\s"#)
     
     /// Separator between phrases
     private let phraseSeparator = "   " // 3 spaces
@@ -87,6 +89,8 @@ public class SeedPhrasesTextView: UITextView {
 
         // add first placeholder
         insertIndexAtSelectedRangeAndMoveCursor()
+        
+        returnKeyType = .done
     }
 
     /// Disable initializing with storyboard
@@ -386,7 +390,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     // MARK: - Helpers
 
     private func insertSeparatorAtSelectedRangeAndMoveCursor() {
-        let separatorAttributedString = NSAttributedString(string: phraseSeparator, attributes: typingAttributes)
+        let separatorAttributedString = NSAttributedString(string: phraseSeparator, attributes: Self.defaultTypingAttributes)
         insertAttributedStringAtSelectedRangeAndMoveCursor(separatorAttributedString)
     }
     
@@ -487,9 +491,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     // MARK: - AttributedString builders
 
     private func indexAttributedString(index: Int) -> NSMutableAttributedString {
-        var attributes = typingAttributes
-        attributes[.foregroundColor] = UIColor.lightGray
-        return .init(string: "\(index). ", attributes: attributes)
+        .init(string: "\(index) ", attributes: Self.defaultIndexAttributes)
     }
 
     private func phraseIndex(at location: Int) -> Int {
