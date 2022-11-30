@@ -109,7 +109,9 @@ public class SeedPhrasesTextView: UITextView {
 //        return original
 //    }
     
+    /// Closest position when dragging
     public override func closestPosition(to point: CGPoint) -> UITextPosition? {
+        // FIXME: - Enable choosing in the middle
         let beginning = self.beginningOfDocument
         let end = self.position(from: beginning, offset: self.text?.count ?? 0)
         return end
@@ -132,7 +134,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     public func textViewDidChangeSelection(_ textView: UITextView) {
-        // ignore selecting in the middle
+        // FIXME: - Enable selecting in the middle
         if selectedRange.location + selectedRange.length < text.count {
             selectedRange = .init(location: text.count, length: 0)
         }
