@@ -350,7 +350,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     private func insertOnlyLetters(range: NSRange, text: String) {
         // won't allow ANY character between two spaces
         
-        let allowedCharacters = CharacterSet.lowercaseLetters
+        let allowedCharacters = CharacterSet.englishLowercaseLetters
         let characterSet = CharacterSet(charactersIn: text.lowercased())
         
         if allowedCharacters.isSuperset(of: characterSet) {
@@ -518,7 +518,7 @@ private extension String {
     }
     var lettersAndSpaces: String {
         return String(unicodeScalars.filter({ scalar in
-            CharacterSet.letters.contains(scalar) ||
+            CharacterSet.englishLowercaseLetters.contains(scalar) ||
             CharacterSet(charactersIn: " ").contains(scalar)
         }))
     }
@@ -529,5 +529,11 @@ private extension NSMutableAttributedString {
         let attributedString = Self(attributedString: attributedString)
         attributedString.append(self)
         return attributedString
+    }
+}
+
+private extension CharacterSet {
+    static var englishLowercaseLetters: CharacterSet {
+        CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz")
     }
 }
