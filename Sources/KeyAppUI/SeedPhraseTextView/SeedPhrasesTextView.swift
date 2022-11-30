@@ -84,15 +84,12 @@ public class SeedPhrasesTextView: UITextView {
     
     /// Get current entered phrases
     public func getPhrases() -> [String] {
-//        let attributedText = NSMutableAttributedString(attributedString: attributedText)
-//        self.attributedText
-//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-//                if att is PlaceholderAttachment {
-//                    attributedText.replaceCharacters(in: range, with: " ")
-//                }
-//            }
-//        let text = attributedText.string.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        return text.components(separatedBy: " ")
+        text
+            .lettersAndSpaces
+            .removingExtraSpaces()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: " ")
+            .filter {!$0.isEmpty}
     }
     
     /// Clear text view
@@ -432,28 +429,18 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         var attributes = typingAttributes
         attributes[.foregroundColor] = UIColor.lightGray
         return .init(string: "\(index). ", attributes: attributes)
-//        let label = UILabel(text: "\(index + 1)", textColor: Asset.Colors.mountain.color)
-//            .padding(.init(top: 0, left: index == 0 ? 0: 16, bottom: 0, right: 2))
-//        label.translatesAutoresizingMaskIntoConstraints = true
-//
-//        // replace text by attachment
-//        let attachment = PlaceholderAttachment(view: label)
-//        let attrString = NSMutableAttributedString(attachment: attachment)
-//        attrString.addAttributes(typingAttributes, range: NSRange(location: 0, length: attrString.length))
-//        return attrString
     }
 
     private func phraseIndex(at location: Int) -> Int {
-//        var count = 0
-//        attributedText
-//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-//                if range.location > location { return }
-//                if att is PlaceholderAttachment {
-//                    count += 1
-//                }
-//            }
-//        return count
-        return 2
+        let textToLocation = String(text[0..<location])
+            .lettersAndSpaces
+            .removingExtraSpaces()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: " ")
+            .filter {!$0.isEmpty}
+        let numberOfPhraseToLocation = textToLocation
+            .count
+        return numberOfPhraseToLocation + 1
     }
 }
 
