@@ -171,41 +171,71 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     // MARK: - Handlers
     
     private func handlePasting(range: NSRange, text: String) {
-//        let text = text.lettersAndSpaces
-//            .lowercased()
-//            .trimmingCharacters(in: .whitespacesAndNewlines)
-//            .removeExtraSpaces()
-//
-//        // find all indexes of spaces
-//        var indexes = [Int]()
-//        for (index, char) in text.enumerated() where char == " " {
-//            indexes.append(index)
-//        }
-//
-//        // replace all spaces with attachments
-//        var addingAttributedString = NSMutableAttributedString(string: text, attributes: typingAttributes)
-//        for index in indexes {
-//            let spaceRange = NSRange(location: index, length: 1)
-//            addingAttributedString.replaceCharacters(in: spaceRange, with: placeholderAttachment(index: index))
-//        }
-//
-//        // if stand at the begining, or prev character is not a placeholder, add attachment
-//        if range.location == 0 || !attributedText.containsAttachments(in: NSRange(location: range.location - 1, length: 1)) {
-//            let attachment = placeholderAttachment(index: 0)
-//            attachment.append(addingAttributedString)
-//            addingAttributedString = attachment
-//        }
-//
-//        // paste to range
-//        textStorage.replaceCharacters(in: range, with: addingAttributedString)
-//
-//        // rearrange
-//        rearrangeAttachments()
-//
-//        // move cursor
-//        DispatchQueue.main.async { [weak self] in
-//            self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
-//        }
+        let text = text.lettersAndSpaces
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .removingExtraSpaces()
+
+        // find all indexes of spaces
+        var indexes = [Int]()
+        for (index, char) in text.enumerated() where char == " " {
+            indexes.append(index)
+        }
+
+        // replace all spaces with phrase separator + index
+        var addingAttributedString = NSMutableAttributedString(string: text, attributes: defaultTypingAttributes)
+        var indexDiff = 0
+        for index in indexes {
+            let spaceRange = NSRange(location: index + indexDiff, length: 1)
+            
+            // phrase separator
+            let replacementAttributedString = NSMutableAttributedString(
+                string: phraseSeparator,
+                attributes: defaultTypingAttributes
+            )
+            
+            // phrase index
+            replacementAttributedString
+                .append(indexAttributedString(index: 1))
+            
+            // replace string with replacement
+            addingAttributedString.replaceCharacters(
+                in: spaceRange,
+                with: replacementAttributedString
+            )
+            indexDiff = indexDiff - 1 + replacementAttributedString.length
+        }
+
+        // if stand at the begining add index
+        if range.location == 0 {
+            addingAttributedString = addingAttributedString
+                .prepending(indexAttributedString(index: 1))
+        }
+        
+        // if not stand at the begining and there is no index before it
+        else if !hasIndexBeforeLocation(range.location) {
+            // add index
+            addingAttributedString = addingAttributedString
+                .prepending(indexAttributedString(index: 1))
+            
+            // add phrase separator (if needed)
+            if !hasPhraseSeparatorBeforeLocation(range.location) {
+                let phraseSeparator = NSMutableAttributedString(string: phraseSeparator, attributes: defaultTypingAttributes)
+                addingAttributedString = addingAttributedString
+                    .prepending(phraseSeparator)
+            }
+        }
+
+        // paste to range
+        textStorage.replaceCharacters(in: range, with: addingAttributedString)
+
+        // rearrange
+        rearrangeIndexes()
+
+        // move cursor
+        DispatchQueue.main.async { [weak self] in
+            self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
+        }
         
         isPasting = false
     }
@@ -224,12 +254,12 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         
         else {
             // remove extra index before
-            if let indexRange = rangeOfIndexBeforeCurrentSelectedLocation() {
+            if let indexRange = rangeOfIndexBeforeLocation(selectedRange.location) {
                 textStorage.replaceCharacters(in: indexRange, with: "")
             }
             
             // remove extra phrase separator
-            if let phraseSeparatorRange = rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() {
+            if let phraseSeparatorRange = rangeOfPhraseSeparatorBeforeLocation(selectedRange.location) {
                 textStorage.replaceCharacters(in: phraseSeparatorRange, with: "")
             }
         }
@@ -260,7 +290,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         let hasIndexAfterCurrentSelectedLocation = hasIndexAfterCurrentSelectedLocation()
         if selectedRange.location > 0 {
             // if there is already an index before current cursor, ignore it
-            if hasIndexBeforeCurrentSelectedLocation() {
+            if hasIndexBeforeLocation(selectedRange.location) {
                 return
             }
             // if there is no index before current cursor,
@@ -345,12 +375,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     
     // MARK: - Checking
 
-    private func hasIndexBeforeCurrentSelectedLocation() -> Bool {
-        rangeOfIndexBeforeCurrentSelectedLocation() != nil
+    private func hasIndexBeforeLocation(_ location: Int) -> Bool {
+        rangeOfIndexBeforeLocation(location) != nil
     }
     
-    private func rangeOfIndexBeforeCurrentSelectedLocation() -> NSRange? {
-        let location = selectedRange.location
+    private func rangeOfIndexBeforeLocation(_ location: Int) -> NSRange? {
         // index max "24. ", min "1. " (min 3 character)
         guard location >= 3 else { return nil}
         
@@ -363,7 +392,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         
         let range = result.range
         
-        if range.location + range.length == selectedRange.location {
+        if range.location + range.length == location {
             return range
         }
         return nil
@@ -394,8 +423,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         return nil
     }
     
-    private func rangeOfPhraseSeparatorBeforeCurrentSelectedLocation() -> NSRange? {
-        let location = selectedRange.location
+    private func hasPhraseSeparatorBeforeLocation(_ location: Int) -> Bool {
+        rangeOfPhraseSeparatorBeforeLocation(location) != nil
+    }
+    
+    private func rangeOfPhraseSeparatorBeforeLocation(_ location: Int) -> NSRange? {
         // index max "24. ", min "1. " (min 3 character)
         guard location >= 3 else { return nil}
         
@@ -408,7 +440,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         
         let range = result.range
         
-        if range.location + range.length == selectedRange.location {
+        if range.location + range.length == location {
             return range
         }
         return nil
@@ -456,5 +488,13 @@ private extension String {
             CharacterSet.letters.contains(scalar) ||
             CharacterSet(charactersIn: " ").contains(scalar)
         }))
+    }
+}
+
+private extension NSMutableAttributedString {
+    func prepending(_ attributedString: NSAttributedString) -> Self {
+        let attributedString = Self(attributedString: attributedString)
+        attributedString.append(self)
+        return attributedString
     }
 }
