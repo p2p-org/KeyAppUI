@@ -38,6 +38,12 @@ public class SeedPhrasesTextView: UITextView {
     /// Regex for Index
     private let indexRegex = try! NSRegularExpression(pattern: #"[0-9]+\s"#)
     
+    /// Max index for length. For example "24 " -> 3
+    private let maxIndexLength = 3
+    
+    /// Max index for length. For example "1 " -> 2
+    private let minIndexLength = 2
+    
     /// Separator between phrases
     private let phraseSeparator = "   " // 3 spaces
     
@@ -271,7 +277,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         // remove
         let firstRemovedCharacter = text[range.location]
         
-        if range.length > 0 {
+        if range.length > 1 {
             textStorage.replaceCharacters(in: .init(location: range.location + 1, length: range.length - 1), with: "")
         }
         
@@ -412,11 +418,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func rangeOfIndexBeforeLocation(_ location: Int) -> NSRange? {
-        // index max "24. ", min "1. " (min 3 character)
-        guard location >= 3 else { return nil}
+        // index max "24 ", min "1 " (min 2 character)
+        guard location >= minIndexLength else { return nil}
         
         // check index by using regex
-        guard let result = indexRegex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
+        guard let result = indexRegex.matches(in: text, range: NSRange(location: location > maxIndexLength ? location - maxIndexLength: 0, length: location >= maxIndexLength ? maxIndexLength: minIndexLength)).last
         else {
             return nil
         }
@@ -435,11 +441,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     
     private func rangeOfIndexAfterCurrentSelectedLocation() -> NSRange? {
         let location = selectedRange.location
-        // index max "24. ", min "1. " (min 3 character)
-        guard location + 3 <= text.count else { return nil}
+        // index max "24 ", min "1 " (max 4 character)
+        guard location + minIndexLength <= text.count else { return nil}
         
         // check index by using regex
-        guard let result = indexRegex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).first
+        guard let result = indexRegex.matches(in: text, range: NSRange(location: location, length: text.count >= location + maxIndexLength ? maxIndexLength: minIndexLength)).first
         else {
             return nil
         }
@@ -458,12 +464,11 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     }
     
     private func rangeOfPhraseSeparatorBeforeLocation(_ location: Int) -> NSRange? {
-        // index max "24. ", min "1. " (min 3 character)
-        guard location >= 3 else { return nil}
+        guard location >= phraseSeparator.count else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"\s{3}"#)
-        guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
+        let regex = try! NSRegularExpression(pattern: #"\s{\#(phraseSeparator.count)}"#)
+        guard let result = regex.matches(in: text, range: NSRange(location: location - phraseSeparator.count, length: phraseSeparator.count)).last
         else {
             return nil
         }
