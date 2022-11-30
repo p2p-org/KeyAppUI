@@ -62,6 +62,7 @@ public class SeedPhrasesTextView: UITextView {
         typingAttributes = defaultTypingAttributes
 //        placeholder = L10n.enterSeedPhrasesInACorrectOrderToRecoverYourWallet
         delegate = self
+        layoutManager.delegate = self
         autocapitalizationType = .none
         autocorrectionType = .no
 
