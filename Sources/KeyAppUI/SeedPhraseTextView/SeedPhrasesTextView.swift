@@ -114,13 +114,12 @@ public class SeedPhrasesTextView: UITextView {
     }
     
     /// Rect for cursor
-//    public override func caretRect(for position: UITextPosition) -> CGRect {
-//        var original = super.caretRect(for: position)
-//        let height: CGFloat = 20
-//        original.origin.y += (original.size.height - 20) / 2
-//        original.size.height = height
-//        return original
-//    }
+    public override func caretRect(for position: UITextPosition) -> CGRect {
+        var original = super.caretRect(for: position)
+        let height: CGFloat = 20
+        original.size.height = height
+        return original
+    }
     
     /// Closest position when dragging
     public override func closestPosition(to point: CGPoint) -> UITextPosition? {
