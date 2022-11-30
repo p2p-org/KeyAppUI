@@ -60,6 +60,12 @@ public class SeedPhrasesTextView: UITextView {
             }
         }
     }
+    
+    public override var text: String! {
+        didSet {
+            fatalError("Don't set text directly, use paste(text) instead")
+        }
+    }
 
     // MARK: - Initializers
     
@@ -127,6 +133,11 @@ public class SeedPhrasesTextView: UITextView {
         let beginning = self.beginningOfDocument
         let end = self.position(from: beginning, offset: self.text?.count ?? 0)
         return end
+    }
+    
+    /// Paste text
+    public func paste(_ newText: String) {
+        handlePasting(range: .init(location: 0, length: text.count), text: newText)
     }
 }
 

@@ -27,15 +27,6 @@
           "revision": "b640c1d8eee79c3a5ad6e0ae1afd2ae0fea30423",
           "version": "1.29.3"
         }
-      },
-      {
-        "package": "SubviewAttachingTextView",
-        "repositoryURL": "https://github.com/vlas-voloshin/SubviewAttachingTextView.git",
-        "state": {
-          "branch": null,
-          "revision": "6025828b6c05fbf5529616a70c702f7425899fe5",
-          "version": "1.5.1"
-        }
       }
     ]
   },
