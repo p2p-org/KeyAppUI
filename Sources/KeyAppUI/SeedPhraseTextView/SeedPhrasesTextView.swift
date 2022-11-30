@@ -13,15 +13,28 @@ import Foundation
 public class SeedPhrasesTextView: UITextView {
     // MARK: - Properties
     
-    /// Default typing attributes for text
-    private let defaultTypingAttributes: [NSAttributedString.Key: Any] = {
+    private static let defaultParagraphStyle: NSMutableParagraphStyle = {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
-        return [
+        return paragraphStyle
+    }()
+    
+    /// Default typing attributes for text
+    private static let defaultTypingAttributes: [NSAttributedString.Key: Any] = {
+        [
             .font: UIFont.systemFont(ofSize: 15),
-            .paragraphStyle: paragraphStyle
+            .paragraphStyle: defaultParagraphStyle
         ]
     }()
+    
+    private static let defaultIndexAttributes: [NSAttributedString.Key: Any] = {
+        var attributes = defaultTypingAttributes
+        attributes[.foregroundColor] = UIColor.lightGray
+        return attributes
+    }()
+    
+    /// Regex for Index
+    private let indexRegex = try! NSRegularExpression(pattern: #"[0-9]+\.\s"#)
     
     /// Separator between phrases
     private let phraseSeparator = "   " // 3 spaces
@@ -59,7 +72,7 @@ public class SeedPhrasesTextView: UITextView {
         backgroundColor = .clear
         tintColor = .black
 
-        typingAttributes = defaultTypingAttributes
+        typingAttributes = Self.defaultTypingAttributes
 //        placeholder = L10n.enterSeedPhrasesInACorrectOrderToRecoverYourWallet
         delegate = self
         layoutManager.delegate = self
@@ -183,7 +196,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         }
 
         // replace all spaces with phrase separator + index
-        var addingAttributedString = NSMutableAttributedString(string: text, attributes: defaultTypingAttributes)
+        var addingAttributedString = NSMutableAttributedString(string: text, attributes: Self.defaultTypingAttributes)
         var lengthDiff = 0
         for index in indexes {
             let spaceRange = NSRange(location: index + lengthDiff, length: 1)
@@ -191,7 +204,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             // phrase separator
             let replacementAttributedString = NSMutableAttributedString(
                 string: phraseSeparator,
-                attributes: defaultTypingAttributes
+                attributes: Self.defaultTypingAttributes
             )
             
             // phrase index
@@ -220,7 +233,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             
             // add phrase separator (if needed)
             if !hasPhraseSeparatorBeforeLocation(range.location) {
-                let phraseSeparator = NSMutableAttributedString(string: phraseSeparator, attributes: defaultTypingAttributes)
+                let phraseSeparator = NSMutableAttributedString(string: phraseSeparator, attributes: Self.defaultTypingAttributes)
                 addingAttributedString = addingAttributedString
                     .prepending(phraseSeparator)
             }
@@ -329,21 +342,26 @@ extension SeedPhrasesTextView: UITextViewDelegate {
                 insertIndexAtSelectedRangeAndMoveCursor()
             }
             
-            textStorage.replaceCharacters(in: selectedRange, with: NSAttributedString(string: text.lowercased(), attributes: defaultTypingAttributes))
+            textStorage.replaceCharacters(in: selectedRange, with: NSAttributedString(string: text.lowercased(), attributes: Self.defaultTypingAttributes))
             selectedRange = NSRange(location: selectedRange.location + text.count, length: 0)
         }
     }
 
     private func rearrangeIndexes() {
-//        var count = 0
-//        attributedText
-//            .enumerateAttribute(.attachment, in: NSRange(location: 0, length: attributedText.length)) { att, range, _ in
-//                if att is PlaceholderAttachment {
-//                    let att = placeholderAttachment(index: count)
-//                    textStorage.replaceCharacters(in: range, with: att)
-//                    count += 1
-//                }
-//            }
+        // find all text with index format
+        let indexRanges = indexRegex
+            .matches(in: text, range: .init(location: 0, length: text.count))
+            .map(\.range)
+        
+        // replace with real index
+        var currentPhraseIndex = 1
+        var lengthDiff = 0
+        for range in indexRanges {
+            let indexAttributedString = indexAttributedString(index: currentPhraseIndex)
+            textStorage.replaceCharacters(in: .init(location: range.location + lengthDiff, length: range.length), with: indexAttributedString)
+            currentPhraseIndex += 1
+            lengthDiff = lengthDiff - range.length + indexAttributedString.length
+        }
     }
     
     private func markAsChanged() {
@@ -384,8 +402,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location >= 3 else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"[0-9]+\.\s"#)
-        guard let result = regex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
+        guard let result = indexRegex.matches(in: text, range: NSRange(location: location >= 4 ? location - 4: 0, length: location >= 4 ? 4: 3)).last
         else {
             return nil
         }
@@ -408,8 +425,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         guard location + 3 <= text.count else { return nil}
         
         // check index by using regex
-        let regex = try! NSRegularExpression(pattern: #"[0-9]+\.\s"#)
-        guard let result = regex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).first
+        guard let result = indexRegex.matches(in: text, range: NSRange(location: location, length: text.count >= location + 4 ? 4: 3)).first
         else {
             return nil
         }
