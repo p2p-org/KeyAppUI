@@ -22,7 +22,10 @@ public struct SeedPhraseTextView: UIViewRepresentable {
     }
 
     public func updateUIView(_ uiView: UISeedPhrasesTextView, context _: Context) {
-        uiView.replaceText(newText: text)
+        let currentPhrases = uiView.getPhrases().joined(separator: " ")
+        if currentPhrases != text {
+            uiView.replaceText(newText: text)
+        }
         switch isFirstResponder {
         case true: uiView.becomeFirstResponder()
         case false: uiView.resignFirstResponder()

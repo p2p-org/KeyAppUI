@@ -135,8 +135,7 @@ public class UISeedPhrasesTextView: UITextView {
     
     /// Paste text
     public func replaceText(newText: String) {
-        textStorage.replaceCharacters(in: .init(location: 0, length: text.count), with: "")
-        handlePasting(range: .init(location: 0, length: 0), text: newText)
+        handlePasting(range: .init(location: 0, length: text.count), text: newText)
     }
 }
 
