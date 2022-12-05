@@ -118,13 +118,6 @@ public class SeedPhrasesTextView: UITextView {
             .filter {!$0.isEmpty}
     }
     
-    /// Clear text view
-    public func clear() {
-        text = nil
-//        addPlaceholderAttachment(at: 0)
-//        selectedRange = NSRange(location: 1, length: 0)
-    }
-    
     /// Rect for cursor
     public override func caretRect(for position: UITextPosition) -> CGRect {
         var original = super.caretRect(for: position)
@@ -162,12 +155,12 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         forwardedDelegate?.seedPhrasesTextViewDidChange?(self)
     }
     
-    public func textViewDidChangeSelection(_ textView: UITextView) {
-        // FIXME: - Enable selecting in the middle
-        if selectedRange.location + selectedRange.length < text.count {
-            selectedRange = .init(location: text.count, length: 0)
-        }
-    }
+//    public func textViewDidChangeSelection(_ textView: UITextView) {
+//        // FIXME: - Enable selecting in the middle
+//        if selectedRange.location + selectedRange.length < text.count {
+//            selectedRange = .init(location: text.count, length: 0)
+//        }
+//    }
 
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // pasting
@@ -215,6 +208,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         // replace all spaces with phrase separator + index
         var addingAttributedString = NSMutableAttributedString(string: text, attributes: Self.defaultTypingAttributes)
         var lengthDiff = 0
+        let phraseIndex = phraseIndex(at: range.location)
         for index in indexes {
             let spaceRange = NSRange(location: index + lengthDiff, length: 1)
             
@@ -226,7 +220,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
             
             // phrase index
             replacementAttributedString
-                .append(indexAttributedString(index: 1))
+                .append(indexAttributedString(index: phraseIndex + index))
             
             // replace string with replacement
             addingAttributedString.replaceCharacters(
@@ -246,7 +240,7 @@ extension SeedPhrasesTextView: UITextViewDelegate {
         else if !hasIndexBeforeLocation(range.location) {
             // add index
             addingAttributedString = addingAttributedString
-                .prepending(indexAttributedString(index: 1))
+                .prepending(indexAttributedString(index: phraseIndex + 1))
             
             // add phrase separator (if needed)
             if !hasPhraseSeparatorBeforeLocation(range.location) {
@@ -264,7 +258,10 @@ extension SeedPhrasesTextView: UITextViewDelegate {
 
         // move cursor
         DispatchQueue.main.async { [weak self] in
-            self?.selectedRange = NSRange(location: range.location + addingAttributedString.length, length: 0)
+            guard let self = self else {return}
+            var newLocation = range.location + addingAttributedString.length
+            newLocation = newLocation <= self.text.count ? newLocation: self.text.count
+            self.selectedRange = NSRange(location: newLocation, length: 0)
         }
         
         isPasting = false
