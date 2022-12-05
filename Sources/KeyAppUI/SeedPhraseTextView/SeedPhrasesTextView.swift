@@ -80,7 +80,6 @@ public class SeedPhrasesTextView: UITextView {
     /// Default initializer
     public init() {
         super.init(frame: .zero, textContainer: nil)
-        configureForAutoLayout()
         isScrollEnabled = false
 
         backgroundColor = .clear
