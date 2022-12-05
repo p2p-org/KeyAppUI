@@ -92,10 +92,6 @@ public class SeedPhrasesTextView: UITextView {
         layoutManager.delegate = self
         autocapitalizationType = .none
         autocorrectionType = .no
-
-        // add first placeholder
-        insertIndexAtSelectedRangeAndMoveCursor()
-        
         returnKeyType = .done
     }
 
@@ -204,8 +200,9 @@ extension SeedPhrasesTextView: UITextViewDelegate {
     // MARK: - Handlers
     
     private func handlePasting(range: NSRange, text: String) {
-        let text = text.lettersAndSpaces
+        let text = text
             .lowercased()
+            .lettersAndSpaces
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .removingExtraSpaces()
 
