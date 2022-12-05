@@ -71,7 +71,7 @@ public class UISeedPhrasesTextView: UITextView {
     
     public override var text: String! {
         didSet {
-            fatalError("Don't set text directly, use paste(text) instead")
+            fatalError("Don't set text directly, use replaceText(newText:) instead")
         }
     }
 
@@ -134,8 +134,9 @@ public class UISeedPhrasesTextView: UITextView {
     }
     
     /// Paste text
-    public func paste(_ newText: String) {
-        handlePasting(range: .init(location: 0, length: text.count), text: newText)
+    public func replaceText(newText: String) {
+        textStorage.replaceCharacters(in: .init(location: 0, length: text.count), with: "")
+        handlePasting(range: .init(location: 0, length: 0), text: newText)
     }
 }
 
