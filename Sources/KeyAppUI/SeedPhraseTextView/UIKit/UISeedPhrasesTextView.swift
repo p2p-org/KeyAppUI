@@ -155,12 +155,12 @@ extension UISeedPhrasesTextView: UITextViewDelegate {
         forwardedDelegate?.seedPhrasesTextViewDidChange?(self)
     }
     
-    public func textViewDidChangeSelection(_ textView: UITextView) {
-        // FIXME: - Enable selecting in the middle
-        if selectedRange.location + selectedRange.length < text.count {
-            selectedRange = .init(location: text.count, length: 0)
-        }
-    }
+//    public func textViewDidChangeSelection(_ textView: UITextView) {
+//        // FIXME: - Enable selecting in the middle
+//        if selectedRange.location + selectedRange.length < text.count {
+//            selectedRange = .init(location: text.count, length: 0)
+//        }
+//    }
 
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // pasting
