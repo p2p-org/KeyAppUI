@@ -23,7 +23,7 @@ public struct SeedPhraseTextView: UIViewRepresentable {
 
     public func updateUIView(_ uiView: UISeedPhrasesTextView, context _: Context) {
         let currentPhrases = uiView.getPhrases().joined(separator: " ")
-        if currentPhrases != text {
+        if currentPhrases != text.seedPhraseFormatted {
             uiView.replaceText(newText: text)
         }
         switch isFirstResponder {

@@ -110,9 +110,7 @@ public class UISeedPhrasesTextView: UITextView {
     /// Get current entered phrases
     public func getPhrases() -> [String] {
         text
-            .lettersAndSpaces
-            .removingExtraSpaces()
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .seedPhraseFormatted
             .components(separatedBy: " ")
             .filter {!$0.isEmpty}
     }
@@ -192,11 +190,7 @@ extension UISeedPhrasesTextView: UITextViewDelegate {
     // MARK: - Handlers
     
     private func handlePasting(range: NSRange, text: String) {
-        let text = text
-            .lowercased()
-            .lettersAndSpaces
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .removingExtraSpaces()
+        let text = text.seedPhraseFormatted
 
         // find all indexes of spaces
         var indexes = [Int]()
@@ -494,9 +488,7 @@ extension UISeedPhrasesTextView: UITextViewDelegate {
 
     private func phraseIndex(at location: Int) -> Int {
         let textToLocation = String(text[0..<location])
-            .lettersAndSpaces
-            .removingExtraSpaces()
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .seedPhraseFormatted
             .components(separatedBy: " ")
             .filter {!$0.isEmpty}
         let numberOfPhraseToLocation = textToLocation
@@ -505,15 +497,21 @@ extension UISeedPhrasesTextView: UITextViewDelegate {
     }
 }
 
-private extension String {
-    func removingExtraSpaces() -> String {
+extension String {
+    private func removingExtraSpaces() -> String {
         return self.replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
     }
-    var lettersAndSpaces: String {
+    private var lettersAndSpaces: String {
         return String(unicodeScalars.filter({ scalar in
             CharacterSet.englishLowercaseLetters.contains(scalar) ||
             CharacterSet(charactersIn: " ").contains(scalar)
         }))
+    }
+    var seedPhraseFormatted: String {
+        lowercased()
+            .lettersAndSpaces
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .removingExtraSpaces()
     }
 }
 
