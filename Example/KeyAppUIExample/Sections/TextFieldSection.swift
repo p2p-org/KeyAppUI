@@ -10,7 +10,7 @@ class TextFieldSection: BECompositionView {
             UILabel(text: "Text Fields", textSize: 22).padding(.init(only: .top, inset: 20))
             
             for i in [true, false] {
-                SeedPhrasesTextView()
+                UISeedPhrasesTextView()
                     .setup { tv in
                         tv.forwardedDelegate = self
                     }
@@ -95,8 +95,8 @@ class TextFieldSection: BECompositionView {
     }
 }
 
-extension TextFieldSection: SeedPhraseTextViewDelegate {
-    func seedPhrasesTextView(_ textView: SeedPhrasesTextView, didEnterPhrases phrases: String) {
+extension TextFieldSection: UISeedPhraseTextViewDelegate {
+    func seedPhrasesTextView(_ textView: UISeedPhrasesTextView, didEnterPhrases phrases: String) {
         print(phrases)
     }
 }

@@ -2,15 +2,15 @@ import UIKit
 import Foundation
 
 /// Delegate for seed phrase text view
-@objc public protocol SeedPhraseTextViewDelegate: AnyObject {
-    @objc optional func seedPhrasesTextViewDidBeginEditing(_ textView: SeedPhrasesTextView)
-    @objc optional func seedPhrasesTextViewDidEndEditing(_ textView: SeedPhrasesTextView)
-    @objc optional func seedPhrasesTextViewDidChange(_ textView: SeedPhrasesTextView)
-    func seedPhrasesTextView(_ textView: SeedPhrasesTextView, didEnterPhrases phrases: String)
+@objc public protocol UISeedPhraseTextViewDelegate: AnyObject {
+    @objc optional func seedPhrasesTextViewDidBeginEditing(_ textView: UISeedPhrasesTextView)
+    @objc optional func seedPhrasesTextViewDidEndEditing(_ textView: UISeedPhrasesTextView)
+    @objc optional func seedPhrasesTextViewDidChange(_ textView: UISeedPhrasesTextView)
+    func seedPhrasesTextView(_ textView: UISeedPhrasesTextView, didEnterPhrases phrases: String)
 }
 
 /// TextView that can handle seed phrase with indexes
-public class SeedPhrasesTextView: UITextView {
+public class UISeedPhrasesTextView: UITextView {
     // MARK: - Properties
     
     private static let defaultParagraphStyle: NSMutableParagraphStyle = {
@@ -54,7 +54,7 @@ public class SeedPhrasesTextView: UITextView {
     private var phrasesCached = ""
     
     /// Replacement for default delegate
-    public weak var forwardedDelegate: SeedPhraseTextViewDelegate?
+    public weak var forwardedDelegate: UISeedPhraseTextViewDelegate?
     
     /// Prevent default delegation
     public override weak var delegate: UITextViewDelegate? {
@@ -141,7 +141,7 @@ public class SeedPhrasesTextView: UITextView {
 
 // MARK: - Forward delegate
 
-extension SeedPhrasesTextView: UITextViewDelegate {
+extension UISeedPhrasesTextView: UITextViewDelegate {
     public func textViewDidBeginEditing(_: UITextView) {
         forwardedDelegate?.seedPhrasesTextViewDidBeginEditing?(self)
     }
