@@ -1,11 +1,11 @@
 import SwiftUI
 import UIKit
 
-struct SeedPhraseTextView: UIViewRepresentable {
+public struct SeedPhraseTextView: UIViewRepresentable {
     @Binding private var isFirstResponder: Bool
     @Binding private var text: String
 
-    init(
+    public init(
         text: Binding<String>,
         isFirstResponder: Binding<Bool>
     ) {
@@ -13,7 +13,7 @@ struct SeedPhraseTextView: UIViewRepresentable {
         _isFirstResponder = isFirstResponder
     }
 
-    func makeUIView(context: Context) -> UISeedPhrasesTextView {
+    public func makeUIView(context: Context) -> UISeedPhrasesTextView {
         let view = UISeedPhrasesTextView()
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -21,7 +21,7 @@ struct SeedPhraseTextView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: UISeedPhrasesTextView, context _: Context) {
+    public func updateUIView(_ uiView: UISeedPhrasesTextView, context _: Context) {
 //        uiView.text = text
         uiView.paste(text)
         switch isFirstResponder {
@@ -30,11 +30,11 @@ struct SeedPhraseTextView: UIViewRepresentable {
         }
     }
 
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator($text, isFirstResponder: $isFirstResponder)
     }
 
-    class Coordinator: NSObject, UISeedPhraseTextViewDelegate {
+    public class Coordinator: NSObject, UISeedPhraseTextViewDelegate {
         var text: Binding<String>
         var isFirstResponder: Binding<Bool>
 
@@ -43,15 +43,15 @@ struct SeedPhraseTextView: UIViewRepresentable {
             self.isFirstResponder = isFirstResponder
         }
         
-        func seedPhrasesTextView(_ textView: UISeedPhrasesTextView, didEnterPhrases phrases: String) {
+        public func seedPhrasesTextView(_ textView: UISeedPhrasesTextView, didEnterPhrases phrases: String) {
             text.wrappedValue = phrases
         }
         
-        func seedPhrasesTextViewDidBeginEditing(_ textView: UISeedPhrasesTextView) {
+        public func seedPhrasesTextViewDidBeginEditing(_ textView: UISeedPhrasesTextView) {
             isFirstResponder.wrappedValue = true
         }
         
-        func seedPhrasesTextViewDidEndEditing(_ textView: UISeedPhrasesTextView) {
+        public func seedPhrasesTextViewDidEndEditing(_ textView: UISeedPhrasesTextView) {
             isFirstResponder.wrappedValue = false
         }
     }
