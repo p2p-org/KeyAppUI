@@ -497,34 +497,10 @@ extension UISeedPhrasesTextView: UITextViewDelegate {
     }
 }
 
-extension String {
-    private func removingExtraSpaces() -> String {
-        return self.replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
-    }
-    private var lettersAndSpaces: String {
-        return String(unicodeScalars.filter({ scalar in
-            CharacterSet.englishLowercaseLetters.contains(scalar) ||
-            CharacterSet(charactersIn: " ").contains(scalar)
-        }))
-    }
-    var seedPhraseFormatted: String {
-        lowercased()
-            .lettersAndSpaces
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .removingExtraSpaces()
-    }
-}
-
 private extension NSMutableAttributedString {
     func prepending(_ attributedString: NSAttributedString) -> Self {
         let attributedString = Self(attributedString: attributedString)
         attributedString.append(self)
         return attributedString
-    }
-}
-
-private extension CharacterSet {
-    static var englishLowercaseLetters: CharacterSet {
-        CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz")
     }
 }
