@@ -10,6 +10,11 @@ class TextFieldSection: BECompositionView {
             UILabel(text: "Text Fields", textSize: 22).padding(.init(only: .top, inset: 20))
             
             for i in [true, false] {
+                UISeedPhrasesTextView()
+                    .setup { tv in
+                        tv.forwardedDelegate = self
+                    }
+                
                 let leftView: UIView = {
                     BEHStack {
                         UILabel(text: "🇦🇷", textSize: 24, weight: .bold)
@@ -87,5 +92,11 @@ class TextFieldSection: BECompositionView {
                 }
             }
         }
+    }
+}
+
+extension TextFieldSection: UISeedPhraseTextViewDelegate {
+    func seedPhrasesTextView(_ textView: UISeedPhrasesTextView, didEnterPhrases phrases: String) {
+        print(phrases)
     }
 }
