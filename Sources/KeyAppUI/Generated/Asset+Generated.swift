@@ -23,6 +23,7 @@ public typealias AssetImageTypeAlias = ImageAsset.Image
 public enum Asset {
   public enum Colors {
     public static let cloud = ColorAsset(name: "Cloud")
+    public static let lightSun = ColorAsset(name: "LightSun")
     public static let lime = ColorAsset(name: "Lime")
     public static let listSeparator = ColorAsset(name: "ListSeparator")
     public static let mint = ColorAsset(name: "Mint")
@@ -38,6 +39,7 @@ public enum Asset {
     // swiftlint:disable trailing_comma
     public static let allColors: [ColorAsset] = [
       cloud,
+      lightSun,
       lime,
       listSeparator,
       mint,
@@ -62,6 +64,7 @@ public enum Asset {
     public static let qr = ImageAsset(name: "qr")
     public static let remove = ImageAsset(name: "remove")
     public static let send = ImageAsset(name: "send")
+    public static let warning = ImageAsset(name: "warning")
     // swiftlint:disable trailing_comma
     public static let allColors: [ColorAsset] = [
     ]
@@ -72,6 +75,7 @@ public enum Asset {
       qr,
       remove,
       send,
+      warning,
     ]
     // swiftlint:enable trailing_comma
   }

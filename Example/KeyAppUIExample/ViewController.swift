@@ -37,11 +37,9 @@ class ViewController: UIViewController {
             BEVStack {
                 SliderButton(
                     image: Asset.MaterialIcon.appleLogo.image,
-                    title: "Change Apple ID", style: .black
-                ).onChanged { [weak self] value in
-                    guard let self = self else { return }
-                    self.sliderButton.view?.title = "\(value)"
-                }.bind(sliderButton)
+                    title: "Change Apple ID", style: .solidBlack
+                )
+                .bind(sliderButton)
 
                 BEHStack(spacing: 10, alignment: .center) {
                     UISlider(width: 100)
