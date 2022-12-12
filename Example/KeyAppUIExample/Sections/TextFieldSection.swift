@@ -4,12 +4,25 @@ import KeyAppUI
 import UIKit
 
 class TextFieldSection: BECompositionView {
+    private let decimalSeparator = Bool.random() ? ".": ","
+    private let maximumFractionDigits = Int.random(in: 2..<6)
+    private let maxVariable = [Double]([100, 1000, 10000000]).randomElement()!
     
     override func build() -> UIView {
         BEVStack(spacing: 10) {
             UILabel(text: "Text Fields", textSize: 22).padding(.init(only: .top, inset: 20))
             
             for i in [true, false] {
+                UILabel(text: "UIDecimalTextField, decimalSeparator: \(decimalSeparator), maximumFractionDigits: \(maximumFractionDigits), max: \(maxVariable)", textSize: 10)
+                UIDecimalTextField()
+                    .setup { tf in
+                        tf.decimalSeparator = decimalSeparator
+                        tf.maximumFractionDigits = maximumFractionDigits
+                        tf.max = maxVariable
+                        tf.forwardedDelegate = self
+                    }
+                
+                UILabel(text: "UISeedPhrasesTextView", textSize: 10)
                 UISeedPhrasesTextView()
                     .setup { tv in
                         tv.forwardedDelegate = self
@@ -98,5 +111,11 @@ class TextFieldSection: BECompositionView {
 extension TextFieldSection: UISeedPhraseTextViewDelegate {
     func seedPhrasesTextView(_ textView: UISeedPhrasesTextView, didEnterPhrases phrases: String) {
         print(phrases)
+    }
+}
+
+extension TextFieldSection: UIDecimalTextFieldDelegate {
+    func decimalTextFieldDidReceiveValue(_ decimalTextField: UIDecimalTextField, value: Double?) {
+        print(value)
     }
 }

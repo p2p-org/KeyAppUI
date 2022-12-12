@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+public protocol UIDecimalTextFieldDelegate: UITextFieldDelegate {
+    func decimalTextFieldDidReceiveValue(_ decimalTextField: UIDecimalTextField, value: Double?)
+}
+
 /// UITextField that allows only decimal number
 open class UIDecimalTextField: UITextField, UITextFieldDelegate {
     
@@ -30,7 +34,7 @@ open class UIDecimalTextField: UITextField, UITextFieldDelegate {
     }
     
     /// Forwarded delegate
-    public weak var forwardedDelegate: UITextFieldDelegate?
+    public weak var forwardedDelegate: UIDecimalTextFieldDelegate?
     
     // MARK: - Initializer
 
@@ -47,6 +51,7 @@ open class UIDecimalTextField: UITextField, UITextFieldDelegate {
     }
     
     open func commonInit() {
+        keyboardType = .decimalPad
         delegate = self
     }
     
@@ -85,11 +90,18 @@ open class UIDecimalTextField: UITextField, UITextFieldDelegate {
         // if input comma (or dot)
         if text?.isEmpty == true, string == decimalSeparator {
             text = "0\(decimalSeparator)"
+            forwardedDelegate?.decimalTextFieldDidReceiveValue(self, value: 0)
             return false
         }
         
         // if deleting
-        if string.isEmpty { return true }
+        if string.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [unowned self] in
+                forwardedDelegate?.decimalTextFieldDidReceiveValue(self, value: text?.toDouble(decimalSeparator: decimalSeparator))
+            }
+            
+            return true
+        }
         
         // get the current text, or use an empty string if that failed
         let currentText = text ?? ""
@@ -102,16 +114,26 @@ open class UIDecimalTextField: UITextField, UITextFieldDelegate {
         
         // check if newText is a Number
         let formatter = NumberFormatter()
-        let isANumber = formatter.number(from: updatedText) != nil
+        let isANumber = formatter.number(from: updatedText.replacingOccurrences(of: decimalSeparator, with: Locale.current.decimalSeparator ?? ".")) != nil
         
         if updatedText.starts(with: "0") && !updatedText.starts(with: "0\(decimalSeparator)") {
             updatedText = currentText.replacingOccurrences(of: "^0+", with: "", options: .regularExpression)
             text = updatedText
+            forwardedDelegate?.decimalTextFieldDidReceiveValue(self, value: 0)
+            return false
         }
 
-        return isANumber
+        let shouldChange = isANumber
             && textHasRightMaximumFractionDigits(text: updatedText, separator: decimalSeparator)
             && isNotMoreThanMax(text: updatedText)
+        
+        if shouldChange {
+            text = updatedText
+            forwardedDelegate?.decimalTextFieldDidReceiveValue(self, value: updatedText.toDouble(decimalSeparator: decimalSeparator))
+            return false
+        }
+        
+        return false
     }
 
     public func textFieldDidChangeSelection(_ textField: UITextField) {
@@ -152,17 +174,27 @@ open class UIDecimalTextField: UITextField, UITextFieldDelegate {
             return true
         }
 
-        return text[indexOfSeparator...].count <= maximumFractionDigits
+        return text[indexOfSeparator...].count - 1 <= maximumFractionDigits
     }
 
     private func isNotMoreThanMax(text: String) -> Bool {
         guard
             let max = max,
-            let number = NumberFormatter().number(from: text)?.doubleValue
+            let number = text.toDouble(decimalSeparator: decimalSeparator)
         else {
             return true
         }
 
         return number <= max
+    }
+}
+
+private extension String {
+    func toDouble(decimalSeparator: String) -> Double? {
+        guard let number = NumberFormatter().number(from: replacingOccurrences(of: decimalSeparator, with: Locale.current.decimalSeparator ?? "."))?.doubleValue
+        else {
+            return nil
+        }
+        return number
     }
 }
