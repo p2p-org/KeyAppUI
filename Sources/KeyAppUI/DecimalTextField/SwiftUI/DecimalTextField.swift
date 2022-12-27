@@ -88,6 +88,12 @@ public struct DecimalTextField: UIViewRepresentable {
         public func textFieldDidEndEditing(_: UITextField) {
             isFirstResponder.wrappedValue = false
         }
+        
+        public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+            // TODO: - Why textFieldDidEndEditing not called??
+            isFirstResponder.wrappedValue = false
+            return true
+        }
     }
 }
 
