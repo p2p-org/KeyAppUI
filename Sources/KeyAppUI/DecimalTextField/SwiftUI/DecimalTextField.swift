@@ -49,15 +49,15 @@ public struct DecimalTextField: UIViewRepresentable {
             {
                 
             } else {
-                uiView.text = value.toString(decimalSeparator: uiView.decimalSeparator, maximumFractionDigits: 9)
+                uiView.text = value.toString(decimalSeparator: uiView.decimalSeparator, maximumFractionDigits: uiView.maximumFractionDigits ?? 9)
             }
         } else {
             uiView.text = nil
         }
         
-        if uiView.isFirstResponder, !isFirstResponder {
+        if !isFirstResponder {
             DispatchQueue.main.async { uiView.resignFirstResponder() }
-        } else if !uiView.isFirstResponder, isFirstResponder {
+        } else {
             DispatchQueue.main.async { uiView.becomeFirstResponder() }
         }
         
