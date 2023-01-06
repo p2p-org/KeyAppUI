@@ -117,9 +117,12 @@ open class UIDecimalTextField: UITextField, UITextFieldDelegate {
         let isANumber = formatter.number(from: updatedText.replacingOccurrences(of: decimalSeparator, with: Locale.current.decimalSeparator ?? ".")) != nil
         
         if updatedText.starts(with: "0") && !updatedText.starts(with: "0\(decimalSeparator)") {
-            updatedText = currentText.replacingOccurrences(of: "^0+", with: "", options: .regularExpression)
+            updatedText = updatedText.replacingOccurrences(of: "^0+", with: "", options: .regularExpression)
+            if updatedText.isEmpty {
+                updatedText = "0"
+            }
             text = updatedText
-            forwardedDelegate?.decimalTextFieldDidReceiveValue(self, value: 0)
+            forwardedDelegate?.decimalTextFieldDidReceiveValue(self, value: updatedText.toDouble(decimalSeparator: decimalSeparator))
             return false
         }
 
