@@ -55,9 +55,9 @@ public struct DecimalTextField: UIViewRepresentable {
             uiView.text = nil
         }
         
-        if !isFirstResponder {
+        if uiView.isFirstResponder, !isFirstResponder {
             DispatchQueue.main.async { uiView.resignFirstResponder() }
-        } else {
+        } else if !uiView.isFirstResponder, isFirstResponder {
             DispatchQueue.main.async { uiView.becomeFirstResponder() }
         }
         

@@ -26,9 +26,11 @@ public struct SeedPhraseTextView: UIViewRepresentable {
         if currentPhrases != text.seedPhraseFormatted {
             uiView.replaceText(newText: text)
         }
-        switch isFirstResponder {
-        case true: uiView.becomeFirstResponder()
-        case false: uiView.resignFirstResponder()
+        
+        if uiView.isFirstResponder, !isFirstResponder {
+            DispatchQueue.main.async { uiView.resignFirstResponder() }
+        } else if !uiView.isFirstResponder, isFirstResponder {
+            DispatchQueue.main.async { uiView.becomeFirstResponder() }
         }
     }
 
