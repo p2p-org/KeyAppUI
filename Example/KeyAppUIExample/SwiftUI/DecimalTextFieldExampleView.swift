@@ -11,7 +11,10 @@ import KeyAppUI
 struct DecimalTextFieldExampleView: View {
     @State var value: Double?
     @State var isFirstResponder: Bool = false
-    
+    @State var textColor: UIColor = Asset.Colors.night.color
+
+    private var colorVariants = [Asset.Colors.night.color, Asset.Colors.rose.color, Asset.Colors.rain.color, Asset.Colors.lime.color]
+
     private let decimalSeparator = Bool.random() ? ".": ","
     private let maximumFractionDigits = Int.random(in: 2..<6)
     private let maxVariable = [Double]([100, 1000, 10000000]).randomElement()!
@@ -22,7 +25,8 @@ struct DecimalTextFieldExampleView: View {
             HStack {
                 DecimalTextField(
                     value: $value,
-                    isFirstResponder: $isFirstResponder
+                    isFirstResponder: $isFirstResponder,
+                    textColor: $textColor
                 ) { textField in
                     textField.decimalSeparator = decimalSeparator
                     textField.maximumFractionDigits = maximumFractionDigits
@@ -31,6 +35,9 @@ struct DecimalTextFieldExampleView: View {
                 }
                 .frame(maxHeight: 40)
                 Text("Result: \(value ?? 0)")
+            }
+            Button("Switch color") {
+                textColor = colorVariants.randomElement() ?? .black
             }
             Spacer()
         }.padding()
