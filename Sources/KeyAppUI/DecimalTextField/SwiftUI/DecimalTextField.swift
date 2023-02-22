@@ -19,24 +19,30 @@ public struct DecimalTextField: UIViewRepresentable {
     
     /// Value of current text field
     @Binding private var value: Double?
-    
+
+    /// Color of text
+    @Binding private var textColor: UIColor
+
     /// Additional configuration
     private var configuration = { (_: UIDecimalTextField) in }
 
     public init(
         value: Binding<Double?>,
         isFirstResponder: Binding<Bool>,
+        textColor: Binding<UIColor> = Binding.constant(Asset.Colors.night.color),
         configuration: @escaping (UIDecimalTextField) -> Void = { _ in }
     ) {
         self.configuration = configuration
         _value = value
         _isFirstResponder = isFirstResponder
+        _textColor = textColor
     }
 
     public func makeUIView(context: Context) -> UIDecimalTextField {
         let view = UIDecimalTextField()
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         view.forwardedDelegate = context.coordinator
+        view.textColor = textColor
         configuration(view)
         return view
     }
@@ -62,6 +68,7 @@ public struct DecimalTextField: UIViewRepresentable {
         }
         
         configuration(uiView)
+        uiView.textColor = textColor
     }
 
     public func makeCoordinator() -> Coordinator {
