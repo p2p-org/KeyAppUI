@@ -89,21 +89,21 @@ public struct DecimalTextField: UIViewRepresentable {
         }
         
         public func textFieldDidBeginEditing(_: UITextField) {
-            DispatchQueue.main.async { [unowned self] in
-                isFirstResponder.wrappedValue = true
+            DispatchQueue.main.async { [weak self] in
+                self?.isFirstResponder.wrappedValue = true
             }
         }
 
         public func textFieldDidEndEditing(_: UITextField) {
-            DispatchQueue.main.async { [unowned self] in
-                isFirstResponder.wrappedValue = false
+            DispatchQueue.main.async { [weak self] in
+                self?.isFirstResponder.wrappedValue = false
             }
         }
         
         public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
             // TODO: - Why textFieldDidEndEditing not called??
-            DispatchQueue.main.async { [unowned self] in
-                isFirstResponder.wrappedValue = false
+            DispatchQueue.main.async { [weak self] in
+                self?.isFirstResponder.wrappedValue = false
             }
             return true
         }
