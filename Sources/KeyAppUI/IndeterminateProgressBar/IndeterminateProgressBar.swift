@@ -1,10 +1,3 @@
-//
-//  SwiftUIView.swift
-//  
-//
-//  Created by Chung Tran on 01/03/2023.
-//
-
 import SwiftUI
 
 struct IndeterminateProgressBar: View {
