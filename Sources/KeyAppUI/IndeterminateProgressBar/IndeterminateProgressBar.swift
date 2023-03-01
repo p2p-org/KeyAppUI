@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct IndeterminateProgressBar: View {
+public struct IndeterminateProgressBar: View {
     @State private var offset: CGFloat = 0
-    let indicatorColor: Color
+    public let indicatorColor: Color
 
     private let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
-    var body: some View {
+    public var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle().frame(width: geometry.size.width, height: geometry.size.height)
