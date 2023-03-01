@@ -26,6 +26,7 @@ public typealias AssetImageTypeAlias = ImageAsset.Image
 public enum Asset {
   public enum Colors {
     public static let cloud = ColorAsset(name: "Cloud")
+    public static let lightRose = ColorAsset(name: "LightRose")
     public static let lightSun = ColorAsset(name: "LightSun")
     public static let lime = ColorAsset(name: "Lime")
     public static let listSeparator = ColorAsset(name: "ListSeparator")
@@ -45,6 +46,7 @@ public enum Asset {
     @available(*, deprecated, message: "All values properties are now deprecated")
     public static let allColors: [ColorAsset] = [
       cloud,
+      lightRose,
       lightSun,
       lime,
       listSeparator,
