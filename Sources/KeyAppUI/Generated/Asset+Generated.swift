@@ -8,9 +8,6 @@
 #elseif os(tvOS) || os(watchOS)
   import UIKit
 #endif
-#if canImport(SwiftUI)
-  import SwiftUI
-#endif
 
 // Deprecated typealiases
 @available(*, deprecated, renamed: "ColorAsset.Color", message: "This typealias will be removed in SwiftGen 7.0")
@@ -27,6 +24,7 @@ public enum Asset {
   public enum Colors {
     public static let cloud = ColorAsset(name: "Cloud")
     public static let lightRose = ColorAsset(name: "LightRose")
+    public static let lightSea = ColorAsset(name: "LightSea")
     public static let lightSun = ColorAsset(name: "LightSun")
     public static let lime = ColorAsset(name: "Lime")
     public static let listSeparator = ColorAsset(name: "ListSeparator")
@@ -41,12 +39,11 @@ public enum Asset {
     public static let smoke = ColorAsset(name: "Smoke")
     public static let snow = ColorAsset(name: "Snow")
     public static let sun = ColorAsset(name: "Sun")
-
     // swiftlint:disable trailing_comma
-    @available(*, deprecated, message: "All values properties are now deprecated")
     public static let allColors: [ColorAsset] = [
       cloud,
       lightRose,
+      lightSea,
       lightSun,
       lime,
       listSeparator,
@@ -62,6 +59,8 @@ public enum Asset {
       snow,
       sun,
     ]
+    public static let allImages: [ImageAsset] = [
+    ]
     // swiftlint:enable trailing_comma
   }
   public enum Icons {
@@ -72,9 +71,9 @@ public enum Asset {
     public static let remove = ImageAsset(name: "remove")
     public static let send = ImageAsset(name: "send")
     public static let warning = ImageAsset(name: "warning")
-
     // swiftlint:disable trailing_comma
-    @available(*, deprecated, message: "All values properties are now deprecated")
+    public static let allColors: [ColorAsset] = [
+    ]
     public static let allImages: [ImageAsset] = [
       copyFilled,
       key,
@@ -183,9 +182,9 @@ public enum Asset {
     public static let waves = ImageAsset(name: "waves")
     public static let weekend = ImageAsset(name: "weekend")
     public static let whereToVote = ImageAsset(name: "where_to_vote")
-
     // swiftlint:disable trailing_comma
-    @available(*, deprecated, message: "All values properties are now deprecated")
+    public static let allColors: [ColorAsset] = [
+    ]
     public static let allImages: [ImageAsset] = [
       accountBalanceWalletOutlined,
       add,
@@ -319,13 +318,6 @@ public final class ColorAsset {
   }
   #endif
 
-  #if canImport(SwiftUI)
-  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  public private(set) lazy var swiftUIColor: SwiftUI.Color = {
-    SwiftUI.Color(asset: self)
-  }()
-  #endif
-
   fileprivate init(name: String) {
     self.name = name
   }
@@ -344,16 +336,6 @@ public extension ColorAsset.Color {
     #endif
   }
 }
-
-#if canImport(SwiftUI)
-@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-public extension SwiftUI.Color {
-  init(asset: ColorAsset) {
-    let bundle = BundleToken.bundle
-    self.init(asset.name, bundle: bundle)
-  }
-}
-#endif
 
 public struct ImageAsset {
   public fileprivate(set) var name: String
@@ -391,13 +373,6 @@ public struct ImageAsset {
     return result
   }
   #endif
-
-  #if canImport(SwiftUI)
-  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-  public var swiftUIImage: SwiftUI.Image {
-    SwiftUI.Image(asset: self)
-  }
-  #endif
 }
 
 public extension ImageAsset.Image {
@@ -415,26 +390,6 @@ public extension ImageAsset.Image {
     #endif
   }
 }
-
-#if canImport(SwiftUI)
-@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-public extension SwiftUI.Image {
-  init(asset: ImageAsset) {
-    let bundle = BundleToken.bundle
-    self.init(asset.name, bundle: bundle)
-  }
-
-  init(asset: ImageAsset, label: Text) {
-    let bundle = BundleToken.bundle
-    self.init(asset.name, bundle: bundle, label: label)
-  }
-
-  init(decorative asset: ImageAsset) {
-    let bundle = BundleToken.bundle
-    self.init(decorative: asset.name, bundle: bundle)
-  }
-}
-#endif
 
 // swiftlint:disable convenience_type
 private final class BundleToken {
