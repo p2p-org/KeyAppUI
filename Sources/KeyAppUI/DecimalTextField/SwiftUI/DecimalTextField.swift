@@ -61,12 +61,11 @@ public struct DecimalTextField: UIViewRepresentable {
             uiView.text = nil
         }
         
-        // FIXME: - Пока что лучше без этого, так как это ломает всю верстку приложения
-//         if uiView.isFirstResponder, !isFirstResponder {
-//             DispatchQueue.main.async { uiView.resignFirstResponder() }
-//         } else if !uiView.isFirstResponder, isFirstResponder {
-//             DispatchQueue.main.async { uiView.becomeFirstResponder() }
-//         }
+        if uiView.isFirstResponder, !isFirstResponder {
+            DispatchQueue.main.async { uiView.resignFirstResponder() }
+        } else if !uiView.isFirstResponder, isFirstResponder {
+            DispatchQueue.main.async { uiView.becomeFirstResponder() }
+        }
         
         configuration(uiView)
         uiView.textColor = textColor
