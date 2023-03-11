@@ -63,7 +63,7 @@ public extension TextButton {
         public func font(size: Size) -> UIFont {
             switch size {
             case .large, .medium: return UIFont.font(of: .text2, weight: .bold)
-            case .small: return UIFont.font(of: .text4, weight: .bold)
+            case .small: return UIFont.font(of: .text4, weight: .semibold)
             }
         }
 
@@ -115,15 +115,23 @@ public extension TextButton {
 
     /// Create button with defined style
     convenience init(title: String, style: Style, size: Size, leading: UIImage? = nil, trailing: UIImage? = nil) {
+        var left: CGFloat = leading != nil ? 14 : 20
+        var right: CGFloat = trailing != nil ? 14 : 20
+        
+        if size == .small {
+            left = 0
+            right = 0
+        }
+        
         let theme = TextButtonAppearance(
             backgroundColor: style.backgroundColor,
             foregroundColor: style.foreground,
             font: style.font(size: size),
             contentPadding: .init(
                 top: 0,
-                left: leading != nil ? 14 : 20,
+                left: left,
                 bottom: 0,
-                right: trailing != nil ? 14 : 20
+                right: right
             ),
             iconSpacing: 8,
             borderRadius: size.borderRadius,
